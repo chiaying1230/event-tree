@@ -7,7 +7,7 @@ function heroTreeSvg(){
   const at = y => (Math.max(y-Y0,0)/(Y1-Y0)*2.6).toFixed(2);            // 動畫：年份越晚，越晚長出來
   const tl = L+50, tr = W-Rm-44, colW = (tr-tl)/Math.max(LEAFN-1,1), pos = {};
   EVENTS.forEach(e=>{ pos[e.id] = {x:tl+COL[e.id]*colW, y:e.id==='root' ? base : yOf(e.t)}; });
-  const hue = t => ({test:'var(--hero-a)', law:'var(--hero-b)'})[t]||'var(--hero-fg)';
+  const hue = t => ({iq:'var(--hero-a)', ab:'var(--hero-c)', law:'var(--hero-b)'})[t]||'var(--hero-fg)';
   let g = '';
   // 背景：報紙用詞的比例
   const samp = []; for(let k=0;k<=110;k++){ const yv = Y0+(DATA_END-Y0)*k/110; samp.push({y:yOf(yv), sh:shares(yv)}); }
@@ -15,8 +15,8 @@ function heroTreeSvg(){
     g += `<polygon points="${l.concat(r).join(' ')}" fill="var(--hero-fg)" opacity="${[.05,.09,.14,.2][Math.min(i,3)]}"/>`; });
   g += `<line x1="${L}" x2="${W-Rm}" y1="${f(yOf(DATA_END))}" y2="${f(yOf(DATA_END))}" stroke="var(--hero-mut)" stroke-width="1" stroke-dasharray="5 4" opacity=".7"/>`;
   for(let d=1970; d<=2020; d+=10) g += `<line x1="${L}" x2="${W-Rm}" y1="${f(yOf(d))}" y2="${f(yOf(d))}" stroke="var(--hero-fg)" stroke-width="1" opacity=".14"/><text x="${L-8}" y="${f(yOf(d)+4)}" text-anchor="end" font-size="${f(11.5*k)}" fill="var(--hero-mut)">${d}</text>`;
-  // 主幹與分支
-  const {junc, segs} = treeSegments(pos, ks=>base-Math.max(10,(base-Math.max(...ks.map(e=>pos[e.id].y)))*.5));
+  // 三個分支的枝條
+  const {junc, segs} = treeSegments(EVENTS, pos, ks=>base-Math.max(10,(base-Math.max(...ks.map(e=>pos[e.id].y)))*.5));
   segs.forEach(s=>{ const fromRoot = s.from==='root', t0 = fromRoot ? Y0 : byId[s.from].t;
     const d = s.to ? (fromRoot ? '.3' : at(t0)) : '0', dur = s.to ? Math.max(at(byId[s.to].t)-at(t0), .25).toFixed(2) : '.35';
     g += `<path class="grow" pathLength="1" style="--d:${d}s;--t:${dur}s" d="${curveD(s.a,s.b)}" fill="none" stroke="${hue(s.theme)}" stroke-width="${f(Math.max(2.6,s.w*.92)*(big?1.25:1))}" stroke-linecap="round" opacity=".85"/>`; });
@@ -25,15 +25,14 @@ function heroTreeSvg(){
   ORDER.forEach(id=>{ const e = byId[id], p = pos[id];
     g += `<g class="pop" style="--d:${at(e.t)}s" data-tip="${esc(e.title+'\n'+whenLong(e))}">${mark(shapeOf(e),p.x,p.y,big?8:6.2,`fill="var(--hero-bg)" stroke="${hue(e.theme)}" stroke-width="${big?3.4:2.6}"`)}<circle cx="${f(p.x)}" cy="${f(p.y)}" r="13" fill="transparent"/></g>`; });
   // 每一支的名稱
-  const groups = Object.keys(SUBS).map(k=>({name:SUBS[k].name, ev:EVENTS.filter(e=>e.sub===k)}))
-    .concat(Object.keys(THEMES).filter(t=>!EVENTS.some(e=>e.theme===t&&e.sub)).map(t=>({name:THEMES[t].name, ev:EVENTS.filter(e=>e.theme===t)})));
+  const groups = TKEYS.map(t=>({name:THEMES[t].name, ev:EVENTS.filter(e=>e.theme===t)}));
   groups.forEach(gr=>{ if(!gr.ev.length) return; const lf = gr.ev.filter(e=>!kidsOf(e.id).length), xs = lf.map(e=>pos[e.id].x), top = Math.min(...gr.ev.map(e=>pos[e.id].y));
     g += `<text class="pop" style="--d:${at(Math.max(...gr.ev.map(e=>e.t)))}s" x="${f((Math.min(...xs)+Math.max(...xs))/2)}" y="${f(top-(big?18:15))}" text-anchor="middle" font-size="${f(12.5*k)}" font-weight="700" fill="var(--hero-fg)">${esc(gr.name)}</text>`; });
   return `<svg viewBox="0 0 ${W} ${H}" aria-hidden="true" focusable="false">${g}</svg>`;
 }
 // 目錄裡的縮圖
-function miniTimelineSvg(){        // 時間軸：事件依年份排在兩條線上
-  const W = 300, H = 64, x = t => 12+(t-Y0)/(Y1-Y0)*(W-24), rows = {test:22, law:44};
+function miniTimelineSvg(){        // 時間軸：事件依年份排在三條線上，一個分支一條
+  const W = 300, H = 64, x = t => 12+(t-Y0)/(Y1-Y0)*(W-24), rows = {iq:16, ab:32, law:48};
   let g = '';
   for(let d=1970; d<=2020; d+=10) g += `<line x1="${x(d).toFixed(1)}" x2="${x(d).toFixed(1)}" y1="9" y2="${H-9}" stroke="var(--line)" stroke-width="1"/>`;
   Object.keys(rows).forEach(k=>{ g += `<line x1="12" x2="${W-12}" y1="${rows[k]}" y2="${rows[k]}" stroke="var(--c-${k})" stroke-width="2" opacity=".4"/>`; });
@@ -55,7 +54,7 @@ DRAW.home = function(){
   </div>`;
   const P = PEOPLE.nation.ID, ys = Object.keys(P).map(Number).sort((a,b)=>a-b), max = newsScale('view',false), sampleP = PHOTOS.some(p=>p.sample), sampleA = INTERVIEWS.some(a=>a.sample);
   const rows = [
-    ['tree','01','時間軸', `重大事件表的 ${ORDER.length} 件事，分成「測驗」與「法規與鑑定」兩條主幹；背景是同一時間報紙用詞的比例。`,
+    ['tree','01','時間軸', `重大事件表的 ${ORDER.length} 件事，分成智力測驗、適應行為量表、法規與鑑定三個分支；背景是同一時間報紙用詞的比例。`,
       `<span class="th-line">${miniTimelineSvg()}</span><span class="th-cap"><span>${Y0}</span><span>2024</span></span>`],
     ['people','02','人數', '各障別的特教學生人數，以及衛福部的智能障礙總人數。',
       `<span class="th-line">${sparkSvg(ys.map(y=>P[y]))}</span><span class="th-cap"><span><b>${fmtN(P[ys[0]])}</b>${ys[0]} 年</span><span>全台智能障礙學生人數</span><span><b>${fmtN(P[ys[ys.length-1]])}</b>${ys[ys.length-1]} 年</span></span>`],

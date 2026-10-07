@@ -36,40 +36,39 @@ function buildTermTrends(){
 }
 
 const TREE = {
-  // 兩條主幹；節點的形狀用來區分（顏色寫在 style.css 的 --c-test、--c-law）
+  // 三個分支，各自從樹根長出來；除了顏色，節點的形狀也不同（顏色寫在 style.css 的 --c-iq、--c-ab、--c-law）
   themes:{
-    test:{name:'測驗', shape:'circle'},
+    iq:{name:'智力測驗', shape:'circle'},
+    ab:{name:'適應行為量表', shape:'square'},
     law:{name:'法規與鑑定', shape:'diamond'}
   },
-  // 測驗這條主幹的兩個分支，用形狀區分
-  subs:{ iq:{name:'智力測驗', shape:'circle'}, ab:{name:'適應行為量表', shape:'square'} },
   // 時間軸的範圍比事件前後各多一段，背景才會比樹大
   axis:[1962,2025],
   trends:buildTermTrends(),
   events:[
     {id:'root', title:'智能障礙', date:'', parents:[], theme:null, trends:[],
-     desc:'這棵樹整理 1970 年代到 2024 年，智能障礙在測驗（智力測驗、適應行為量表）以及法規與鑑定兩方面的事件。背景是同一段時間報紙新聞使用的名詞。'},
+     desc:'這棵樹整理 1970 年代到 2024 年，智能障礙在智力測驗、適應行為量表、法規與鑑定三方面的事件。背景是同一段時間報紙新聞使用的名詞。'},
 
-    {id:'q1', title:'WISC-R 修訂完成', date:'1979', parents:['root'], theme:'test', sub:'iq', trends:[],
+    {id:'q1', title:'WISC-R 修訂完成', date:'1979', parents:['root'], theme:'iq', trends:[],
      desc:'台灣完成魏克斯勒兒童智力量表（WISC-R）的修訂。\n備註：適逢特教興盛，個別智力測驗列為甄選學生的項目之一（陳美芳，1985）。'},
-    {id:'q2', title:'WISC-III 出版', date:'1991', parents:['q1'], theme:'test', sub:'iq', trends:[],
+    {id:'q2', title:'WISC-III 出版', date:'1991', parents:['q1'], theme:'iq', trends:[],
      desc:'魏氏兒童智力測驗（WISC-III）第三版出版。'},
-    {id:'q3', title:'WISC-IV 英文版出版', date:'2003', parents:['q2'], theme:'test', sub:'iq', trends:[],
+    {id:'q3', title:'WISC-IV 英文版出版', date:'2003', parents:['q2'], theme:'iq', trends:[],
      desc:'魏氏兒童智力量表英文第四版（WISC-IV）出版。'},
-    {id:'q4', title:'WISC-V 英文版出版', date:'2014', parents:['q3'], theme:'test', sub:'iq', trends:[],
+    {id:'q4', title:'WISC-V 英文版出版', date:'2014', parents:['q3'], theme:'iq', trends:[],
      desc:'魏氏兒童智力量表英文第五版（WISC-V）出版。'},
-    {id:'q5', title:'WISC-V 中文版出版', date:'2018-09', parents:['q4'], theme:'test', sub:'iq', trends:[],
+    {id:'q5', title:'WISC-V 中文版出版', date:'2018-09', parents:['q4'], theme:'iq', trends:[],
      desc:'魏氏兒童智力量表中文第五版（WISC-V）出版。'},
 
-    {id:'b1', title:'引進文蘭社會成熟量表', date:'1970', when:'1970年代', parents:['root'], theme:'test', sub:'ab', trends:[],
+    {id:'b1', title:'引進文蘭社會成熟量表', date:'1970', when:'1970年代', parents:['root'], theme:'ab', trends:[],
      desc:'引進文蘭社會成熟量表。\n備註：未建立國內常模。'},
-    {id:'b2', title:'文蘭適應行為量表', date:'1984', parents:['b1'], theme:'test', sub:'ab', trends:[],
+    {id:'b2', title:'文蘭適應行為量表', date:'1984', parents:['b1'], theme:'ab', trends:[],
      desc:'文蘭社會成熟量表擴展為文蘭適應行為量表（VABS）第一版。'},
-    {id:'b5', title:'文蘭中文編譯版出版', date:'2004', parents:['b2'], theme:'test', sub:'ab', trends:[],
+    {id:'b5', title:'文蘭中文編譯版出版', date:'2004', parents:['b2'], theme:'ab', trends:[],
      desc:'文蘭第一版中文編譯版出版。'},
-    {id:'b3', title:'引進修訂適應行為量表', date:'1986-02', parents:['b1'], theme:'test', sub:'ab', trends:[],
+    {id:'b3', title:'引進修訂適應行為量表', date:'1986-02', parents:['b1'], theme:'ab', trends:[],
      desc:'引進使用修訂適應行為量表（徐享良，1986）。\n備註：以美國智能不足協會適應行為量表為藍本。'},
-    {id:'b4', title:'社會適應表現檢核表', date:'2003', parents:['b3'], theme:'test', sub:'ab', trends:[],
+    {id:'b4', title:'社會適應表現檢核表', date:'2003', parents:['b3'], theme:'ab', trends:[],
      desc:'社會適應表現檢核表出版（盧台華等，2003）。\n備註：國內第一本以 AAMR 五大領域做分量表依據設計的適應行為量表（社會適應表現檢核表之信效度及其相關因素之研究）。'},
 
     {id:'l1', title:'福利法明定鑑定工具', date:'1981', parents:['root'], theme:'law', trends:['w2'],

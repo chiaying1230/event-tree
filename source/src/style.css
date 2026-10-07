@@ -3,11 +3,11 @@
    淺色與深色各一組；圖表用的資料色兩種主題都用色盲模擬檢查過 */
 :root{
   --bg:#EAECE6; --paper:#F7F8F4; --stage:#E1E4DD; --ink:#1F2A2E; --ink2:#37444A; --muted:#525F65; --line:#CBD2CB; --line2:#AEB7AE;
-  --c-test:#2F6187; --c-law:#8C6013;
+  --c-iq:#2F6187; --c-ab:#247B62; --c-law:#8C6013;
   --g1:#EFECE4; --g2:#E1DBCE; --g3:#D0C8B6; --g4:#BCB2A0;
   --d1:#376fb0; --d2:#c26a3d; --d3:#17998a; --d4:#a8841a; --d5:#b0668f; --d6:#5f8f3a; --rose:#2F6187; --link:#2F6187; --ctl:#79847E;
   --trk:rgba(31,42,46,.045); --trk2:rgba(31,42,46,.11); --band:.04;
-  --hero-bg:#17262D; --hero-fg:#EEF1EB; --hero-mut:#A9B5B4; --hero-a:#8FB6D4; --hero-b:#DDB565;
+  --hero-bg:#17262D; --hero-fg:#EEF1EB; --hero-mut:#A9B5B4; --hero-a:#8FB6D4; --hero-b:#DDB565; --hero-c:#8ECDB9;
   --serif:"Noto Serif TC","Songti TC","PMingLiU",serif;
   --sans:"Noto Sans TC","PingFang TC","Microsoft JhengHei",sans-serif;
   --kai:"LXGW WenKai TC","Kaiti TC","BiauKai","DFKai-SB","標楷體",serif;
@@ -16,19 +16,19 @@
 }
 @media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
   --bg:#171B1C; --paper:#20272A; --stage:#14181A; --ink:#E6EAE5; --ink2:#C7CFCB; --muted:#9BA6A8; --line:#384344; --line2:#4E5A5B;
-  --c-test:#82ABCB; --c-law:#DDB35F;
+  --c-iq:#82ABCB; --c-ab:#86C9B0; --c-law:#DDB35F;
   --g1:#282C2A; --g2:#333733; --g3:#41453D; --g4:#4F5348;
   --d1:#5289d4; --d2:#c9703f; --d3:#24a08e; --d4:#b08720; --d5:#bd689b; --d6:#6ea040; --rose:#82ABCB; --link:#82ABCB; --ctl:#7E8A8B;
   --trk:rgba(230,234,229,.07); --trk2:rgba(230,234,229,.15); --band:.065;
-  --hero-bg:#0D1315; --hero-fg:#E6EAE5; --hero-mut:#93A0A2; --hero-a:#82ABCB; --hero-b:#DDB35F; color-scheme:dark;
+  --hero-bg:#0D1315; --hero-fg:#E6EAE5; --hero-mut:#93A0A2; --hero-a:#82ABCB; --hero-b:#DDB35F; --hero-c:#8ECDB9; color-scheme:dark;
 }}
 :root[data-theme="dark"]{
   --bg:#171B1C; --paper:#20272A; --stage:#14181A; --ink:#E6EAE5; --ink2:#C7CFCB; --muted:#9BA6A8; --line:#384344; --line2:#4E5A5B;
-  --c-test:#82ABCB; --c-law:#DDB35F;
+  --c-iq:#82ABCB; --c-ab:#86C9B0; --c-law:#DDB35F;
   --g1:#282C2A; --g2:#333733; --g3:#41453D; --g4:#4F5348;
   --d1:#5289d4; --d2:#c9703f; --d3:#24a08e; --d4:#b08720; --d5:#bd689b; --d6:#6ea040; --rose:#82ABCB; --link:#82ABCB; --ctl:#7E8A8B;
   --trk:rgba(230,234,229,.07); --trk2:rgba(230,234,229,.15); --band:.065;
-  --hero-bg:#0D1315; --hero-fg:#E6EAE5; --hero-mut:#93A0A2; --hero-a:#82ABCB; --hero-b:#DDB35F; color-scheme:dark;
+  --hero-bg:#0D1315; --hero-fg:#E6EAE5; --hero-mut:#93A0A2; --hero-a:#82ABCB; --hero-b:#DDB35F; --hero-c:#8ECDB9; color-scheme:dark;
 }
 
 /* ============ 基本 ============ */
@@ -196,8 +196,12 @@ body[data-view="home"] .mast{margin-bottom:calc(-1*var(--mast) - 1px - env(safe-
 /* ============ 時間軸 ============ */
 .tl{display:grid;grid-template-columns:minmax(0,1fr);gap:24px}
 .tl.wide{grid-template-columns:minmax(0,1fr) 370px;align-items:start}
-.keys{list-style:none;display:flex;flex-wrap:wrap;gap:4px 18px;padding:0;margin-bottom:10px;font-size:.9rem;color:var(--ink2)}
-.keys li{display:inline-flex;align-items:center;gap:6px}
+/* 分支的篩選：沒選到的是空心的圖示，選到的是實心、加粗、有分支顏色的框 */
+.tl-filter{display:flex;flex-wrap:wrap;align-items:center;gap:8px;margin-bottom:12px}
+.bchip{display:inline-flex;align-items:center;gap:8px;min-height:40px;padding:5px 15px;border:1.5px solid var(--ctl);border-radius:999px;background:var(--paper);font-size:.94rem;color:var(--ink)}
+.bchip:hover{border-color:var(--ink)}
+.bchip[aria-pressed="true"]{border-color:var(--c,var(--ink));box-shadow:inset 0 0 0 1px var(--c,var(--ink));background:color-mix(in srgb,var(--c,var(--ink)) 9%,var(--paper));font-weight:700}
+.tl-filter .hint{margin-left:6px;font-size:.88rem;color:var(--muted)}
 .plate.tl-fig{padding:0;overflow:hidden;margin-bottom:0}
 .tl-fig svg{display:block}
 .tl-terms{display:flex;flex-wrap:wrap;align-items:center;gap:8px;margin-top:12px}
@@ -220,6 +224,14 @@ body[data-view="home"] .mast{margin-bottom:calc(-1*var(--mast) - 1px - env(safe-
 .tsvg .dec.on text{fill:var(--paper);font-weight:700}
 .tsvg .dec:focus-visible .dbox{fill-opacity:1;stroke:var(--ink);stroke-width:2.5px}
 .tsvg .ev{cursor:pointer;outline:none}
+/* 總覽：只有節點；枝條和分支名稱可以點，點了只看那個分支 */
+.tsvg .dot .ring{fill:none;stroke:transparent;stroke-width:2.5px}
+.tsvg .dot:hover .mk{fill:var(--c)}
+.tsvg .dot:focus-visible .ring{stroke:var(--ink)}
+.tsvg .bseg,.tsvg .bname.pick{cursor:pointer}
+.tsvg .bseg:hover .vis{opacity:1}
+.tsvg .bname .nbox{fill:var(--paper);fill-opacity:0;stroke:transparent;stroke-width:1.5px}
+.tsvg .bname.pick:hover .nbox{fill-opacity:.9;stroke:var(--line2)}
 .tsvg .ev .mk{fill:var(--paper);stroke:var(--c);stroke-width:2.6px}
 .tsvg .ev.on .mk{fill:var(--c)}
 .tsvg .ev.dim .mk{opacity:.4}
@@ -568,7 +580,9 @@ html.has-dock{scroll-padding-bottom:88px}
   .heat td{min-width:0;padding:4px 0 5px;font-size:.8rem;line-height:1.3}
   .heat td::before{content:attr(data-h);display:block;font-size:.62rem;color:var(--ink2)}
   .heat td.hl::before{margin:0 3px;border-radius:999px;background:var(--ink);color:var(--paper);font-weight:700}
-  .keys{font-size:.84rem;gap:2px 12px}
+  .tl-filter .lbl{display:none}
+  .tl-filter .hint{flex-basis:100%;margin-left:2px}
+  .bchip{padding:5px 13px}
   .tchip{min-height:38px;padding:4px 11px;font-size:.86rem;gap:6px}
   .tl-terms .lbl{flex-basis:100%}
   .plate.tlist{padding:4px 14px 14px}
@@ -596,7 +610,7 @@ html.has-dock{scroll-padding-bottom:88px}
 }
 @media (max-width:359px){ .tbl{font-size:.66rem} .tbl th,.tbl td{padding:6px 1px} }          /* 很窄的手機：數字表再小一點，一列才放得下 */
 /* 用手指操作的裝置：主要按鈕至少 44 像素高 */
-@media (pointer:coarse){ .btn,.ph-tools .btn,.seg button,.tchip,.ts,.chk{min-height:44px} .tchip.sm{min-height:40px} }
+@media (pointer:coarse){ .btn,.ph-tools .btn,.seg button,.tchip,.bchip,.ts,.chk{min-height:44px} .tchip.sm{min-height:40px} }
 @media (prefers-reduced-motion:reduce){
   *,*::before,*::after{animation-duration:.01ms!important;animation-delay:0s!important;transition-duration:.01ms!important}
   .hero .grow{stroke-dashoffset:0;animation:none}

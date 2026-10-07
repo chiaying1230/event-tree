@@ -65,7 +65,7 @@ function fillCharts(root){
 }
 
 /* 重新繪製後把鍵盤焦點放回原本的元素，避免焦點跑回頁首 */
-const FOCUS_ATTRS = ['data-id','data-cat','data-pick','data-step','data-dim','data-region','data-term','data-era','data-jump','data-pager','data-act','data-go'];
+const FOCUS_ATTRS = ['data-branch','data-id','data-cat','data-pick','data-step','data-dim','data-region','data-term','data-era','data-jump','data-pager','data-act','data-go'];
 function focusKey(){
   const a = document.activeElement; if(!a || a===document.body) return null;
   if(a.id) return {id:a.id};
