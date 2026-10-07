@@ -1,0 +1,140 @@
+
+<header class="mast" id="mast">
+  <a href="#view" class="skip" id="skipMain">跳到主要內容</a>
+  <div class="wrap mast-in">
+    <a class="brand" href="#home" data-go="home">智能障礙事件樹</a>
+    <nav class="nav" id="nav" aria-label="展區"></nav>
+  </div>
+</header>
+<main id="main">
+  <section class="hero" id="hero" aria-labelledby="heroTitle" hidden></section>
+  <div id="view"></div>
+</main>
+<footer class="foot">
+  <div class="wrap foot-in">
+    <b>智能障礙事件樹</b>
+    <span>專案成果展示・資料整理於 2026 年 10 月</span>
+    <a href="#about" data-go="about">關於本站與資料說明</a>
+  </div>
+</footer>
+<div class="sheet" id="sheet" role="region" aria-label="說明" hidden>
+  <div class="sheet-bar"><span class="sheet-grip" aria-hidden="true"></span><button class="sheet-x" data-sheet-close aria-label="關閉說明">關閉</button></div>
+  <div class="sheet-body" id="sheetBody"></div>
+</div>
+<div class="dock" id="dock" role="region" aria-label="正在播放的訪談" hidden>
+  <div class="dock-bar" aria-hidden="true"><i id="dockBar"></i></div>
+  <button class="pp sm" id="dockPlay" aria-pressed="false" aria-label="播放"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path class="ic-play" d="M8 5.5v13l11-6.5z"/><path class="ic-pause" d="M7 5h4v14H7zM13 5h4v14h-4z"/></svg></button>
+  <button class="dock-txt" id="dockGo"><span class="vh">回到正在播放的段落：</span><b id="dockTitle"></b><span id="dockSeg"></span></button>
+  <span class="dock-time" id="dockTime"></span>
+  <button class="dock-x" id="dockClose" aria-label="停止並關閉播放列">停止</button>
+</div>
+<div class="tour" id="tour" hidden>
+  <div class="tour-hole" id="tourHole"></div>
+  <div class="tour-card" id="tourCard" role="dialog" aria-modal="true" aria-labelledby="tourTitle" aria-describedby="tourText">
+    <p class="tour-step"><span>導覽</span><span id="tourStep"></span></p>
+    <h2 id="tourTitle"></h2>
+    <p id="tourText"></p>
+    <div class="tour-btns"><button class="btn" id="tourSkip">略過</button><span class="gap"></span><button class="btn" id="tourPrev">上一步</button><button class="btn solid" id="tourNext">下一步</button></div>
+    <p class="tour-off"><button id="tourOff">以後不再自動顯示導覽</button></p>
+  </div>
+</div>
+<div class="tip" id="tip" aria-hidden="true" hidden></div>
+<div class="safe-b" id="safeB" aria-hidden="true"></div>
+
+<template id="aboutTpl">
+  <div class="about">
+    <nav class="atoc" aria-label="本頁內容">
+      <button data-scroll="ab1">關於本計畫</button>
+      <button data-scroll="ab2">資料來源與整理方式</button>
+      <button data-scroll="ab3">圖表怎麼看</button>
+      <button data-scroll="ab4">無障礙說明</button>
+      <button data-scroll="ab5">用詞與內容</button>
+      <button data-scroll="ab6">引用與授權</button>
+    </nav>
+    <div class="abody">
+    <section>
+      <h2 id="ab1" tabindex="-1">關於本計畫</h2>
+      <p>本站把智能障礙相關的資料放在同一條時間軸上：重大事件、報紙剪報、學術研究、學生人數，並設有照片與訪談錄音的展區。</p>
+      <dl class="fill">
+        <div><dt>計畫名稱</dt><dd class="todo">（待填）</dd></div>
+        <div><dt>執行單位</dt><dd class="todo">（待填）</dd></div>
+        <div><dt>計畫主持人與團隊</dt><dd class="todo">（待填）</dd></div>
+        <div><dt>執行期間</dt><dd class="todo">（待填）</dd></div>
+        <div><dt>經費來源</dt><dd class="todo">（待填）</dd></div>
+        <div><dt>聯絡方式</dt><dd class="todo">（待填）</dd></div>
+      </dl>
+    </section>
+
+    <section>
+      <h2 id="ab2" tabindex="-1">資料來源與整理方式</h2>
+      <ul>
+        <li><b>時間軸</b>：來自「智能障礙重大事件表」的 18 件事，說明與備註保留原文。兩條主幹與測驗的兩個分支是整理時分的；標為「1970 年代」的事件畫在 1970 年的位置。背景的用詞比例由新聞資料算出，每五年一段（1980 年以前每十年一段）。新聞資料到 2022 年，2023 年以後的背景留白，圖上用一條虛線標出資料的終點。</li>
+        <li><b>剪報</b>：使用「2026整理」工作表的 738 篇。日期取自「0815合併原始檔」的日期欄（721 篇對得到），其餘 17 篇用檔名開頭的日期；標題取自檔名。</li>
+        <li><b>觀點</b>：用「主要事件觀點」，可以加上「次要敘述觀點」。編為「無」或沒有填的不畫在圓圈裡，另外寫出篇數。</li>
+        <li><b>主題</b>：用「重編主題」的大類。專家學者意見與專家學者分享合併為「專家學者」，三種表揚合併為「表揚」，其餘以「-」前面的字為大類；點某一格會列出細項。</li>
+        <li><b>用詞</b>：寫法相近的併成一組，例如「白痴/低能」與「低能」、「憨兒」與「喜憨兒」、「心智障礙」與「心智障礙者」。較少見的 37 種寫法（各出現 1 到 3 次）歸為「其他用詞」。</li>
+        <li><b>標記</b>：原表有 18 篇標記為「有出現關鍵字但主體非智能障礙者」，這些仍計入統計，在剪報清單裡會標示。</li>
+        <li><b>沒有放上來的欄位</b>：備註欄有當事人的姓名，所以沒有放進網頁。剪報標題取自檔名，少數也含有姓名，公開分享前請再檢查。</li>
+        <li><b>研究文獻</b>：「Design_themes」工作表的 426 篇。文獻用詞取自「Terms」工作表的 628 筆（兩筆空白略過），以「智能障礙」開頭的寫法併入智能障礙，英文與少見的寫法歸為其他。</li>
+        <li><b>學生人數</b>：全台用「通報網全台數據」，台北市用「台北市年報」，智能障礙總人數用「衛福部全台數據」。表裡的 ID、ASD、LD、CP、OTHER 分別顯示為智能障礙、自閉症、學習障礙、腦性麻痺、其他障礙。腦性麻痺欄位填 0 的年度不畫。</li>
+      </ul>
+    </section>
+
+    <section>
+      <h2 id="ab3" tabindex="-1">圖表怎麼看</h2>
+      <p>每個展區第一次進來時，會出現幾個步驟的導覽，可以選擇以後不再自動顯示；之後隨時可以按標題旁的「怎麼看」重看。</p>
+      <h3>時間軸</h3>
+      <ul>
+        <li>電腦上是一棵由下往上長的樹，越上面越晚；手機上是由上往下排的直式時間軸，一行一件事。兩條主幹是「測驗」與「法規與鑑定」（菱形）；測驗再分成智力測驗（圓形）與適應行為量表（方形）兩支。</li>
+        <li>點任何一個事件，會顯示日期與說明。說明裡可以往前、往後看相連的事件，也可以用「上一件／下一件」依時間順序一件一件看。</li>
+        <li>背景色塊是同一時間報紙用詞的比例。點圖下方的用詞，可以單獨看那個詞，法規裡用到這個詞的事件會保持清楚，其他的變淡。</li>
+        <li>點年代（例如 1980），會列出那十年的重大事件、剪報、研究與學生人數；點後面有箭頭的數字，可以到那個展區看同一個年代，那個年代會被標出來。</li>
+        <li>「文字清單」會把事件排成純文字的清單。按 Esc 或「清除選取」取消選取。</li>
+      </ul>
+      <h3>學生人數與研究文獻的圖表</h3>
+      <ul>
+        <li>折線圖與長條圖：滑鼠移到圖上（手機用手指點）會顯示那一年的數字。每一頁最下面的「看數字表」有每張圖完整的數字。</li>
+        <li>各障別人數的圖上，圓圈標出智能障礙與學習障礙、自閉症人數交叉的位置，移上去或點一下會顯示說明。</li>
+        <li>表格的底色越深，代表占那一欄的比例越高。</li>
+        <li>從時間軸的年代摘要連過來時，那個年代會被標出來：圖的橫軸上有一條深色的線，表格那一欄的欄名是深色的。按標題下方的「×」取消。</li>
+      </ul>
+      <h3>剪報的圓圈圖</h3>
+      <ul>
+        <li>中間是一個圓，外面平分成幾格，每格對應一個編碼類別，每一圈格子的位置都一樣。</li>
+        <li>每一格從中間的圓往外凸，凸出的面積和「那個年代有多少比例的新聞屬於這一格」成正比；凸到最外面代表的比例，所有圓圈都一樣。</li>
+        <li>顏色最深的一格是那個年代比例最高的類別。格子順時針依這個類別「平均出現的年份」由早到晚排。</li>
+        <li>圖上只寫類別名稱。大圈中間是一組數字（比例與篇數），屬於外圈標成深色的那個類別：平常是比例最高的一格；滑鼠移到別的格子上或點一下，就換成那一格。</li>
+        <li>一進來，大圈是全部年代。點一個年代的小圓圈，大圈換成那個年代，再點一次回到全部年代；點大圈的任何一格，所有圓圈只亮那一格，下面列出那些新聞。手機上可以在大圈上左右滑，換上一個或下一個年代。</li>
+        <li>大圈右邊的折線，是同一個類別在各年代的比例，會跟著你移到或點選的那一格更換；折線下面每個年代一個小圓圈，點一下，大圈就換成那個年代。</li>
+        <li>頁面最下面的「看各年代的數字」有完整的表。</li>
+      </ul>
+    </section>
+
+    <section>
+      <h2 id="ab4" tabindex="-1">無障礙說明</h2>
+      <ul>
+        <li><b>鍵盤操作</b>：所有功能都可以用鍵盤操作。Tab 移動、Enter 選取、Esc 取消；頁面最上方有「跳到主要內容」的連結。切換展區後，焦點會移到展區標題。圖表上滑鼠移過去才出現的數字，可以從「看數字表」讀到。</li>
+        <li><b>不只靠顏色</b>：時間軸同時用顏色和形狀區分主幹與分支；圓圈圖靠位置和文字標示；圖表的顏色用色盲模擬檢查過。</li>
+        <li><b>文字替代</b>：圖表附有數字表；時間軸有純文字清單。照片需附替代文字，訪談錄音需附逐字稿。</li>
+        <li><b>對比與字級</b>：內文與背景的對比在 4.5:1 以上；按鈕邊框、圖表的線與長條在 3:1 以上。時間軸的背景色塊刻意較淡，可以點圖下方的用詞加深單一色塊，數字在剪報展區的「用詞」。字級使用相對單位，可以用瀏覽器放大。</li>
+        <li><b>手機與電腦</b>：版面會依螢幕寬度重新排列，圖表依寬度重畫，不需要左右捲動。照片與圓圈圖可以左右滑動，也都有按鈕可以按。</li>
+        <li><b>其他</b>：手機與平板上，主要按鈕至少 44 像素高；支援深色模式；會依系統設定減少動畫。</li>
+        <li><b>檢測</b>：2026 年 10 月以 axe-core 4.14 依 WCAG 2.2 AA 的規則檢查各展區（電腦與手機版面、淺色與深色）。自動檢測只涵蓋一部分準則，本站尚未以螢幕報讀軟體實機測試，也還沒有請身心障礙使用者試用。</li>
+      </ul>
+    </section>
+
+    <section>
+      <h2 id="ab5" tabindex="-1">用詞與內容</h2>
+      <ul>
+        <li>本站保留資料原本的用詞，包括當年報紙與法規使用的名詞，用來呈現用語的變化。</li>
+        <li>剪報的主題包含社會事件，例如命案與性侵案件。</li>
+      </ul>
+    </section>
+
+    <section>
+      <h2 id="ab6" tabindex="-1">引用與授權</h2>
+      <p class="todo">（待填）建議的引用方式，以及剪報、照片、錄音的授權與使用範圍。</p>
+    </section>
+    </div>
+  </div>
+</template>
