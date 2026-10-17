@@ -212,6 +212,7 @@ const CR = CR_RAW.map(r=>{
   return e;
 }).sort((a,b)=>a.k-b.k);
 const crById = Object.fromEntries(CR.map(e=>[e.id,e]));
+const crYear = e => e.when && /年代/.test(e.when) ? e.when : String(e.y);          // 卡片上只寫年份；「1970年代」這種照寫
 const crDate = e => e.when || (e.dd ? `${e.y} 年 ${e.mo} 月 ${e.dd} 日` : e.mo ? `${e.y} 年 ${e.mo} 月` : `${e.y} 年`);
 
 let crSel = null, crList = false, crX = 0;
@@ -238,7 +239,7 @@ function crTicks(S){
 function crLayout(width){
   const narrow = vw()<720, S = crScale(narrow), labW = narrow ? 44 : 64, padL = labW+24, padR = narrow ? 140 : 200;
   const fs = narrow ? 13.8 : 14.7, rowH = narrow ? 44 : 46, RULER = 58, lanePad = 6;
-  const wOf = e => Math.ceil(34+Math.max(textW(String(e.when||e.y), 12.5), Math.min(textW(e.t, fs)*1.06, narrow ? 180 : 240)));          // 一件事的寬度：依名稱長短
+  const wOf = e => Math.ceil(34+Math.max(textW(crYear(e), 12.5), Math.min(textW(e.t, fs)*1.06, narrow ? 180 : 240)));          // 一件事的寬度：依名稱長短
   const pos = {}, lanes = [];
   let top = RULER;
   CR_LANES.filter(l=>crShow.has(l.k)).forEach(l=>{
@@ -273,7 +274,7 @@ function crFigHtml(L){
   const eras = CR_ERAS.map((r,i)=>{ const a = X(Math.max(r.from,1795)), b = X(i<CR_ERAS.length-1 ? CR_ERAS[i+1].from : CR_END);
     return `<div class="cr-era" style="left:${a.toFixed(0)}px;width:${(b-a).toFixed(0)}px"><span>${esc(r.name)}</span></div>`; }).join('');
   const items = CR.filter(e=>L.pos[e.id]).map(e=>{ const p = L.pos[e.id], ln = CR_LANE[e.lane];
-    return `<button class="cr-it${ln.data?' data':''}" data-cr="${e.id}" aria-pressed="${crSel===e.id}" style="left:${(p.x-8).toFixed(0)}px;top:${p.y}px;width:${p.w}px" title="${esc(e.t)}">${icon(ln.shape,'var(--ink)',ln.data)}<span class="cr-y">${esc(String(e.when||e.y))}</span><span class="cr-t">${esc(e.t)}</span><span class="vh">，${ln.name}${ln.data?'（本站資料）':''}</span></button>`; }).join('');
+    return `<button class="cr-it${ln.data?' data':''}" data-cr="${e.id}" aria-pressed="${crSel===e.id}" style="left:${(p.x-8).toFixed(0)}px;top:${p.y}px;width:${p.w}px" title="${esc(e.t)}">${icon(ln.shape,'var(--ink)',ln.data)}<span class="cr-y">${esc(crYear(e))}</span><span class="cr-t">${esc(e.t)}</span><span class="vh">，${ln.name}${ln.data?'（本站資料）':''}</span></button>`; }).join('');
   const labels = L.lanes.map(l=>`<div class="cr-lane${l.data?' data':''}" style="top:${l.top}px;height:${l.h}px;width:${L.labW}px"><b>${l.name}</b>${L.narrow?'':`<small>${l.kind}</small>`}</div>`).join('');
   return `<div class="cr-scroll" id="crScroll" tabindex="0" aria-label="年表，可以左右捲動">
       <div class="cr-track" style="width:${L.W}px;height:${L.H}px">${crSvgRuler(L)}${eras}<i class="cr-guide" id="crGuide" hidden></i><span class="cr-flag" id="crFlag" hidden></span>${items}</div>
@@ -287,7 +288,7 @@ function crGuide(id){
   if(!p){ g.hidden = fl.hidden = true; return; }
   g.hidden = fl.hidden = false;
   g.style.cssText = `left:${p.x.toFixed(0)}px;top:${CRL.RULER}px;height:${p.y+6-CRL.RULER}px`;
-  fl.textContent = e.when || (e.mo ? e.y+'.'+e.mo+(e.dd?'.'+e.dd:'') : e.y);
+  fl.textContent = (e.when && /年代/.test(e.when)) ? e.when : (e.mo ? e.y+'.'+e.mo+(e.dd?'.'+e.dd:'') : e.y);
   fl.style.left = p.x.toFixed(0)+'px';
 }
 function crListHtml(){
