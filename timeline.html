@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>智能障礙大事年表</title>
-<meta name="description" content="橫向捲動的智能障礙大事年表：1801 到 2024 年，國際與臺灣的 50 件重要事件。">
+<meta name="description" content="橫向捲動的智能障礙大事年表：1801 到 2024 年，國際與臺灣的 50 件重要事件，加上剪報、研究與學生人數的 26 個資料關鍵。">
 <meta name="color-scheme" content="light dark">
 <link rel="icon" type="image/png" href="icon.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -78,14 +78,15 @@ a{color:var(--assess);text-underline-offset:3px}
 .era-btn[aria-current="true"] span{color:var(--paper);opacity:.8}
 
 /* 全覽：照真實年份比例畫的一條，方框是目前畫面看到的範圍 */
-.mini{position:relative;height:46px;margin:0 20px 10px;border-radius:8px;background:var(--stage);border:1px solid var(--line);cursor:pointer;touch-action:none;user-select:none}
+.mini{position:relative;height:60px;margin:0 20px 10px;border-radius:8px;background:var(--stage);border:1px solid var(--line);cursor:pointer;touch-action:none;user-select:none}
 .mini-era{position:absolute;top:0;bottom:0;border-right:1px dashed var(--line2)}
 .mini-era:last-of-type{border-right:0}
-.mini-mid{position:absolute;left:0;right:0;top:50%;height:1px;background:var(--line2)}
-.mini-tick{position:absolute;width:3px;height:13px;margin-left:-1.5px;border-radius:2px;background:var(--c)}
-.mini-tick.up{top:7px}.mini-tick.dn{bottom:7px}
+.mini-mid{position:absolute;left:0;right:0;top:16px;height:1px;background:var(--line2)}
+.mini-mid.da{top:29px;height:0;background:none;border-top:1px dashed var(--line2)}
+.mini-tick{position:absolute;width:3px;height:10px;margin-left:-1.5px;border-radius:2px;background:var(--c)}
+.mini-tick.up{top:4px}.mini-tick.dn{top:18px}.mini-tick.da{top:31px;height:7px;opacity:.6}
 .mini-tick.dim{opacity:.18}
-.mini-yr{position:absolute;bottom:-1px;font-size:.68rem;color:var(--muted);transform:translateX(-50%);line-height:1;pointer-events:none}
+.mini-yr{position:absolute;bottom:2px;font-size:.68rem;color:var(--muted);transform:translateX(-50%);line-height:1;pointer-events:none}
 .mini-win{position:absolute;top:-3px;bottom:-3px;border:2.5px solid var(--ink);border-radius:7px;background:color-mix(in srgb,var(--ink) 7%,transparent);pointer-events:none;min-width:8px}
 .now{font-size:.85rem;color:var(--muted);white-space:nowrap;font-variant-numeric:tabular-nums}
 
@@ -97,6 +98,8 @@ a{color:var(--assess);text-underline-offset:3px}
 .track{position:relative}
 .lane-tag{position:absolute;left:0;z-index:12;display:flex;align-items:center;justify-content:center;width:44px;writing-mode:vertical-rl;letter-spacing:.35em;font-weight:700;font-size:1rem;background:var(--paper);border-right:1px solid var(--line);pointer-events:none}
 .lane-tag.intl{border-bottom:1px solid var(--line)}
+.lane-tag.tw{border-bottom:1px solid var(--line)}
+.lane-tag.data{font-size:.86rem;letter-spacing:.2em}
 .corner{position:absolute;left:0;top:0;z-index:12;background:var(--stage);pointer-events:none}
 .lane-tag small{font-weight:400;font-size:.72rem;letter-spacing:.1em;color:var(--muted);margin-top:8px}
 
@@ -120,7 +123,15 @@ a{color:var(--assess);text-underline-offset:3px}
 .mk.assess{border-radius:50%}
 .mk.edu{border-radius:1px;transform:scale(.9)}
 .mk.rights{clip-path:polygon(50% 0,100% 100%,0 100%);transform:scale(1.15)}
-.c-law{--c:var(--law)}.c-assess{--c:var(--assess)}.c-edu{--c:var(--edu)}.c-rights{--c:var(--rights)}
+.c-law{--c:var(--law)}.c-assess{--c:var(--assess)}.c-edu{--c:var(--edu)}.c-rights{--c:var(--rights)}.c-data{--c:var(--ink2)}
+/* 本站資料：中性色、空心的方形、虛線框，和彩色的事件分開 */
+.mk.data{background:transparent;border:2.5px solid var(--c);border-radius:2px;transform:scale(.92)}
+.ev.data .card{border:1.5px dashed var(--line2);background:color-mix(in srgb,var(--paper) 70%,var(--stage))}
+.ev.data .card::before{background:repeating-linear-gradient(180deg,var(--c) 0 6px,transparent 6px 10px)}
+.ev.data .card .yr{color:var(--ink)}
+.ev.data .tag{color:var(--ink2);font-weight:700}
+.rail{position:absolute;left:0;right:0;height:0;border-top:2px dashed var(--line2)}
+
 
 .stem{position:absolute;width:2px;margin-left:-1px;background:var(--c);opacity:.55;pointer-events:none}
 .dot{position:absolute;width:20px;height:20px;margin:-10px 0 0 -10px;display:grid;place-items:center;pointer-events:none;z-index:2}
@@ -197,7 +208,7 @@ a{color:var(--assess);text-underline-offset:3px}
   .legend-lbl{display:none}
   .eras{padding:0 14px 6px}
   .era-btn{min-width:122px;padding:4px 10px}
-  .mini{margin:0 14px 8px;height:40px}
+  .mini{margin:0 14px 8px;height:56px}
   .lane-tag{width:30px;font-size:.88rem}
   .lane-tag small{display:none}
   .nav-btn{width:40px;height:40px;margin-top:-20px}
@@ -214,7 +225,7 @@ a{color:var(--assess);text-underline-offset:3px}
 @media (max-height:820px) and (min-width:761px){
   .top-row{padding:7px 20px 5px}
   .era-btn{display:flex;align-items:baseline;gap:10px;padding:3px 12px}
-  .mini{height:40px;margin-bottom:8px}
+  .mini{margin-bottom:8px}
   .card .yr{font-size:1.32rem}
   .card{padding:8px 12px 8px 15px}
 }
@@ -230,7 +241,7 @@ a{color:var(--assess);text-underline-offset:3px}
 <body>
 <header class="top">
   <div class="top-row">
-    <h1>智能障礙大事年表<small>1801–2024・國際與臺灣 50 件事</small></h1>
+    <h1>智能障礙大事年表<small>1801–2024・50 件大事＋26 個資料關鍵</small></h1>
     <a class="back" href="index.html">回到智能障礙事件樹</a>
     <span class="now" id="miniRead" aria-live="off"></span>
     <div class="legend" role="group" aria-label="依類別篩選">
@@ -238,7 +249,7 @@ a{color:var(--assess);text-underline-offset:3px}
     </div>
   </div>
   <nav class="eras" id="eras" aria-label="章節"></nav>
-  <div class="mini" id="mini" role="slider" tabindex="0" aria-label="全覽：依真實年份比例排列，方框是目前看到的範圍" aria-valuemin="1801" aria-valuemax="2024"></div>
+  <div class="mini" id="mini" role="slider" tabindex="0" aria-label="全覽：依真實年份比例排列，上排國際、中排臺灣、下排本站資料，方框是目前看到的範圍" aria-valuemin="1801" aria-valuemax="2024"></div>
 </header>
 
 <main>
@@ -247,18 +258,20 @@ a{color:var(--assess);text-underline-offset:3px}
     <div class="corner" id="corner" aria-hidden="true"></div>
     <div class="lane-tag intl" id="tagIntl">國際<small>上方</small></div>
     <div class="lane-tag tw" id="tagTw">臺灣<small>下方</small></div>
+    <div class="lane-tag data" id="tagData">本站資料<small>剪報・研究・人數</small></div>
     <button class="nav-btn prev" id="prevBtn" aria-label="往前（較早）">‹</button>
     <button class="nav-btn next" id="nextBtn" aria-label="往後（較晚）">›</button>
     <div class="scroller" id="scroller" tabindex="0" aria-label="時間軸，可用左右鍵捲動">
       <div class="track" id="track">
         <div id="bands"></div>
         <div class="axis-line" id="axisLine"></div>
+        <div class="rail" id="rail"></div>
         <div id="axisDeco"></div>
         <section class="intro" id="intro" aria-labelledby="introTitle">
           <h2 id="introTitle">智能障礙<br>兩百年大事年表</h2>
-          <p>從 1801 年第一次有系統地嘗試教育智能障礙者，到 2024 年臺灣修訂鑑定辦法，挑出國際與臺灣的 50 件事，放在同一條時間軸上。</p>
+          <p>從 1801 年第一次有系統地嘗試教育智能障礙者，到 2024 年臺灣修訂鑑定辦法：國際與臺灣的 50 件大事，加上本站剪報、研究與學生人數裡的 26 個轉折點，放在同一條時間軸上。</p>
           <div class="howto">
-            <div><b>怎麼讀</b><span>由左往右是由早到晚。時間軸上方是國際，下方是臺灣。</span></div>
+            <div><b>怎麼讀</b><span>由左往右是由早到晚，分成三道：上方是國際的事件，中間是臺灣的事件，最下面是本站資料（剪報、研究、人數）裡看到的轉折。</span></div>
             <div><b>怎麼動</b><span>捲動滑鼠滾輪、拖曳畫面、按左右鍵，或點上方的章節與全覽。</span></div>
             <div><b>看詳細</b><span>點任何一張卡片，右邊會打開完整說明與來源。</span></div>
             <div><b>斷開的線</b><span>兩件事相隔十五年以上時，時間軸會斷開並寫出相隔幾年。</span></div>
@@ -268,7 +281,7 @@ a{color:var(--assess);text-underline-offset:3px}
         <ol class="events" id="events" style="margin:0;padding:0"></ol>
         <section class="outro" id="outro" aria-labelledby="outroTitle">
           <h2 id="outroTitle">年表到這裡結束</h2>
-          <p>這 50 件事是從不同來源挑出來的重點，不是完整的歷史。標有「也在事件樹裡」的事件，說明取自本站的「智能障礙重大事件表」。</p>
+          <p>這 50 件大事是從不同來源挑出來的重點，不是完整的歷史；標有「也在事件樹裡」的，說明取自本站的「智能障礙重大事件表」。最下面一道的 26 個資料關鍵，由本站的 738 篇剪報、426 篇研究與學生人數算出。</p>
           <p><a href="#plain">往下看文字版與來源</a>・<a href="index.html">回到事件樹</a></p>
         </section>
       </div>
@@ -276,12 +289,13 @@ a{color:var(--assess);text-underline-offset:3px}
   </div>
 
   <section class="plain" id="plain" aria-labelledby="plainTitle">
-    <h2 id="plainTitle">文字版：全部 50 件事</h2>
-    <p>和上面的時間軸內容相同，依時間排成清單。點事件名稱會在時間軸上打開它。</p>
+    <h2 id="plainTitle">文字版：50 件大事與 26 個資料關鍵</h2>
+    <p>和上面的時間軸內容相同，依時間排成清單；「本站資料」是由剪報、研究與學生人數算出的轉折點。點名稱會在時間軸上打開它。</p>
     <div id="plainList"></div>
     <h3>主要來源</h3>
     <ul class="refs">
       <li>本站「智能障礙重大事件表」（事件樹的 18 件事）</li>
+      <li>本站資料：738 篇剪報、426 篇研究文獻、全國與臺北市特教學生人數、衛福部智能障礙者人數（最下面一道的 26 個資料關鍵）</li>
       <li>全國法規資料庫（殘障福利法、身心障礙者保護法、身心障礙者權益保障法、特殊教育法、身心障礙者權利公約施行法的沿革）：<a href="https://law.moj.gov.tw/">law.moj.gov.tw</a></li>
       <li>教育部〈特殊教育簡介〉與各校校史</li>
       <li>明尼蘇達州發展障礙委員會《Parallels in Time》：<a href="https://mn.gov/mnddc/parallels/">mn.gov/mnddc/parallels</a></li>
@@ -309,9 +323,10 @@ const CATS = {
   law:{name:'法規與政策'},
   assess:{name:'定義與鑑定'},
   edu:{name:'教育與普查'},
-  rights:{name:'權利與社會'}
+  rights:{name:'權利與社會'},
+  data:{name:'本站資料'}
 };
-const LANES = {intl:'國際', tw:'臺灣'};
+const LANES = {intl:'國際', tw:'臺灣', data:'本站資料'};
 const ERAS = [
   {from:1800, to:1904, name:'啟蒙與機構', desc:'開始嘗試教育，也開始把人送進大型機構'},
   {from:1905, to:1949, name:'測量與優生', desc:'智力測驗出現，優生學帶來絕育與殺害'},
@@ -523,6 +538,100 @@ const EVENTS = [
    src:'本站「智能障礙重大事件表」'}
 ];
 
+/* ============ 本站資料裡的關鍵 ============
+   這些不是事件，是從本站的剪報（738 篇）、研究文獻（426 篇）與學生人數算出來的轉折點，畫在最下面一道。
+   數字都由 source/data.json 算出；資料更新時請重算。kind：news 剪報、lit 研究、people 人數 */
+const KINDS = {
+  news:{name:'剪報', link:'index.html#news', more:'到事件樹的「剪報」展區看'},
+  lit:{name:'研究', link:'index.html#research', more:'到事件樹的「研究」展區看'},
+  people:{name:'人數', link:'index.html#people', more:'到事件樹的「人數」展區看'}
+};
+const DATA = [
+  {id:'n1962', d:'1962-01-15', kind:'news', t:'最早的一篇剪報',
+   s:'中央日報〈幼獅社〉，用的詞是「白痴／低能」。',
+   x:'本站 738 篇剪報裡最早的一篇，是 1962 年 1 月 15 日中央日報的〈幼獅社〉。\n1960 年代的 21 篇剪報，有 62% 用到「白痴」或「低能」，48% 用到「智能不足」。'},
+  {id:'n1964', d:'1964-07-15', kind:'news', t:'「智能不足」第一次見報',
+   s:'中央日報報導教育局為設班寫給家長的信。',
+   x:'剪報裡第一次出現「智能不足」，是 1964 年 7 月 15 日中央日報的〈設班 教育局告家長書〉。\n1960 年代的 21 篇剪報有 10 篇是政策公告，多半與設班、設立特殊學校有關，和同一時期開辦啟智班的事件相呼應。'},
+  {id:'n1967', d:'1967-01-04', kind:'news', t:'溪洲命案的連續報導',
+   s:'三天內 8 篇，醫師、母親、老師各自發表看法。',
+   x:'1967 年 1 月 4 日到 6 日，中央日報與中國時報連續報導溪洲命案，三天內有 8 篇，分別從醫師、母親、老師與記者的角度發表看法。\n這 8 篇編碼的主要觀點有沈重負擔／同情憐憫（3 篇）、排斥障礙者、犧牲奉獻，也有一篇是倡議。這是剪報裡最早一次密集的社會事件報導。'},
+  {id:'n1978', d:'1978-10-02', kind:'news', t:'「智能障礙」第一次見報',
+   s:'比 1990 年法律改稱早了 12 年，但之後十年仍很少見。',
+   x:'剪報裡第一次出現「智能障礙」，是 1978 年 10 月 2 日的〈佳音韻療育中心〉。\n但這個詞之後很少見：1980–1984 年的 19 篇剪報全部用「智能不足」。'},
+  {id:'n1985', d:'1985-02-13', kind:'news', t:'家長陳情',
+   s:'1980 年代是剪報裡「倡議」觀點比例最高的年代。',
+   x:'1985 年 2 月 13、14 日，聯合報連續報導家長陳情，主要觀點編為「倡議」。\n1980 年代 58 篇剪報有 9 篇的主要觀點是倡議（16%），是各年代裡比例最高的；1990 年代降為 8%，2010 年以後只有 4%。'},
+  {id:'n1988', d:'1988-04-02', kind:'news', t:'「智障」第一次見報',
+   s:'中國時報〈歧視〉，談家長不願孩子被貼標籤。',
+   x:'剪報裡第一次出現「智障」這個簡稱，是 1988 年 4 月 2 日中國時報的〈歧視〉，主要觀點是家長拒絕標籤。\n之後「智障」很快普及：1990–1994 年有 42% 的剪報用到它。'},
+  {id:'n1990s', d:'1990', kind:'news', t:'剪報數量大增',
+   s:'1990 年代 247 篇，是 1980 年代的四倍多。',
+   x:'1990 年代的剪報有 247 篇（1980 年代 58 篇），是篇數最多的年代。\n主題以社會事件（84 篇）和政策公告（71 篇）最多。'},
+  {id:'n1996', d:'1996-12-19', kind:'news', t:'家長怕孩子被貼標籤',
+   s:'不願孩子接受鑑定或讀啟智班，1990 年代有 8 篇。',
+   x:'1990 年代有 8 篇剪報的主要觀點是「家長拒絕標籤」：家長擔心孩子被貼上標籤，不願讓孩子接受鑑定或就讀啟智班。\n例如 1993 年〈啟智班家長態度 怕烙印〉、1996 年 12 月 19 日〈家長怕被貼標籤〉、1997 年〈憂歧視 家長不願孩子就讀啟智班〉。'},
+  {id:'n1998', d:'1998-11-13', kind:'news', t:'「喜憨兒」第一次見報',
+   s:'喜憨兒基金會成立三年後，這個詞出現在剪報。',
+   x:'剪報裡第一次出現「喜憨兒」，是 1998 年 11 月 13 日的〈喜憨兒 啟智中心〉。\n「憨兒／喜憨兒」一共出現在 14 篇剪報，最後一次是 2017 年。'},
+  {id:'n1999', d:'1999', kind:'news', t:'剪報最多的一年：43 篇',
+   s:'除了成果發表，還有「裝傻免役」的爭議。',
+   x:'1999 年有 43 篇剪報，是篇數最多的一年。\n最常見的是障礙者的成果發表、比賽、課程或營隊（12 篇），其次是編為「誤判」的 6 篇，都與兵役體檢驗退「智能不足」、有人裝傻逃避兵役的爭議有關。'},
+  {id:'n2000', d:'2000', kind:'news', t:'報紙改口「智能障礙」',
+   s:'2000–2004 年，「智能障礙」第一次成為最常用的詞。',
+   x:'2000–2004 年的剪報有 51% 用「智能障礙」，第一次超過「智能不足」（33%）與「智障」（37%）。\n比例逐年上升，2015–2019 年有 94% 的剪報用「智能障礙」。'},
+  {id:'n2010', d:'2010', kind:'news', t:'最常見的觀點仍是同情',
+   s:'2010 年以後，「沈重負擔／同情憐憫」仍然最多。',
+   x:'2010–2022 年的 200 篇剪報，主要觀點最常見的是「沈重負擔／同情憐憫」（75 篇），其次是「肯定障礙者的能力與成就」（45 篇）。\n從 1990 年代起，同情憐憫一直是剪報裡最常見的觀點。'},
+
+  {id:'r1971', d:'1971', kind:'lit', t:'最早的一篇研究',
+   s:'426 篇研究裡最早的一篇，是量化的現況調查。',
+   x:'本站整理的 426 篇學術文獻，最早一篇在 1971 年，研究設計是量化研究，主題是現況調查。\n整個 1970 年代只有 7 篇。'},
+  {id:'r1985', d:'1985', kind:'lit', t:'第一篇質性研究',
+   s:'下一篇質性研究要到 2001 年才出現。',
+   x:'1985 年出現第一篇質性研究，但下一篇要到 2001 年。\n2000 年以後質性研究才增加，一共 63 篇，多半談家庭觀點或個人的生命經驗。'},
+  {id:'r1986', d:'1986', kind:'lit', t:'研究開始談性與權利',
+   s:'第一篇「權利意識」研究，也是第一篇性相關調查。',
+   x:'1986 年出現第一篇主題為「權利意識」的研究，也是第一篇性相關調查。\n權利意識的研究一共 31 篇，有一半在 2010 年代。'},
+  {id:'r1988', d:'1988', kind:'lit', t:'研究第一次用「智能障礙」',
+   s:'研究比報紙更早改口：2000 年代初已有 87% 用這個詞。',
+   x:'文獻用詞裡第一次出現「智能障礙」是 1988 年。1970–1989 年的 45 筆文獻，有 41 筆用「智能不足」。\n2000–2004 年，87% 的文獻已改用「智能障礙」；同一時期的剪報只有 51%。'},
+  {id:'r2000', d:'2000', kind:'lit', t:'研究數量大增',
+   s:'2000 年代 143 篇，是 1990 年代的近七倍。',
+   x:'1990 年代只有 21 篇研究，2000 年代增加到 143 篇，2010 年代再增加到 201 篇。研究最多的一年是 2006 年（28 篇）。\n研究設計以實驗或介入研究最多（185 篇），主題以現況調查最多（137 篇）。'},
+  {id:'r2005', d:'2005', kind:'lit', t:'第一篇自我倡議研究',
+   s:'研究開始討論自我倡議與自我決策。',
+   x:'2005 年出現第一篇以自我倡議／自我決策為主題的研究，之後一共 16 篇。\n同一時期，CRPD 在 2006 年通過，強調「沒有我們的參與，不要做關於我們的決定」。'},
+
+  {id:'p1999', d:'1999', kind:'people', t:'智能障礙者 68,044 人',
+   s:'衛福部統計的全國智能障礙者人數（年底）。',
+   x:'衛福部統計的全國智能障礙者人數，1999 年底是 68,044 人。\n之後逐年增加，2014 年超過十萬人。'},
+  {id:'p2007', d:'2007', kind:'people', t:'臺北市：學障超過智障',
+   s:'臺北市特教學生裡，學習障礙第一次多於智能障礙。',
+   x:'2007 年，臺北市的特教學生裡，學習障礙 2,196 人，第一次多於智能障礙的 1,918 人。\n臺北市的智能障礙學生從 2003 年的 2,345 人，減少到 2024 年的 506 人。'},
+  {id:'p2009', d:'2009', kind:'people', t:'臺北市：自閉症超過智障',
+   s:'自閉症 2,020 人，智能障礙 1,861 人。',
+   x:'2009 年，臺北市的自閉症學生 2,020 人，第一次多於智能障礙的 1,861 人。\n全國要到 2022 年才出現同樣的交叉。'},
+  {id:'p2010', d:'2010', kind:'people', t:'全國智障學生最多',
+   s:'26,059 人，之後逐年減少。',
+   x:'全國特教學生裡的智能障礙學生，2010 年是 26,059 人，是有資料的 2008–2024 年裡最多的一年，之後逐年減少。'},
+  {id:'p2013', d:'2013', kind:'people', t:'全國：學障超過智障',
+   s:'學習障礙 26,797 人，智能障礙 25,088 人。',
+   x:'2013 年，全國的學習障礙學生 26,797 人，第一次多於智能障礙的 25,088 人。臺北市早在 2007 年就出現這個交叉。'},
+  {id:'p2014', d:'2014', kind:'people', t:'智能障礙者超過十萬人',
+   s:'衛福部統計 100,588 人，之後維持在十萬人上下。',
+   x:'衛福部統計的全國智能障礙者，2014 年底是 100,588 人，第一次超過十萬。\n之後大致持平，2024 年底是 102,556 人。'},
+  {id:'p2022', d:'2022', kind:'people', t:'全國：自閉症超過智障',
+   s:'自閉症 18,853 人，智能障礙 17,608 人。',
+   x:'2022 年，全國的自閉症學生 18,853 人，第一次多於智能障礙的 17,608 人。臺北市在 2009 年就已交叉。'},
+  {id:'p2024', d:'2024', kind:'people', t:'智障學生 16,800 人',
+   s:'比 2010 年少 36%，只占特教學生的 13%。',
+   x:'2024 年，全國的智能障礙學生 16,800 人，比 2010 年的高峰少了 36%。\n占全部特教學生的比例，從 2008 年的 31% 降到 13%。同一時期，衛福部統計的智能障礙者總人數沒有減少，維持在十萬人上下。'}
+];
+DATA.forEach(e => { e.lane = 'data'; e.cat = 'data'; e.src = '本站資料：' + KINDS[e.kind].name + '（由 source/data.json 計算）'; });
+const NEV = EVENTS.length;
+EVENTS.push(...DATA);   // 事件與資料關鍵排在同一條時間軸上，以下統稱 EVENTS
+
 /* ============ 整理資料 ============ */
 const $ = s => document.querySelector(s);
 const el = (tag, cls, html) => { const e = document.createElement(tag); if (cls) e.className = cls; if (html != null) e.innerHTML = html; return e; };
@@ -535,7 +644,7 @@ const fmtMD = d => { const [,m,dd] = parts(d); return m ? m + ' 月' + (dd ? ' '
 EVENTS.forEach(e => { e.k = sortKey(e.d); e.y = parts(e.d)[0]; });
 EVENTS.sort((a,b) => a.k - b.k);
 EVENTS.forEach((e,i) => { e.i = i; e.era = ERAS.findIndex(r => e.y >= r.from && e.y <= r.to); });
-console.assert(EVENTS.length === 50, '事件數應為 50，現在是 ' + EVENTS.length);
+console.assert(NEV === 50, '事件數應為 50，現在是 ' + NEV);
 const Y0 = 1795, Y1 = 2030;
 
 /* ============ 畫面 ============ */
@@ -555,9 +664,8 @@ Object.entries(CATS).forEach(([k,c]) => {
 // 章節
 const erasNav = $('#eras');
 ERAS.forEach((r,i) => {
-  const n = EVENTS.filter(e => e.era === i).length;
-  const first = EVENTS.find(e => e.era === i), last = [...EVENTS].reverse().find(e => e.era === i);
-  const b = el('button', 'era-btn', '<b>' + (i+1) + '　' + r.name + '</b><span>' + first.y + '–' + last.y + '・' + n + ' 件</span>');
+  const evs = EVENTS.filter(e => e.era === i), n = evs.filter(e => e.lane !== 'data').length, m = evs.length - n;
+  const b = el('button', 'era-btn', '<b>' + (i+1) + '　' + r.name + '</b><span>' + evs[0].y + '–' + evs[evs.length-1].y + '・' + n + ' 件' + (m ? '＋資料 ' + m : '') + '</span>');
   b.onclick = () => goEra(i);
   erasNav.appendChild(b);
 });
@@ -565,8 +673,9 @@ ERAS.forEach((r,i) => {
 // 卡片
 const list = $('#events');
 EVENTS.forEach(e => {
-  const li = el('li', 'ev'); li.id = 'ev-' + e.id; li.dataset.cat = e.cat;
-  const c = 'c-' + e.cat;
+  const li = el('li', 'ev' + (e.lane === 'data' ? ' data' : '')); li.id = 'item-' + e.id; li.dataset.cat = e.cat;
+  // id 不用 ev- 開頭：網址的 #ev-… 對不到元素，瀏覽器才不會把頁面往下捲
+  const c = 'c-' + e.cat, tag = e.kind ? KINDS[e.kind].name : CATS[e.cat].name;
   li.innerHTML =
     '<i class="stem ' + c + '" aria-hidden="true"></i>' +
     '<i class="dot" aria-hidden="true"><i class="mk ' + e.cat + ' ' + c + '"></i></i>' +
@@ -574,8 +683,8 @@ EVENTS.forEach(e => {
       '<span class="when"><span class="yr">' + e.y + '</span><span class="md">' + fmtMD(e.d) + '</span></span>' +
       '<span class="tt">' + esc(e.t) + '</span>' +
       '<span class="ss">' + esc(e.s) + '</span>' +
-      '<span class="tag"><i class="mk ' + e.cat + ' ' + c + '" aria-hidden="true"></i>' + CATS[e.cat].name + '</span>' +
-      '<span class="vh">，' + LANES[e.lane] + '，' + fmtDate(e.d) + '</span>' +
+      '<span class="tag"><i class="mk ' + e.cat + ' ' + c + '" aria-hidden="true"></i>' + tag + '</span>' +
+      '<span class="vh">，' + (e.kind ? '本站資料・' + tag : LANES[e.lane]) + '，' + fmtDate(e.d) + '</span>' +
     '</button>';
   const btn = li.querySelector('.card');
   btn.onclick = ev => { if (dragMoved) { ev.preventDefault(); return; } open(e.i); };
@@ -591,27 +700,28 @@ EVENTS.forEach(e => {
 });
 
 /* ============ 版面 ============
-   每件事依時間排一欄；同一側相鄰的事件放在兩層（靠近時間軸、遠離時間軸），卡片不會重疊。
-   兩件事相隔 15 年以上，時間軸斷開並寫出相隔幾年。 */
+   三道由上到下：國際、（時間軸）、臺灣、本站資料。每道只有一排卡片，依時間由左往右排，同一道的卡片不重疊。
+   兩個相鄰的時間點相隔 15 年以上，時間軸斷開並寫出相隔幾年。 */
 function layout() {
   const narrow = innerWidth < 760;
   const topH = document.querySelector('.top').offsetHeight;
   const avail = Math.max(innerHeight - topH, 480);
   const short = !narrow && innerHeight <= 820;
-  const ERA_H = narrow ? 58 : short ? 54 : 64, AXIS = narrow ? 40 : short ? 44 : 52, GAP = narrow ? 10 : short ? 10 : 14;
-  const laneH = Math.floor((avail - ERA_H - AXIS) / 2);
-  const cardH = Math.max(100, Math.min(136, Math.floor((laneH - GAP * 3) / 2)));
-  const realLane = cardH * 2 + GAP * 3;
-  const cardW = narrow ? 200 : 268, step = narrow ? 108 : 150, pad = narrow ? 10 : 16;
+  const ERA_H = narrow ? 58 : short ? 54 : 64, AXIS = narrow ? 40 : short ? 44 : 52, GAP = narrow ? 10 : short ? 10 : 14, RAIL = 30;
+  const cardH = Math.max(108, Math.min(150, Math.floor((avail - ERA_H - AXIS - RAIL - GAP * 6) / 3)));
+  const laneH = cardH + GAP * 2;
+  const cardW = narrow ? 200 : 268, step = narrow ? 70 : 96, pad = narrow ? 12 : 18;
   const tagW = narrow ? 30 : 44, introW = narrow ? Math.min(innerWidth - 60, 340) : 520;
-  const H = ERA_H + realLane * 2 + AXIS;
-  const axisY = ERA_H + realLane + AXIS / 2;
-  const lines = cardH >= 114 ? 2 : 1;
+  const axisY = ERA_H + laneH + AXIS / 2;
+  const twTop = ERA_H + laneH + AXIS;
+  const railY = twTop + laneH + RAIL / 2;
+  const H = railY + RAIL / 2 + laneH;
+  const lines = cardH >= 140 ? 3 : cardH >= 116 ? 2 : 1;
   L = {narrow, cardW, cardH, step, axisY, H, tagW};
 
-  // 每一欄的位置
+  // 每一個時間點的位置
   let x = tagW + 40 + introW + 60;
-  const right = {intl:[-1e9,-1e9], tw:[-1e9,-1e9]};
+  const right = {intl:-1e9, tw:-1e9, data:-1e9};
   const gaps = [];
   EVENTS.forEach((e,i) => {
     if (i > 0) {
@@ -620,13 +730,11 @@ function layout() {
       if (e.era !== prev.era) x += narrow ? 40 : 60;
       if (dy >= 15) { gaps.push({x0: prev.px + 26, x1: x + (narrow ? 70 : 110) - 8, n: dy}); x += narrow ? 70 : 110; }
     }
-    const r = right[e.lane];
-    let tier = r[0] + pad <= x ? 0 : r[1] + pad <= x ? 1 : -1;
-    if (tier < 0) { tier = r[0] <= r[1] ? 0 : 1; x = r[tier] + pad; }
-    r[tier] = x + cardW;
-    e.px = x; e.tier = tier;
+    x = Math.max(x, right[e.lane] + pad);
+    right[e.lane] = x + cardW;
+    e.px = x;
   });
-  const lastRight = Math.max(...right.intl, ...right.tw);
+  const lastRight = Math.max(right.intl, right.tw, right.data);
   const outroX = lastRight + 80, outroW = narrow ? 300 : 420;
   const W = outroX + outroW + 80;
   L.W = W;
@@ -634,24 +742,24 @@ function layout() {
   track.style.width = W + 'px'; track.style.height = H + 'px';
   stage.style.height = H + 'px';
   $('#axisLine').style.top = axisY + 'px';
+  $('#rail').style.top = railY + 'px';
 
-  const tagI = $('#tagIntl'), tagT = $('#tagTw');
   Object.assign($('#corner').style, {width: tagW + 'px', height: ERA_H + 'px'});
-  tagI.style.top = ERA_H + 'px'; tagI.style.height = realLane + AXIS / 2 + 'px';
-  tagT.style.top = axisY + 'px'; tagT.style.height = realLane + AXIS / 2 + 'px';
+  Object.assign($('#tagIntl').style, {top: ERA_H + 'px', height: laneH + AXIS / 2 + 'px'});
+  Object.assign($('#tagTw').style, {top: axisY + 'px', height: twTop + laneH - axisY + 'px'});
+  Object.assign($('#tagData').style, {top: twTop + laneH + 'px', height: RAIL + laneH + 'px'});
   $('#prevBtn').style.top = $('#nextBtn').style.top = axisY + 'px';
 
   EVENTS.forEach(e => {
     const cx = e.px + 22;
-    let top;
-    if (e.lane === 'intl') top = e.tier === 0 ? ERA_H + GAP * 2 + cardH : ERA_H + GAP;
-    else top = e.tier === 0 ? axisY + AXIS / 2 + GAP : axisY + AXIS / 2 + GAP * 2 + cardH;
+    const top = e.lane === 'intl' ? ERA_H + GAP : e.lane === 'tw' ? twTop + GAP : railY + RAIL / 2 + GAP;
+    const lineY = e.lane === 'data' ? railY : axisY;
     const card = e.btn, stem = e.li.querySelector('.stem'), dot = e.li.querySelector('.dot');
     Object.assign(card.style, {left: e.px + 'px', top: top + 'px', width: cardW + 'px', height: cardH + 'px'});
     card.style.setProperty('--lines', lines);
-    const y0 = e.lane === 'intl' ? top + cardH : axisY, y1 = e.lane === 'intl' ? axisY : top;
+    const y0 = e.lane === 'intl' ? top + cardH : lineY, y1 = e.lane === 'intl' ? axisY : top;
     Object.assign(stem.style, {left: cx + 'px', top: y0 + 'px', height: (y1 - y0) + 'px'});
-    Object.assign(dot.style, {left: cx + 'px', top: axisY + 'px'});
+    Object.assign(dot.style, {left: cx + 'px', top: lineY + 'px'});
   });
 
   // 章節的底色
@@ -692,6 +800,7 @@ const yx = y => (y - Y0) / (Y1 - Y0) * 100;
 function buildMini() {
   mini.innerHTML = '';
   mini.appendChild(el('div', 'mini-mid'));
+  mini.appendChild(el('div', 'mini-mid da'));
   ERAS.forEach(r => {
     const d = el('div', 'mini-era');
     d.style.left = yx(r.from) + '%'; d.style.width = (yx(Math.min(r.to + 1, Y1)) - yx(r.from)) + '%';
@@ -702,7 +811,7 @@ function buildMini() {
     if (!L.narrow || y % 100 === 0) mini.appendChild(t);
   });
   EVENTS.forEach(e => {
-    const t = el('i', 'mini-tick c-' + e.cat + ' ' + (e.lane === 'intl' ? 'up' : 'dn'));
+    const t = el('i', 'mini-tick c-' + e.cat + ' ' + ({intl:'up', tw:'dn', data:'da'})[e.lane]);
     t.style.left = yx(e.k) + '%'; e.tick = t;
     mini.appendChild(t);
   });
@@ -864,11 +973,12 @@ function open(i, fromHash) {
   const paras = e.x.split('\n').map(p => '<p>' + esc(p) + '</p>').join('');
   $('#pBody').innerHTML =
     '<div class="p-meta"><span>第 ' + (e.era+1) + ' 章・' + ERAS[e.era].name + '</span><span>' + LANES[e.lane] + '</span>' +
-    '<span><i class="mk ' + e.cat + ' c-' + e.cat + '" aria-hidden="true"></i>' + CATS[e.cat].name + '</span></div>' +
+    '<span><i class="mk ' + e.cat + ' c-' + e.cat + '" aria-hidden="true"></i>' + (e.kind ? KINDS[e.kind].name : CATS[e.cat].name) + '</span></div>' +
     '<div class="p-date c-' + e.cat + '" style="color:var(--c)">' + fmtDate(e.d) + '</div>' +
     '<h2 id="pTitle" tabindex="-1">' + esc(e.t) + '</h2>' +
     '<div class="p-x">' + paras + '</div>' +
-    '<div class="p-src">來源：' + esc(e.src) + (e.tree ? '<br><span class="p-tree">也在事件樹裡（<a href="index.html">智能障礙事件樹</a>）</span>' : '') + '</div>';
+    '<div class="p-src">來源：' + esc(e.src) +
+      (e.kind ? '<br><a href="' + KINDS[e.kind].link + '">' + KINDS[e.kind].more + '</a>' : '') + (e.tree ? '<br><span class="p-tree">也在事件樹裡（<a href="index.html">智能障礙事件樹</a>）</span>' : '') + '</div>';
   $('#pPos').textContent = (i+1) + ' / ' + EVENTS.length;
   $('#pPrev').disabled = i === 0; $('#pNext').disabled = i === EVENTS.length - 1;
   panel.style.top = L.narrow ? '' : document.querySelector('.top').offsetHeight + 12 + 'px';
@@ -907,7 +1017,7 @@ ERAS.forEach((r,i) => {
   evs.forEach(e => {
     const li = el('li', null,
       '<span class="d">' + fmtDate(e.d) + '</span><span class="l">' + LANES[e.lane] + '</span>' +
-      '<span><button>' + esc(e.t) + '</button>　<small style="color:var(--muted)">' + CATS[e.cat].name + '</small></span><p>' + esc(e.s) + '</p>');
+      '<span><button>' + esc(e.t) + '</button>　<small style="color:var(--muted)">' + (e.kind ? KINDS[e.kind].name : CATS[e.cat].name) + '</small></span><p>' + esc(e.s) + '</p>');
     li.querySelector('button').onclick = () => { window.scrollTo({top:0, behavior:smooth()}); open(e.i); };
     ol.appendChild(li);
   });
@@ -920,7 +1030,8 @@ addEventListener('resize', () => { clearTimeout(rs); rs = setTimeout(() => { con
 layout();
 if (document.fonts) document.fonts.ready.then(layout);
 const h = location.hash.match(/^#ev-(.+)$/);
-if (h) { const e = EVENTS.find(x => x.id === h[1]); if (e) requestAnimationFrame(() => open(e.i, true)); }
+// 網址指到某件事時，瀏覽器會把頁面往下捲到那張卡片；改成停在頁首，只橫向捲過去
+if (h) { const e = EVENTS.find(x => x.id === h[1]); if (e) requestAnimationFrame(() => { window.scrollTo(0, 0); open(e.i, true); }); }
 </script>
 </body>
 </html>
