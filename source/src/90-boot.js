@@ -23,6 +23,7 @@ document.addEventListener('keydown', e=>{
 });
 $('#skipMain').addEventListener('click', e=>{ e.preventDefault(); const h = $('#pageTitle')||$('#heroTitle'); if(h) h.focus(); });
 { const h = (location.hash||'').slice(1); if(SECTIONS[h]) page = h; }
+if(ONLY){ page = ONLY; document.body.dataset.only = ONLY; const b = $('.brand'); b.textContent = SITE; b.href = '#'+ONLY; b.dataset.go = ONLY; }
 try{ window.history.scrollRestoration = 'manual'; }catch(e){}
 render();
 // 瀏覽器的返回／前進，或直接改網址上的 #展區

@@ -11,6 +11,7 @@
 #       --out 資料夾        網站檔案要放在哪裡（預設是上一層資料夾）
 #       --gas 資料夾        另外產生 Google Apps Script 用的 Index.html 與 Code.gs
 #       --artifact 檔名     另外產生 claude.ai 的 Artifact 用的頁面（沒有 <html><head><body> 外殼）
+#       --chron 檔名        同上，但只有「年表」一個展區
 #
 # 只用到 Python 內建的功能，不需要另外安裝套件。
 import argparse, glob, io, json, os, shutil, urllib.parse
@@ -21,6 +22,7 @@ ap.add_argument('--site', default='', help='網站發布後的網址，例如 ht
 ap.add_argument('--out', default=os.path.join(HERE, '..'), help='網站檔案要放在哪個資料夾（預設是上一層）')
 ap.add_argument('--gas', default='', help='另外產生 Google Apps Script 用的檔案，放在這個資料夾')
 ap.add_argument('--artifact', default='', help='另外產生 claude.ai Artifact 用的頁面，寫到這個檔案')
+ap.add_argument('--chron', default='', help='另外產生「只有年表」的頁面（claude.ai Artifact 用，沒有其他展區），寫到這個檔案')
 args = ap.parse_args()
 
 rd = lambda f: io.open(os.path.join(HERE, f), encoding='utf-8').read()
@@ -107,3 +109,10 @@ if args.artifact:
             + '\n<script>\n' + src.replace('/*__DATA__*/', dump(D).replace('</', '<\\/')) + '</script>\n')
     wr(args.artifact, html)
     print('Artifact：%s（%d 字）' % (args.artifact, len(html)))
+
+# ---------- 只有年表的頁面（選用） ----------
+if args.chron:
+    html = ('<title>智能障礙大事年表</title>\n' + FONTS + '<style>' + css + '</style>\n' + body
+            + '\n<script>\nwindow.SITE_ONLY = "chron";\n' + src.replace('/*__DATA__*/', dump(D).replace('</', '<\\/')) + '</script>\n')
+    wr(args.chron, html)
+    print('只有年表：%s（%d KB）' % (args.chron, len(html.encode('utf-8')) // 1024))

@@ -309,7 +309,7 @@ function crPanelHtml(){
   const lines = e.x.split('\n'), k = lines.findIndex(s=>s.startsWith('備註：'));
   const main = (k<0?lines:lines.slice(0,k)).map(s=>`<p>${esc(s)}</p>`).join('');
   const memo = k<0 ? '' : `<div class="memo"><h3>備註</h3>${lines.slice(k).map((s,j)=>`<p>${esc(j?s:s.replace(/^備註：/,''))}</p>`).join('')}</div>`;
-  const more = e.tree ? `<p class="pn-go"><a href="#tree" data-act="cr-tree" data-id="${e.tree}">在時間軸（事件樹）上看這件事 →</a></p>`
+  const more = ONLY ? '' : e.tree ? `<p class="pn-go"><a href="#tree" data-act="cr-tree" data-id="${e.tree}">在時間軸（事件樹）上看這件事 →</a></p>`
     : ln.go ? `<p class="pn-go"><a href="#${ln.go}" data-go="${ln.go}">到「${SECTIONS[ln.go].name.replace(/・.*/,'')}」展區看 →</a></p>` : '';
   return `<p class="pn-kind">${icon(ln.shape,'var(--ink)',ln.data)}${ln.name}・${ln.data?'本站資料':esc(CR_CATS[e.cat])}・${esc(CR_ERAS[e.era].name)}</p>
     <h2 tabindex="-1">${esc(e.t)}</h2>

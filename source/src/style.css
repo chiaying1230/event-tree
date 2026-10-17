@@ -205,6 +205,7 @@ body[data-view="home"] .mast{margin-bottom:calc(-1*var(--mast) - 1px - env(safe-
 .plate.tl-fig{padding:0;overflow:hidden;margin-bottom:0}
 .tl-fig svg{display:block}
 
+body[data-only] .foot a{display:none}
 /* ============ 年表：上方一把時間尺，一道一種來源，可以左右捲動 ============ */
 .cr-nav{display:flex;flex-wrap:wrap;align-items:center;gap:4px 2px;margin-bottom:10px}
 .cr-nav > button{position:relative;min-height:38px;padding:4px 12px;border:0;border-radius:8px;background:none;font-size:.92rem;color:var(--muted)}

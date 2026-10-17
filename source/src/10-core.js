@@ -13,7 +13,9 @@ const calm = () => window.matchMedia('(prefers-reduced-motion: reduce)').matches
 // 粗估一段文字畫出來有多寬：中文字算一個字寬，英數字大約半個多一點
 const textW = (s,fs) => [...String(s)].reduce((a,ch)=>a+(ch.charCodeAt(0)<256 ? (ch===' '?.3:.58) : 1)*fs, 0);
 
-const SITE = '智能障礙事件樹';
+// 只展示一個展區的版本（build.py --chron 產生的「只有年表」頁面）：沒有其他展區的連結
+const ONLY = (typeof window!=='undefined' && window.SITE_ONLY) || null;
+const SITE = ONLY==='chron' ? '智能障礙大事年表' : '智能障礙事件樹';
 // 是不是發布在 Google Apps Script 的網頁應用程式裡（頁面會被放在一個內框中，網址上的 #展區 要透過 google.script 讀寫）
 const GAS = typeof google!=='undefined' && !!(google.script && google.script.history && google.script.url);
 let gasReady = false;          // 先讀完網址上原本的 #展區，才開始改寫網址
@@ -42,18 +44,20 @@ function pageHead(p,o){
   o = o||{}; const S = SECTIONS[p];
   const tabs = o.tabs ? `<nav class="subnav" aria-label="這個展區的內容">${o.tabs.map(t=>`<a href="#${t[0]}" data-go="${t[0]}" data-how="sub"${t[0]===p?' aria-current="page"':''}><b>${t[1]}</b>${t[2]?`<small>${t[2]}</small>`:''}</a>`).join('')}</nav>` : '';
   return `<header class="ph">
-    <p class="ph-over"><span class="ph-site">${SITE}</span>${S.no?`<span class="ph-no">展區 ${S.no}</span>`:''}</p>
+    <p class="ph-over"><span class="ph-site">${SITE}</span>${S.no&&!ONLY?`<span class="ph-no">展區 ${S.no}</span>`:''}</p>
     <div class="ph-row"><h1 id="pageTitle" tabindex="-1">${esc(S.title)}</h1><div class="ph-tools">${o.tools||''}${TOURS[p]?'<button class="btn how" id="howBtn" data-act="tour" aria-haspopup="dialog">怎麼看</button>':''}</div></div>
     <p class="ph-lead">${esc(o.lead||S.lead||'')}</p>
   </header>${tabs}`;
 }
 // 每一頁最下面的「上一頁／下一頁」，照展區的順序走
 function routeHtml(){
+  if(ONLY) return '';
   const i = NAV.findIndex(n=>n[0]===(GROUP[page]||page)), prev = NAV[i-1], next = NAV[i+1];
   const a = (n,cls,lab) => n ? `<a class="rt ${cls}" href="#${n[0]}" data-go="${n[0]}"><small>${lab}</small><b>${n[1]}</b></a>` : '<span></span>';
   return `<nav class="route" aria-label="上一頁與下一頁">${a(prev,'prev','上一頁')}${a(next,'next','下一頁')}</nav>`;
 }
 function drawNav(){
+  if(ONLY){ $('#nav').innerHTML = ''; return; }
   const g = GROUP[page]||page;
   $('#nav').innerHTML = NAV.map(n=>`<a href="#${n[0]}" data-go="${n[0]}"${g===n[0]?' aria-current="page"':''}>${n[1]}</a>`).join('');
 }
@@ -88,7 +92,7 @@ function render(){
   heroEl.hidden = page!=='home'; if(page!=='home') heroEl.innerHTML = '';
   DRAW[page]();
   fillCharts();
-  document.title = (page==='home' ? '' : SECTIONS[page].name+'｜')+SITE;
+  document.title = (page==='home' || ONLY ? '' : SECTIONS[page].name+'｜')+SITE;
   restoreFocus(fk); syncMast();
 }
 // 網址：每個展區有自己的網址（#tree、#news…）。獨立的網站上，換展區會留下一筆紀錄，瀏覽器的「返回」可以回到上一個展區；
@@ -113,7 +117,8 @@ const eraBand = ys => { if(eraFocus==null) return null; const ix = ys.map((y,i)=
 // o.hist：是瀏覽器的返回／前進帶來的，網址已經換好了　o.quiet：這一次不要自動跳出導覽
 function go(p,how,o){
   o = o||{};
-  if(!SECTIONS[p]) p = 'home';
+  if(ONLY) p = ONLY;
+  else if(!SECTIONS[p]) p = 'home';
   if(tour) endTour();
   eraFocus = pendingEra; pendingEra = null;
   LEAVE.forEach(fn=>fn()); closeSheet(true); hideTip();

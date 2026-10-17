@@ -232,6 +232,7 @@ body[data-view="home"] .mast{margin-bottom:calc(-1*var(--mast) - 1px - env(safe-
 .plate.tl-fig{padding:0;overflow:hidden;margin-bottom:0}
 .tl-fig svg{display:block}
 
+body[data-only] .foot a{display:none}
 /* ============ 年表：上方一把時間尺，一道一種來源，可以左右捲動 ============ */
 .cr-nav{display:flex;flex-wrap:wrap;align-items:center;gap:4px 2px;margin-bottom:10px}
 .cr-nav > button{position:relative;min-height:38px;padding:4px 12px;border:0;border-radius:8px;background:none;font-size:.92rem;color:var(--muted)}
@@ -2766,7 +2767,9 @@ const calm = () => window.matchMedia('(prefers-reduced-motion: reduce)').matches
 // 粗估一段文字畫出來有多寬：中文字算一個字寬，英數字大約半個多一點
 const textW = (s,fs) => [...String(s)].reduce((a,ch)=>a+(ch.charCodeAt(0)<256 ? (ch===' '?.3:.58) : 1)*fs, 0);
 
-const SITE = '智能障礙事件樹';
+// 只展示一個展區的版本（build.py --chron 產生的「只有年表」頁面）：沒有其他展區的連結
+const ONLY = (typeof window!=='undefined' && window.SITE_ONLY) || null;
+const SITE = ONLY==='chron' ? '智能障礙大事年表' : '智能障礙事件樹';
 // 是不是發布在 Google Apps Script 的網頁應用程式裡（頁面會被放在一個內框中，網址上的 #展區 要透過 google.script 讀寫）
 const GAS = typeof google!=='undefined' && !!(google.script && google.script.history && google.script.url);
 let gasReady = false;          // 先讀完網址上原本的 #展區，才開始改寫網址
@@ -2795,18 +2798,20 @@ function pageHead(p,o){
   o = o||{}; const S = SECTIONS[p];
   const tabs = o.tabs ? `<nav class="subnav" aria-label="這個展區的內容">${o.tabs.map(t=>`<a href="#${t[0]}" data-go="${t[0]}" data-how="sub"${t[0]===p?' aria-current="page"':''}><b>${t[1]}</b>${t[2]?`<small>${t[2]}</small>`:''}</a>`).join('')}</nav>` : '';
   return `<header class="ph">
-    <p class="ph-over"><span class="ph-site">${SITE}</span>${S.no?`<span class="ph-no">展區 ${S.no}</span>`:''}</p>
+    <p class="ph-over"><span class="ph-site">${SITE}</span>${S.no&&!ONLY?`<span class="ph-no">展區 ${S.no}</span>`:''}</p>
     <div class="ph-row"><h1 id="pageTitle" tabindex="-1">${esc(S.title)}</h1><div class="ph-tools">${o.tools||''}${TOURS[p]?'<button class="btn how" id="howBtn" data-act="tour" aria-haspopup="dialog">怎麼看</button>':''}</div></div>
     <p class="ph-lead">${esc(o.lead||S.lead||'')}</p>
   </header>${tabs}`;
 }
 // 每一頁最下面的「上一頁／下一頁」，照展區的順序走
 function routeHtml(){
+  if(ONLY) return '';
   const i = NAV.findIndex(n=>n[0]===(GROUP[page]||page)), prev = NAV[i-1], next = NAV[i+1];
   const a = (n,cls,lab) => n ? `<a class="rt ${cls}" href="#${n[0]}" data-go="${n[0]}"><small>${lab}</small><b>${n[1]}</b></a>` : '<span></span>';
   return `<nav class="route" aria-label="上一頁與下一頁">${a(prev,'prev','上一頁')}${a(next,'next','下一頁')}</nav>`;
 }
 function drawNav(){
+  if(ONLY){ $('#nav').innerHTML = ''; return; }
   const g = GROUP[page]||page;
   $('#nav').innerHTML = NAV.map(n=>`<a href="#${n[0]}" data-go="${n[0]}"${g===n[0]?' aria-current="page"':''}>${n[1]}</a>`).join('');
 }
@@ -2841,7 +2846,7 @@ function render(){
   heroEl.hidden = page!=='home'; if(page!=='home') heroEl.innerHTML = '';
   DRAW[page]();
   fillCharts();
-  document.title = (page==='home' ? '' : SECTIONS[page].name+'｜')+SITE;
+  document.title = (page==='home' || ONLY ? '' : SECTIONS[page].name+'｜')+SITE;
   restoreFocus(fk); syncMast();
 }
 // 網址：每個展區有自己的網址（#tree、#news…）。獨立的網站上，換展區會留下一筆紀錄，瀏覽器的「返回」可以回到上一個展區；
@@ -2866,7 +2871,8 @@ const eraBand = ys => { if(eraFocus==null) return null; const ix = ys.map((y,i)=
 // o.hist：是瀏覽器的返回／前進帶來的，網址已經換好了　o.quiet：這一次不要自動跳出導覽
 function go(p,how,o){
   o = o||{};
-  if(!SECTIONS[p]) p = 'home';
+  if(ONLY) p = ONLY;
+  else if(!SECTIONS[p]) p = 'home';
   if(tour) endTour();
   eraFocus = pendingEra; pendingEra = null;
   LEAVE.forEach(fn=>fn()); closeSheet(true); hideTip();
@@ -4452,7 +4458,7 @@ function crPanelHtml(){
   const lines = e.x.split('\n'), k = lines.findIndex(s=>s.startsWith('備註：'));
   const main = (k<0?lines:lines.slice(0,k)).map(s=>`<p>${esc(s)}</p>`).join('');
   const memo = k<0 ? '' : `<div class="memo"><h3>備註</h3>${lines.slice(k).map((s,j)=>`<p>${esc(j?s:s.replace(/^備註：/,''))}</p>`).join('')}</div>`;
-  const more = e.tree ? `<p class="pn-go"><a href="#tree" data-act="cr-tree" data-id="${e.tree}">在時間軸（事件樹）上看這件事 →</a></p>`
+  const more = ONLY ? '' : e.tree ? `<p class="pn-go"><a href="#tree" data-act="cr-tree" data-id="${e.tree}">在時間軸（事件樹）上看這件事 →</a></p>`
     : ln.go ? `<p class="pn-go"><a href="#${ln.go}" data-go="${ln.go}">到「${SECTIONS[ln.go].name.replace(/・.*/,'')}」展區看 →</a></p>` : '';
   return `<p class="pn-kind">${icon(ln.shape,'var(--ink)',ln.data)}${ln.name}・${ln.data?'本站資料':esc(CR_CATS[e.cat])}・${esc(CR_ERAS[e.era].name)}</p>
     <h2 tabindex="-1">${esc(e.t)}</h2>
@@ -4601,6 +4607,7 @@ document.addEventListener('keydown', e=>{
 });
 $('#skipMain').addEventListener('click', e=>{ e.preventDefault(); const h = $('#pageTitle')||$('#heroTitle'); if(h) h.focus(); });
 { const h = (location.hash||'').slice(1); if(SECTIONS[h]) page = h; }
+if(ONLY){ page = ONLY; document.body.dataset.only = ONLY; const b = $('.brand'); b.textContent = SITE; b.href = '#'+ONLY; b.dataset.go = ONLY; }
 try{ window.history.scrollRestoration = 'manual'; }catch(e){}
 render();
 // 瀏覽器的返回／前進，或直接改網址上的 #展區
