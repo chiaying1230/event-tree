@@ -1,0 +1,926 @@
+<!DOCTYPE html>
+<html lang="zh-Hant-TW">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>智能障礙大事年表</title>
+<meta name="description" content="橫向捲動的智能障礙大事年表：1801 到 2024 年，國際與臺灣的 50 件重要事件。">
+<meta name="color-scheme" content="light dark">
+<link rel="icon" type="image/png" href="icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@600;700&family=Noto+Sans+TC:wght@400;500;700&display=swap" rel="stylesheet">
+<!--
+  智能障礙大事年表（橫向時間軸）
+  這一頁和事件樹（index.html）是分開的兩個檔案，改這一頁不會影響事件樹。
+  要改事件：找下面的 const EVENTS。每一筆是一件事：
+    id   不重複的代號（也用在網址，例如 timeline.html#ev-crpd）
+    d    日期，寫成 1984、1984-12 或 1984-12-17
+    lane 'intl' 國際（畫在時間軸上方）或 'tw' 臺灣（畫在下方）
+    cat  類別：law 法規與政策、assess 定義與鑑定、edu 教育與普查、rights 權利與社會
+    t    標題（卡片上，最好 12 個字以內）
+    s    一句話摘要（卡片上）
+    x    完整說明（點開後看到）
+    src  來源
+    tree true 表示這件事也在事件樹的「智能障礙重大事件表」裡
+-->
+<style>
+:root{
+  --bg:#EAECE6; --paper:#F7F8F4; --stage:#F1F2EC; --ink:#1F2A2E; --ink2:#37444A; --muted:#525F65; --line:#CBD2CB; --line2:#AEB7AE;
+  --law:#8C6013; --assess:#2F6187; --edu:#247B62; --rights:#9A3F68;
+  --era1:rgba(140,96,19,.07); --era2:rgba(47,97,135,.07);
+  --axis:#1F2A2E; --ctl:#79847E; --shadow:0 1px 2px rgba(31,42,46,.08),0 4px 14px rgba(31,42,46,.07);
+  --serif:"Noto Serif TC","Songti TC","PMingLiU",serif;
+  --sans:"Noto Sans TC","PingFang TC","Microsoft JhengHei",sans-serif;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#171B1C; --paper:#20272A; --stage:#1B2123; --ink:#E6EAE5; --ink2:#C7CFCB; --muted:#9BA6A8; --line:#384344; --line2:#4E5A5B;
+  --law:#DDB35F; --assess:#82ABCB; --edu:#86C9B0; --rights:#E39BBD;
+  --era1:rgba(221,179,95,.06); --era2:rgba(130,171,203,.06);
+  --axis:#E6EAE5; --ctl:#7E8A8B; --shadow:0 1px 2px rgba(0,0,0,.3),0 4px 14px rgba(0,0,0,.25); color-scheme:dark;
+}}
+:root[data-theme="dark"]{
+  --bg:#171B1C; --paper:#20272A; --stage:#1B2123; --ink:#E6EAE5; --ink2:#C7CFCB; --muted:#9BA6A8; --line:#384344; --line2:#4E5A5B;
+  --law:#DDB35F; --assess:#82ABCB; --edu:#86C9B0; --rights:#E39BBD;
+  --era1:rgba(221,179,95,.06); --era2:rgba(130,171,203,.06);
+  --axis:#E6EAE5; --ctl:#7E8A8B; --shadow:0 1px 2px rgba(0,0,0,.3),0 4px 14px rgba(0,0,0,.25); color-scheme:dark;
+}
+*,*::before,*::after{box-sizing:border-box}
+[hidden]{display:none!important}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--sans);font-size:16px;line-height:1.6;-webkit-font-smoothing:antialiased}
+h1,h2,h3,p,ol,ul{margin:0}
+button{font:inherit;color:inherit;cursor:pointer}
+a{color:var(--assess);text-underline-offset:3px}
+:focus-visible{outline:3px solid var(--ink);outline-offset:2px;border-radius:6px}
+.vh{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%);white-space:nowrap}
+
+/* ---------- 上方：標題、章節、縮圖 ---------- */
+.top{position:sticky;top:0;z-index:30;background:var(--paper);border-bottom:1px solid var(--line)}
+.top-row{display:flex;align-items:center;gap:12px 20px;flex-wrap:wrap;padding:10px 20px 8px}
+.top h1{font-family:var(--serif);font-size:1.25rem;letter-spacing:.04em;white-space:nowrap}
+.top h1 small{font-family:var(--sans);font-weight:400;font-size:.85rem;color:var(--muted);margin-left:8px;letter-spacing:0}
+.back{font-size:.9rem;white-space:nowrap}
+.legend{display:flex;flex-wrap:wrap;gap:6px;margin-left:auto}
+.chip{display:inline-flex;align-items:center;gap:7px;min-height:36px;padding:3px 13px;border:1.5px solid var(--ctl);border-radius:999px;background:var(--paper);font-size:.88rem;white-space:nowrap}
+.chip:hover{border-color:var(--ink)}
+.chip[aria-pressed="true"]{background:var(--ink);border-color:var(--ink);color:var(--paper)}
+.chip[aria-pressed="true"] .mk{--c:var(--paper)!important}
+.legend-lbl{font-size:.85rem;color:var(--muted);align-self:center;margin-right:2px}
+
+.eras{display:flex;gap:6px;padding:0 20px 8px;overflow-x:auto;scrollbar-width:none}
+.eras::-webkit-scrollbar{display:none}
+.era-btn{flex:1 0 auto;display:grid;text-align:left;min-width:150px;padding:5px 12px 6px;border:1.5px solid var(--line);border-radius:10px;background:var(--paper);line-height:1.35}
+.era-btn b{font-size:.92rem}
+.era-btn span{font-size:.78rem;color:var(--muted)}
+.era-btn:hover{border-color:var(--ctl)}
+.era-btn[aria-current="true"]{border-color:var(--ink);background:var(--ink);color:var(--paper)}
+.era-btn[aria-current="true"] span{color:var(--paper);opacity:.8}
+
+/* 全覽：照真實年份比例畫的一條，方框是目前畫面看到的範圍 */
+.mini{position:relative;height:46px;margin:0 20px 10px;border-radius:8px;background:var(--stage);border:1px solid var(--line);cursor:pointer;touch-action:none;user-select:none}
+.mini-era{position:absolute;top:0;bottom:0;border-right:1px dashed var(--line2)}
+.mini-era:last-of-type{border-right:0}
+.mini-mid{position:absolute;left:0;right:0;top:50%;height:1px;background:var(--line2)}
+.mini-tick{position:absolute;width:3px;height:13px;margin-left:-1.5px;border-radius:2px;background:var(--c)}
+.mini-tick.up{top:7px}.mini-tick.dn{bottom:7px}
+.mini-tick.dim{opacity:.18}
+.mini-yr{position:absolute;bottom:-1px;font-size:.68rem;color:var(--muted);transform:translateX(-50%);line-height:1;pointer-events:none}
+.mini-win{position:absolute;top:-3px;bottom:-3px;border:2.5px solid var(--ink);border-radius:7px;background:color-mix(in srgb,var(--ink) 7%,transparent);pointer-events:none;min-width:8px}
+.now{font-size:.85rem;color:var(--muted);white-space:nowrap;font-variant-numeric:tabular-nums}
+
+/* ---------- 舞台 ---------- */
+.stage{position:relative;background:var(--stage)}
+.scroller{overflow-x:auto;overflow-y:hidden;overscroll-behavior-x:contain;scrollbar-width:thin;cursor:grab}
+.scroller.drag{cursor:grabbing;user-select:none}
+.scroller:focus-visible{outline-offset:-4px}
+.track{position:relative}
+.lane-tag{position:absolute;left:0;z-index:12;display:flex;align-items:center;justify-content:center;width:44px;writing-mode:vertical-rl;letter-spacing:.35em;font-weight:700;font-size:1rem;background:var(--paper);border-right:1px solid var(--line);pointer-events:none}
+.lane-tag.intl{border-bottom:1px solid var(--line)}
+.corner{position:absolute;left:0;top:0;z-index:12;background:var(--stage);pointer-events:none}
+.lane-tag small{font-weight:400;font-size:.72rem;letter-spacing:.1em;color:var(--muted);margin-top:8px}
+
+.era-band{position:absolute;top:0;bottom:0}
+.era-band:nth-child(odd){background:var(--era1)}
+.era-band:nth-child(even){background:var(--era2)}
+.era-h{position:sticky;left:60px;display:inline-block;max-width:min(560px,80vw);padding:10px 14px 0 18px}
+.era-h .no{font-size:.75rem;letter-spacing:.2em;color:var(--muted)}
+.era-h h2{font-family:var(--serif);font-size:1.18rem;line-height:1.3}
+.era-h h2 span{font-family:var(--sans);font-weight:500;font-size:.88rem;color:var(--muted);margin-left:8px}
+
+.axis-line{position:absolute;left:0;right:0;height:4px;margin-top:-2px;background:var(--axis);border-radius:2px}
+.gap{position:absolute;height:28px;margin-top:-14px;display:flex;align-items:center;justify-content:center}
+.gap::before{content:"";position:absolute;inset:11px 0;background:repeating-linear-gradient(90deg,var(--stage) 0 7px,transparent 7px 12px)}
+.gap span{position:relative;padding:1px 10px;border:1.5px solid var(--line2);border-radius:999px;background:var(--paper);font-size:.78rem;color:var(--muted);white-space:nowrap}
+.era-cut{position:absolute;width:2px;margin-left:-1px;background:var(--line2)}
+
+/* 形狀：法規菱形、鑑定圓形、教育方形、權利三角形（不只靠顏色分辨） */
+.mk{--c:var(--ink);display:inline-block;flex:none;width:12px;height:12px;background:var(--c)}
+.mk.law{transform:rotate(45deg) scale(.86);border-radius:1px}
+.mk.assess{border-radius:50%}
+.mk.edu{border-radius:1px;transform:scale(.9)}
+.mk.rights{clip-path:polygon(50% 0,100% 100%,0 100%);transform:scale(1.15)}
+.c-law{--c:var(--law)}.c-assess{--c:var(--assess)}.c-edu{--c:var(--edu)}.c-rights{--c:var(--rights)}
+
+.stem{position:absolute;width:2px;margin-left:-1px;background:var(--c);opacity:.55;pointer-events:none}
+.dot{position:absolute;width:20px;height:20px;margin:-10px 0 0 -10px;display:grid;place-items:center;pointer-events:none;z-index:2}
+.dot::before{content:"";position:absolute;inset:1px;border-radius:50%;background:var(--stage)}
+.dot .mk{position:relative;width:14px;height:14px}
+.ev{list-style:none}
+.card{position:absolute;display:flex;flex-direction:column;gap:2px;padding:10px 14px 10px 16px;text-align:left;border:1px solid var(--line);border-left:0;border-radius:10px;background:var(--paper);box-shadow:var(--shadow);overflow:hidden;z-index:3;transition:transform .15s,box-shadow .15s,opacity .2s}
+.card::before{content:"";position:absolute;left:0;top:0;bottom:0;width:5px;background:var(--c)}
+.card:hover{transform:translateY(-2px);box-shadow:0 2px 4px rgba(31,42,46,.1),0 10px 24px rgba(31,42,46,.12);z-index:5}
+.card .when{display:flex;align-items:baseline;gap:8px;line-height:1.2}
+.card .yr{font-family:var(--serif);font-weight:700;font-size:1.55rem;color:var(--c);letter-spacing:.02em}
+.card .md{font-size:.82rem;color:var(--muted)}
+.card .tt{font-family:var(--serif);font-weight:700;font-size:1.06rem;line-height:1.35;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.card .ss{font-size:.86rem;line-height:1.5;color:var(--ink2);display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:var(--lines,2);overflow:hidden}
+.card .tag{position:absolute;right:10px;top:12px;display:flex;align-items:center;gap:5px;font-size:.72rem;color:var(--muted)}
+.card .tag .mk{width:9px;height:9px}
+.ev.dim .card{opacity:.22}
+.ev.dim .stem,.ev.dim .dot{opacity:.15}
+.ev.on .card{border-color:var(--ink);box-shadow:0 0 0 2px var(--ink),var(--shadow);z-index:6}
+.ev.on .stem{opacity:1;width:3px}
+
+.intro,.outro{position:absolute;z-index:4;display:flex;flex-direction:column;justify-content:center;gap:12px}
+.intro h2{font-family:var(--serif);font-size:clamp(1.7rem,1.2rem + 1.6vw,2.5rem);line-height:1.25;letter-spacing:.03em}
+.intro p,.outro p{color:var(--ink2);font-size:.98rem}
+.howto{display:grid;gap:8px;padding:14px 16px;border:1px solid var(--line);border-radius:12px;background:var(--paper);font-size:.9rem}
+.howto div{display:flex;gap:10px;align-items:baseline}
+.howto b{flex:none;min-width:4.5em}
+.start{align-self:flex-start;display:inline-flex;align-items:center;gap:8px;min-height:44px;padding:6px 20px;border:0;border-radius:999px;background:var(--ink);color:var(--paper);font-weight:700}
+.outro h2{font-family:var(--serif);font-size:1.4rem}
+
+/* 左右按鈕 */
+.nav-btn{position:absolute;top:50%;z-index:20;width:46px;height:46px;margin-top:-23px;border:1.5px solid var(--ctl);border-radius:50%;background:var(--paper);box-shadow:var(--shadow);display:grid;place-items:center;font-size:1.3rem;line-height:1}
+.nav-btn:hover{border-color:var(--ink)}
+.nav-btn:disabled{opacity:.3;cursor:default}
+.nav-btn.prev{left:54px}.nav-btn.next{right:14px}
+
+/* ---------- 說明面板 ---------- */
+.panel{position:fixed;z-index:50;right:16px;top:16px;bottom:16px;width:min(440px,calc(100vw - 32px));display:flex;flex-direction:column;background:var(--paper);border:1px solid var(--line);border-radius:14px;box-shadow:0 10px 40px rgba(0,0,0,.22);overflow:hidden}
+.panel-bar{display:flex;align-items:center;gap:8px;padding:10px 12px 10px 20px;border-bottom:1px solid var(--line)}
+.panel-bar .pos{font-size:.85rem;color:var(--muted);margin-right:auto}
+.pbtn{min-height:38px;padding:4px 14px;border:1.5px solid var(--ctl);border-radius:999px;background:var(--paper);font-size:.88rem;white-space:nowrap}
+.pbtn:hover{border-color:var(--ink)}
+.pbtn:disabled{opacity:.35;cursor:default}
+.panel-body{padding:20px 22px 26px;overflow-y:auto}
+.p-meta{display:flex;flex-wrap:wrap;gap:6px 14px;font-size:.85rem;color:var(--muted);margin-bottom:6px}
+.p-meta span{display:inline-flex;align-items:center;gap:6px}
+.p-date{font-family:var(--serif);font-weight:700;font-size:1.9rem;line-height:1.2;color:var(--c)}
+.panel h2{font-family:var(--serif);font-size:1.45rem;line-height:1.35;margin:4px 0 14px}
+.p-x p{margin-bottom:.8em;line-height:1.85}
+.p-src{margin-top:16px;padding-top:12px;border-top:1px solid var(--line);font-size:.85rem;color:var(--muted)}
+.p-tree{display:inline-block;margin-top:8px;padding:2px 10px;border-radius:999px;background:var(--stage);border:1px solid var(--line);font-size:.8rem;color:var(--ink2)}
+
+/* ---------- 文字版 ---------- */
+.plain{max-width:980px;margin:0 auto;padding:40px 20px 60px}
+.plain > h2{font-family:var(--serif);font-size:1.5rem;margin-bottom:6px}
+.plain > p{color:var(--muted);margin-bottom:20px}
+.plain h3{font-family:var(--serif);font-size:1.12rem;margin:26px 0 8px;padding-bottom:6px;border-bottom:2px solid var(--ink)}
+.plain ol{list-style:none;padding:0}
+.plain li{display:grid;grid-template-columns:7.5em 4em 1fr;gap:4px 14px;padding:9px 0;border-bottom:1px solid var(--line)}
+.plain li .d{font-variant-numeric:tabular-nums;color:var(--muted);font-size:.92rem}
+.plain li .l{font-size:.85rem;color:var(--muted)}
+.plain li button{all:unset;cursor:pointer;font-weight:700}
+.plain li button:hover{text-decoration:underline}
+.plain li button:focus-visible{outline:3px solid var(--ink);outline-offset:2px;border-radius:4px}
+.plain li p{grid-column:3;font-size:.9rem;color:var(--ink2)}
+.refs{margin-top:30px;font-size:.88rem;color:var(--ink2)}
+.refs li{display:list-item;border:0;padding:2px 0;margin-left:1.2em;list-style:disc}
+
+@media (max-width:760px){
+  .top-row{padding:8px 14px 6px}
+  .top h1{font-size:1.08rem}
+  .top h1 small{display:none}
+  .legend{margin-left:0;width:100%;flex-wrap:nowrap;overflow-x:auto;scrollbar-width:none}
+  .legend-lbl{display:none}
+  .eras{padding:0 14px 6px}
+  .era-btn{min-width:122px;padding:4px 10px}
+  .mini{margin:0 14px 8px;height:40px}
+  .lane-tag{width:30px;font-size:.88rem}
+  .lane-tag small{display:none}
+  .nav-btn{width:40px;height:40px;margin-top:-20px}
+  .nav-btn.prev{left:36px}.nav-btn.next{right:8px}
+  .card{padding:8px 10px 8px 13px}
+  .card .yr{font-size:1.3rem}
+  .card .tt{font-size:.98rem}
+  .card .ss{font-size:.8rem}
+  .card .tag{display:none}
+  .panel{left:0;right:0;bottom:0;top:auto;width:auto;max-height:72vh;border-radius:16px 16px 0 0}
+  .plain li{grid-template-columns:1fr;gap:2px}
+  .plain li p{grid-column:1}
+}
+@media (max-height:820px) and (min-width:761px){
+  .top-row{padding:7px 20px 5px}
+  .era-btn{display:flex;align-items:baseline;gap:10px;padding:3px 12px}
+  .mini{height:40px;margin-bottom:8px}
+  .card .yr{font-size:1.32rem}
+  .card{padding:8px 12px 8px 15px}
+}
+@media (max-width:1400px) and (min-width:761px){
+  .legend-lbl,.top h1 small{display:none}
+  .chip{min-height:34px;padding:2px 11px;font-size:.84rem}
+}
+@media (max-width:1000px) and (min-width:761px){ .now{display:none} }
+@media (max-width:760px){ .now{display:none} }
+@media (prefers-reduced-motion:reduce){*{transition:none!important;scroll-behavior:auto!important}}
+</style>
+</head>
+<body>
+<header class="top">
+  <div class="top-row">
+    <h1>智能障礙大事年表<small>1801–2024・國際與臺灣 50 件事</small></h1>
+    <a class="back" href="index.html">回到智能障礙事件樹</a>
+    <span class="now" id="miniRead" aria-live="off"></span>
+    <div class="legend" role="group" aria-label="依類別篩選">
+      <span class="legend-lbl">類別</span>
+    </div>
+  </div>
+  <nav class="eras" id="eras" aria-label="章節"></nav>
+  <div class="mini" id="mini" role="slider" tabindex="0" aria-label="全覽：依真實年份比例排列，方框是目前看到的範圍" aria-valuemin="1801" aria-valuemax="2024"></div>
+</header>
+
+<main>
+  <h2 class="vh">橫向時間軸</h2>
+  <div class="stage" id="stage">
+    <div class="corner" id="corner" aria-hidden="true"></div>
+    <div class="lane-tag intl" id="tagIntl">國際<small>上方</small></div>
+    <div class="lane-tag tw" id="tagTw">臺灣<small>下方</small></div>
+    <button class="nav-btn prev" id="prevBtn" aria-label="往前（較早）">‹</button>
+    <button class="nav-btn next" id="nextBtn" aria-label="往後（較晚）">›</button>
+    <div class="scroller" id="scroller" tabindex="0" aria-label="時間軸，可用左右鍵捲動">
+      <div class="track" id="track">
+        <div id="bands"></div>
+        <div class="axis-line" id="axisLine"></div>
+        <div id="axisDeco"></div>
+        <section class="intro" id="intro" aria-labelledby="introTitle">
+          <h2 id="introTitle">智能障礙<br>兩百年大事年表</h2>
+          <p>從 1801 年第一次有系統地嘗試教育智能障礙者，到 2024 年臺灣修訂鑑定辦法，挑出國際與臺灣的 50 件事，放在同一條時間軸上。</p>
+          <div class="howto">
+            <div><b>怎麼讀</b><span>由左往右是由早到晚。時間軸上方是國際，下方是臺灣。</span></div>
+            <div><b>怎麼動</b><span>捲動滑鼠滾輪、拖曳畫面、按左右鍵，或點上方的章節與全覽。</span></div>
+            <div><b>看詳細</b><span>點任何一張卡片，右邊會打開完整說明與來源。</span></div>
+            <div><b>斷開的線</b><span>兩件事相隔十五年以上時，時間軸會斷開並寫出相隔幾年。</span></div>
+          </div>
+          <button class="start" id="startBtn">開始 →</button>
+        </section>
+        <ol class="events" id="events" style="margin:0;padding:0"></ol>
+        <section class="outro" id="outro" aria-labelledby="outroTitle">
+          <h2 id="outroTitle">年表到這裡結束</h2>
+          <p>這 50 件事是從不同來源挑出來的重點，不是完整的歷史。標有「也在事件樹裡」的事件，說明取自本站的「智能障礙重大事件表」。</p>
+          <p><a href="#plain">往下看文字版與來源</a>・<a href="index.html">回到事件樹</a></p>
+        </section>
+      </div>
+    </div>
+  </div>
+
+  <section class="plain" id="plain" aria-labelledby="plainTitle">
+    <h2 id="plainTitle">文字版：全部 50 件事</h2>
+    <p>和上面的時間軸內容相同，依時間排成清單。點事件名稱會在時間軸上打開它。</p>
+    <div id="plainList"></div>
+    <h3>主要來源</h3>
+    <ul class="refs">
+      <li>本站「智能障礙重大事件表」（事件樹的 18 件事）</li>
+      <li>全國法規資料庫（殘障福利法、身心障礙者保護法、身心障礙者權益保障法、特殊教育法、身心障礙者權利公約施行法的沿革）：<a href="https://law.moj.gov.tw/">law.moj.gov.tw</a></li>
+      <li>教育部〈特殊教育簡介〉與各校校史</li>
+      <li>明尼蘇達州發展障礙委員會《Parallels in Time》：<a href="https://mn.gov/mnddc/parallels/">mn.gov/mnddc/parallels</a></li>
+      <li>美國智能與發展障礙協會（AAIDD）歷年定義手冊：<a href="https://www.aaidd.org/">aaidd.org</a></li>
+      <li>聯合國《智能不足者權利宣言》（1971）、《身心障礙者權利公約》（2006）；聯合國教科文組織《薩拉曼卡宣言》（1994）</li>
+      <li>世界衛生組織 ICF（2001）、ICD-11（2019）；美國精神醫學會 DSM-5（2013）</li>
+      <li>心路社會福利基金會、中華民國智障者家長總會、喜憨兒社會福利基金會的沿革</li>
+    </ul>
+  </section>
+</main>
+
+<aside class="panel" id="panel" role="dialog" aria-modal="false" aria-labelledby="pTitle" hidden>
+  <div class="panel-bar">
+    <span class="pos" id="pPos"></span>
+    <button class="pbtn" id="pPrev">上一件</button>
+    <button class="pbtn" id="pNext">下一件</button>
+    <button class="pbtn" id="pClose" aria-label="關閉說明">關閉</button>
+  </div>
+  <div class="panel-body" id="pBody"></div>
+</aside>
+
+<script>
+/* ============ 事件 ============ */
+const CATS = {
+  law:{name:'法規與政策'},
+  assess:{name:'定義與鑑定'},
+  edu:{name:'教育與普查'},
+  rights:{name:'權利與社會'}
+};
+const LANES = {intl:'國際', tw:'臺灣'};
+const ERAS = [
+  {from:1800, to:1904, name:'啟蒙與機構', desc:'開始嘗試教育，也開始把人送進大型機構'},
+  {from:1905, to:1949, name:'測量與優生', desc:'智力測驗出現，優生學帶來絕育與殺害'},
+  {from:1950, to:1979, name:'覺醒與正常化', desc:'家長站出來，臺灣開辦第一個啟智班'},
+  {from:1980, to:1999, name:'立法與正名', desc:'臺灣的福利法、特教法，用詞從智能不足改為智能障礙'},
+  {from:2000, to:2026, name:'權利與支持', desc:'從保護轉向權利，鑑定改看功能與支持'}
+];
+const EVENTS = [
+  {id:'itard', d:'1801', lane:'intl', cat:'edu', t:'伊塔教育「野孩子」',
+   s:'法國醫師伊塔嘗試教育在森林裡被發現的男孩維克多，發表報告。',
+   x:'法國醫師伊塔（Jean Marc Gaspard Itard）以有系統的感官與語言訓練，教育在阿韋龍森林被發現的男孩維克多，1801 年發表第一份報告。\n這被視為有系統地教育智能障礙者的起點。他的學生塞甘（Édouard Séguin）後來把這套方法發展成學校的課程。',
+   src:'Itard（1801）；《Parallels in Time》'},
+  {id:'down', d:'1866', lane:'intl', cat:'assess', t:'唐約翰描述唐氏症',
+   s:'英國醫師唐約翰描述一群有共同特徵的人，後來以他的名字命名。',
+   x:'英國醫師唐約翰（John Langdon Down）在論文中描述一群外觀有共同特徵的智能障礙者。他當時用的名稱帶有種族偏見，1965 年世界衛生組織改用「唐氏症」。\n成因（第 21 對染色體多了一條）要到 1959 年才由勒瑞恩（Jérôme Lejeune）等人發現。',
+   src:'Down（1866）；世界衛生組織'},
+  {id:'aaidd1876', d:'1876-06-06', lane:'intl', cat:'assess', t:'美國成立專業學會',
+   s:'機構負責人成立學會，就是今天美國智能與發展障礙協會的前身。',
+   x:'塞甘等美國機構負責人在賓州成立「美國白痴與低能者機構醫務人員協會」。\n這個學會後來多次改名：1906 年美國低能研究協會、1933 年美國智能缺陷協會（AAMD）、1987 年美國智能不足協會（AAMR），2007 年改為美國智能與發展障礙協會（AAIDD）。它的定義手冊長期影響各國對智能障礙的定義。',
+   src:'AAIDD 沿革'},
+  {id:'binet', d:'1905', lane:'intl', cat:'assess', t:'比奈—西蒙智力量表',
+   s:'為了找出需要特別協助的學童，法國編出第一份實用的智力測驗。',
+   x:'法國實施義務教育後，需要找出跟不上一般課程的學童。比奈（Alfred Binet）與西蒙（Théodore Simon）編出第一份實用的智力量表。\n量表傳到美國後，1916 年推孟修訂為斯坦福—比奈量表並推廣「智商」的概念，智力測驗從此成為鑑定智能障礙的主要工具。',
+   src:'Binet & Simon（1905）'},
+  {id:'buck', d:'1927-05-02', lane:'intl', cat:'law', t:'巴克訴貝爾案',
+   s:'美國最高法院以 8 比 1 判決，允許州政府強制絕育被認為「低能」的人。',
+   x:'凱莉・巴克（Carrie Buck）被認定為「低能」，維吉尼亞州依優生絕育法要為她結紮。美國最高法院以 8 比 1 判決合憲，大法官霍姆斯寫下「三代低能已經夠了」。\n此後美國有數萬人被強制絕育。這個判決至今沒有被正式推翻。',
+   src:'Buck v. Bell, 274 U.S. 200（1927）'},
+  {id:'vineland', d:'1935', lane:'intl', cat:'assess', t:'文蘭社會成熟量表',
+   s:'多爾發表文蘭社會成熟量表，開始以日常生活能力來評估。',
+   x:'美國新澤西州文蘭訓練學校的多爾（Edgar Doll）發表文蘭社會成熟量表，由熟悉當事人的人回答他在日常生活中的表現。\n這是適應行為評量的源頭。1984 年擴展為文蘭適應行為量表，臺灣在 1970 年代引進（見事件樹的適應行為量表分支）。',
+   src:'Doll（1935）；本站「智能障礙重大事件表」'},
+  {id:'t4', d:'1939-09', lane:'intl', cat:'rights', t:'納粹「T4 行動」',
+   s:'納粹德國有系統地殺害身心障礙者，智能障礙者是主要對象之一。',
+   x:'1939 年起，納粹德國以「安樂死」為名，有系統地殺害住在機構裡的身心障礙兒童與成人，智能障礙者是主要對象之一。到 1941 年 8 月表面上喊停時，毒氣設施已殺害約七萬人，之後以其他方式持續到戰爭結束。\n這段歷史後來成為身心障礙者人權運動的重要警示。',
+   src:'美國大屠殺紀念館；《Parallels in Time》'},
+  {id:'wisc', d:'1949', lane:'intl', cat:'assess', t:'魏氏兒童智力量表',
+   s:'魏克斯勒出版兒童版的個別智力量表（WISC），之後成為最常用的工具。',
+   x:'魏克斯勒（David Wechsler）出版魏氏兒童智力量表（WISC），分為語文與作業兩部分，計算離差智商。\n之後的修訂版（WISC-R、WISC-III、WISC-IV、WISC-V）都有中文版，是臺灣鑑定智能障礙最主要的個別智力測驗（見事件樹的智力測驗分支）。',
+   src:'Wechsler（1949）'},
+  {id:'arc', d:'1950', lane:'intl', cat:'rights', t:'家長組成全國團體',
+   s:'智能障礙者的家長在明尼亞波利斯開會，成立全國性的家長團體。',
+   x:'1950 年秋天，來自美國各地約九十位家長與朋友在明尼蘇達州明尼亞波利斯召開第一次全國家長會議，成立全國智能障礙兒童家長與朋友協會（今天的 The Arc）。\n家長開始公開說出孩子的存在，要求在社區裡提供教育與服務，而不是只把孩子送進機構。',
+   src:'《Parallels in Time》；The Arc'},
+  {id:'denmark', d:'1959', lane:'intl', cat:'law', t:'丹麥提出「正常化」',
+   s:'丹麥立法，主張讓智能障礙者的生活盡量接近一般人。',
+   x:'丹麥通過新的智能障礙者服務法，由班克—米克爾森（Niels Erik Bank-Mikkelsen）推動，主張「讓智能障礙者過著盡可能接近一般人的生活」。\n1969 年瑞典的尼爾耶（Bengt Nirje）把它整理成「正常化原則」，影響了之後數十年的去機構化。',
+   src:'Bank-Mikkelsen；Nirje（1969）'},
+  {id:'heber', d:'1961', lane:'intl', cat:'assess', t:'定義加入適應行為',
+   s:'美國智能缺陷協會的定義加入「適應行為」，智商不再是唯一標準。',
+   x:'美國智能缺陷協會（AAMD）由赫伯（Rick Heber）主編的定義（1959 年發表、1961 年修訂），把智能障礙定為「在發展期間出現、一般智力功能低於平均，並伴隨適應行為的缺損」。\n這是第一次把適應行為正式寫進定義。當時智力的標準是低於平均數一個標準差。',
+   src:'Heber（1959, 1961）；AAIDD'},
+  {id:'so', d:'1968-07-20', lane:'intl', cat:'rights', t:'第一屆特殊奧運',
+   s:'約一千位智能障礙運動員在芝加哥參加第一屆特殊奧運。',
+   x:'由尤妮絲・甘迺迪・施萊佛（Eunice Kennedy Shriver）推動，第一屆國際特殊奧運在芝加哥士兵球場舉行，約一千位來自美國與加拿大的智能障礙運動員參賽。\n特殊奧運之後擴展到世界各地，讓更多人看見智能障礙者的能力。',
+   src:'Special Olympics 沿革'},
+  {id:'un71', d:'1971-12-20', lane:'intl', cat:'law', t:'聯合國權利宣言',
+   s:'聯合國大會通過《智能不足者權利宣言》。',
+   x:'聯合國大會通過《智能不足者權利宣言》，宣示智能障礙者「在最大可能的範圍內」享有與其他人相同的權利，包括醫療、教育、經濟保障，以及免於剝削。\n宣言仍帶有保護的色彩；2006 年的《身心障礙者權利公約》才改以權利主體來看待。',
+   src:'聯合國大會第 2856 號決議（1971）'},
+  {id:'grossman', d:'1973', lane:'intl', cat:'assess', t:'標準改為負二個標準差',
+   s:'美國智能缺陷協會修訂定義，智力須低於平均數兩個標準差。',
+   x:'美國智能缺陷協會由葛斯曼（Herbert Grossman）主編的定義，把智力的標準從低於平均數一個標準差改為兩個標準差（約智商 70 以下），原本被歸為「邊緣」的一群人不再算是智能障礙。\n臺灣 2002 年的鑑定標準也採用負二個標準差。',
+   src:'Grossman（1973）；AAIDD'},
+  {id:'pf', d:'1974', lane:'intl', cat:'rights', t:'自我倡議「先是人」',
+   s:'智能障礙者自己組成團體，主張「我們首先是人」。',
+   x:'1973 年，美國奧瑞岡州舉辦一場由智能障礙者自己參與籌備的會議。1974 年，參與者成立「People First（先是人）」，名稱來自一位與會者說的：不要再叫我們遲緩，我們首先是人。\n智能障礙者為自己發聲的「自我倡議」運動由此擴展到各國。',
+   src:'《Parallels in Time》；People First 沿革'},
+  {id:'pl94', d:'1975-11-29', lane:'intl', cat:'law', t:'美國障礙兒童教育法',
+   s:'美國立法，保障所有障礙兒童接受免費且適當的公立教育。',
+   x:'美國總統福特簽署《全體障礙兒童教育法》（94-142 公法），規定所有障礙兒童都能接受免費且適當的公立教育，要有個別化教育計畫（IEP），並在最少限制的環境中學習。\n1990 年改名為《身心障礙者教育法》（IDEA）。',
+   src:'Public Law 94-142（1975）'},
+  {id:'ada', d:'1990-07-26', lane:'intl', cat:'law', t:'美國身心障礙者法',
+   s:'美國以民權法的方式，禁止在就業與公共場所歧視身心障礙者。',
+   x:'美國總統老布希簽署《美國身心障礙者法》（ADA），禁止在就業、公共服務、公共場所與交通上歧視身心障礙者。\n它把身心障礙看成民權的問題，影響了各國的反歧視立法。',
+   src:'Americans with Disabilities Act（1990）'},
+  {id:'aamr92', d:'1992', lane:'intl', cat:'assess', t:'定義轉向「支持」',
+   s:'美國智能不足協會第九版定義，改以需要多少支持來描述。',
+   x:'美國智能不足協會（AAMR）第九版定義，不再以智商把智能障礙分為輕度、中度、重度、極重度，改以當事人需要的支持程度（間歇、有限、廣泛、全面）來描述，並把適應行為分成十個技能領域。\n這個「支持典範」影響了之後的服務與鑑定。臺灣 2003 年的社會適應表現檢核表，就以 AAMR 的領域為分量表的依據。',
+   src:'AAMR（1992）'},
+  {id:'salamanca', d:'1994-06', lane:'intl', cat:'edu', t:'薩拉曼卡宣言',
+   s:'九十多國政府在西班牙通過宣言，主張融合教育。',
+   x:'聯合國教科文組織在西班牙薩拉曼卡召開世界特殊需求教育會議，92 國政府與 25 個國際組織通過《薩拉曼卡宣言》。\n宣言主張普通學校應接納所有兒童，有特殊需求的學生應能進入普通學校就讀，是融合教育的重要里程碑。',
+   src:'UNESCO（1994）'},
+  {id:'icf', d:'2001-05-22', lane:'intl', cat:'assess', t:'世界衛生組織通過 ICF',
+   s:'障礙不只看個人，也看活動參與和環境。',
+   x:'世界衛生大會通過《國際健康功能與身心障礙分類系統》（ICF），從身體功能與構造、活動與參與、環境因素來描述障礙，不再只看個人的缺損。\n臺灣 2012 年起的身心障礙鑑定新制，就以 ICF 為架構。',
+   src:'世界衛生組織（2001）'},
+  {id:'crpd', d:'2006-12-13', lane:'intl', cat:'law', t:'身心障礙者權利公約',
+   s:'聯合國大會通過公約，把身心障礙者看成權利的主體。',
+   x:'聯合國大會通過《身心障礙者權利公約》（CRPD），2008 年生效。公約要求國家保障身心障礙者的平等、自主、融合教育、法律能力與社區生活，強調「沒有我們的參與，不要做關於我們的決定」。\n臺灣不是聯合國會員，2014 年以施行法讓公約在國內生效。',
+   src:'聯合國（2006）'},
+  {id:'aaidd', d:'2007-01-01', lane:'intl', cat:'assess', t:'學會改名 AAIDD',
+   s:'美國智能不足協會改名，改用 intellectual disability。',
+   x:'成立於 1876 年的美國智能不足協會（AAMR）改名為美國智能與發展障礙協會（AAIDD），以 intellectual disability（智能障礙）取代帶有貶意的 mental retardation（智能不足）。\n美國 2010 年的羅莎法、2013 年的 DSM-5 也陸續跟進。',
+   src:'AAIDD 沿革'},
+  {id:'dsm5', d:'2013-05-18', lane:'intl', cat:'assess', t:'DSM-5 以適應功能分級',
+   s:'美國精神醫學會改用「智能障礙」，嚴重程度看適應功能。',
+   x:'美國精神醫學會出版《精神疾病診斷與統計手冊》第五版（DSM-5），以「智能障礙（智能發展障礙症）」取代「智能不足」。\n嚴重程度改依概念、社會、實用三個領域的適應功能來判斷，不再只看智商。',
+   src:'美國精神醫學會（2013）'},
+  {id:'icd11', d:'2019-05-25', lane:'intl', cat:'assess', t:'ICD-11 智能發展障礙',
+   s:'世界衛生大會通過 ICD-11，2022 年起生效。',
+   x:'世界衛生大會通過《國際疾病分類》第十一版（ICD-11），以「智能發展障礙」（disorders of intellectual development）取代「智能不足」，歸在神經發展障礙之下，並同時考量智力與適應行為。\n2022 年 1 月 1 日生效。',
+   src:'世界衛生組織（2019）'},
+
+  {id:'zs', d:'1962-03', lane:'tw', cat:'edu', t:'第一個啟智班',
+   s:'臺北市中山國小開辦為智能不足兒童設立的特殊班。',
+   x:'臺北市中山國小開辦臺灣第一個為智能不足兒童設立的特殊班（啟智班）。據記載，這源自校長林正株到日本考察「弱智教育」後的啟發。\n教育部也從 1962 年起，在普通中小學試辦特殊教育實驗班。',
+   src:'教育部〈特殊教育簡介〉；Taiwan Review'},
+  {id:'tj70', d:'1970', lane:'tw', cat:'law', t:'特殊教育推行辦法',
+   s:'教育部訂定辦法，推動在一般學校設立特殊班。',
+   x:'教育部訂定《特殊教育推行辦法》，規範特殊班與特殊學校的設置。\n啟智班在 1970 年代陸續從臺北擴展到其他縣市，例如南投縣在 1972 年設立第一個啟智班，老師來自臺北師專首屆的啟智教育培訓。',
+   src:'教育部；南投縣雲林國小校史'},
+  {id:'census76', d:'1976', lane:'tw', cat:'edu', t:'第一次特殊兒童普查',
+   s:'教育部第一次全面調查各類特殊兒童的人數。',
+   x:'教育部進行第一次全國特殊兒童普查，調查學齡階段各類身心障礙兒童的人數與分布，作為規劃特殊教育的依據。\n第二次普查在 1990 年進行。',
+   src:'教育部特殊教育相關文獻'},
+  {id:'q1', d:'1979', lane:'tw', cat:'assess', tree:true, t:'WISC-R 修訂完成',
+   s:'臺灣完成魏氏兒童智力量表修訂版，列為甄選學生的工具之一。',
+   x:'臺灣完成魏克斯勒兒童智力量表（WISC-R）的修訂。\n備註：適逢特教興盛，個別智力測驗列為甄選學生的項目之一（陳美芳，1985）。',
+   src:'本站「智能障礙重大事件表」'},
+  {id:'cfl80', d:'1980-06-02', lane:'tw', cat:'law', t:'殘障福利法公布',
+   s:'臺灣第一部身心障礙者福利專法，當時稱「智能不足者」。',
+   x:'總統公布《殘障福利法》，是臺灣第一部以身心障礙者為對象的福利法律，智能不足者是福利對象之一。\n1990 年修正時改稱「智能障礙者」，1997 年再修正為《身心障礙者保護法》。',
+   src:'全國法規資料庫'},
+  {id:'l1', d:'1981', lane:'tw', cat:'law', tree:true, t:'福利法明定鑑定工具',
+   s:'施行細則明定以智力量表或適應行為量表鑑定。',
+   x:'殘障福利法施行細則明定智力量表或適應行為量表為鑑定智能不足兒童的工具（張德榮、徐享良，1986）。',
+   src:'本站「智能障礙重大事件表」'},
+  {id:'sel84', d:'1984-12-17', lane:'tw', cat:'law', t:'特殊教育法公布',
+   s:'臺灣第一部特殊教育法，智能不足是身心障礙學生的一類。',
+   x:'總統公布《特殊教育法》，確立特殊教育的法源，規定身心障礙學生的類別、鑑定與安置，智能不足是其中一類。\n1987 年的施行細則再依個別智力測驗的結果，把智能不足分為輕度、中度、重度。',
+   src:'全國法規資料庫；教育部〈特殊教育簡介〉'},
+  {id:'b3', d:'1986-02', lane:'tw', cat:'assess', tree:true, t:'引進修訂適應行為量表',
+   s:'以美國智能不足協會的適應行為量表為藍本。',
+   x:'引進使用修訂適應行為量表（徐享良，1986）。\n備註：以美國智能不足協會適應行為量表為藍本。',
+   src:'本站「智能障礙重大事件表」'},
+  {id:'l2', d:'1987-03-25', lane:'tw', cat:'law', tree:true, t:'特教法細則分三類',
+   s:'依個別智力測驗結果，把智能不足分為輕度、中度、重度。',
+   x:'特殊教育法施行細則訂立。\n備註：前項智能不足，依個別智力測驗之結果，分為左列三類：\n一、輕度智能不足：個別智力測驗之結果在平均數負三個標準差以上未達平均數負二個標準差。\n二、中度智能不足：個別智力測驗之結果在平均數負四個標準差以上未達平均數負三個標準差。\n三、重度智能不足：個別智力測驗之結果未達平均數負四個標準差。',
+   src:'本站「智能障礙重大事件表」'},
+  {id:'syinlu', d:'1987', lane:'tw', cat:'rights', t:'心路基金會成立',
+   s:'臺灣第一個由障礙者家長發起成立的社會福利組織。',
+   x:'一群智能障礙者的家長成立心路文教基金會（今天的心路社會福利基金會），是臺灣第一個由障礙者家長發起的社福組織。\n家長們到立法院旁聽、聯繫立法委員，促成殘障福利法的修訂，也辦雜誌、成立服務機構。',
+   src:'心路社會福利基金會；《遠見》1993'},
+  {id:'l3', d:'1990-01-12', lane:'tw', cat:'law', tree:true, t:'福利法改稱智能障礙者',
+   s:'殘障福利法第三條把「智能不足」改稱「智能障礙者」。',
+   x:'殘障福利法第三條將智能不足改稱為智能障礙者。',
+   src:'本站「智能障礙重大事件表」'},
+  {id:'l4', d:'1990-06', lane:'tw', cat:'edu', tree:true, t:'第二次特殊學生普查',
+   s:'配合普查，發展簡式的文蘭適應量表。',
+   x:'第二次特殊學生普查。\n備註：文蘭適應量表發展（簡式，配合普查之需）。',
+   src:'本站「智能障礙重大事件表」'},
+  {id:'pac92', d:'1992', lane:'tw', cat:'rights', t:'智障者家長總會成立',
+   s:'各地智能障礙者家長團體組成全國性的聯盟。',
+   x:'各地的智能障礙者家長協會共同成立中華民國智障者家長總會（智總），以全國的力量推動政策與法律。\n智總參與身心障礙相關法律的修法，也推動社區居住、就業與自立生活等服務。',
+   src:'中華民國智障者家長總會'},
+  {id:'ccb95', d:'1995', lane:'tw', cat:'rights', t:'喜憨兒基金會成立',
+   s:'高雄的家長為年長的心智障礙者成立基金會。',
+   x:'一群心智障礙者的家長在高雄成立喜憨兒社會福利基金會，為年長的心智障礙者規劃長期照顧與工作。1997 年開設第一家烘焙屋，「喜憨兒」一詞因此廣為人知。\n這個稱呼想要去除污名，也有人提醒它容易把成人看成孩子。本站的剪報展區把「憨兒／喜憨兒」列為一種用詞。',
+   src:'喜憨兒社會福利基金會'},
+  {id:'l5', d:'1997-04-22', lane:'tw', cat:'law', tree:true, t:'特教法改稱智能障礙',
+   s:'特殊教育法第三條的名詞修訂為「智能障礙」。',
+   x:'特殊教育法第三條名詞修訂為智能障礙。',
+   src:'本站「智能障礙重大事件表」'},
+  {id:'pp97', d:'1997-04-23', lane:'tw', cat:'law', t:'身心障礙者保護法',
+   s:'殘障福利法改名，「殘障」改稱「身心障礙」。',
+   x:'《殘障福利法》修正名稱與全文為《身心障礙者保護法》，「殘障」改稱「身心障礙」，並加入就業、無障礙環境等規定。\n2007 年再修正為《身心障礙者權益保障法》。',
+   src:'全國法規資料庫'},
+  {id:'l6', d:'2002-05-09', lane:'tw', cat:'law', tree:true, t:'鑑定標準訂立',
+   s:'智力未達平均數負二個標準差，且學習與生活適應有嚴重困難。',
+   x:'身心障礙及資賦優異學生鑑定標準訂立。\n備註：本法第三條第二項第一款所稱智能障礙，指個人之智能發展較同年齡者明顯遲緩，且在學習及生活適應能力表現上有嚴重困難者；其鑑定標準如下：\n一、心智功能明顯低下或個別智力測驗結果未達平均數負二個標準差。\n二、學生在自我照顧、動作、溝通、社會情緒或學科學習等表現上較同年齡者有顯著困難情形。',
+   src:'本站「智能障礙重大事件表」'},
+  {id:'b4', d:'2003', lane:'tw', cat:'assess', tree:true, t:'社會適應表現檢核表',
+   s:'國內第一本以 AAMR 五大領域設計的適應行為量表。',
+   x:'社會適應表現檢核表出版（盧台華等，2003）。\n備註：國內第一本以 AAMR 五大領域做分量表依據設計的適應行為量表（社會適應表現檢核表之信效度及其相關因素之研究）。',
+   src:'本站「智能障礙重大事件表」'},
+  {id:'rights07', d:'2007-07-11', lane:'tw', cat:'law', t:'身心障礙者權益保障法',
+   s:'從「保護」改為「權益保障」，並預告以 ICF 改革鑑定。',
+   x:'《身心障礙者保護法》修正名稱與全文為《身心障礙者權益保障法》，由「保護」轉向「權益」。\n法律並規定五年後改以世界衛生組織的 ICF 架構，辦理身心障礙鑑定與需求評估。',
+   src:'全國法規資料庫'},
+  {id:'icf12', d:'2012-07-11', lane:'tw', cat:'assess', t:'身心障礙鑑定新制',
+   s:'鑑定改依 ICF 架構，原本的 16 類改為 8 大類。',
+   x:'身心障礙鑑定與需求評估新制上路，依 ICF 把障礙分為八大類，智能障礙歸在「神經系統構造及精神、心智功能」類，並同時評估活動參與和環境，作為提供服務的依據。',
+   src:'衛生福利部；身心障礙者權益保障法'},
+  {id:'l7', d:'2012-09-28', lane:'tw', cat:'law', tree:true, t:'鑑定標準修訂',
+   s:'第一次針對智能障礙修訂，困難改為「顯著」並重寫向度。',
+   x:'身心障礙及資賦優異學生鑑定標準修訂（第一次針對智能障礙修訂）。\n備註：本法第三條第一款所稱智能障礙，指個人之智能發展較同年齡者明顯遲緩，且在學習及生活適應能力表現上有顯著困難者。\n前項所定智能障礙，其鑑定基準依下列各款規定：\n一、心智功能明顯低下或個別智力測驗結果未達平均數負二個標準差。\n二、學生在生活自理、動作與行動能力、語言與溝通、社會人際與情緒行為等任一向度及學科（領域）學習之表現較同年齡者有顯著困難情形。',
+   src:'本站「智能障礙重大事件表」'},
+  {id:'crpd14', d:'2014-08-20', lane:'tw', cat:'law', t:'CRPD 施行法公布',
+   s:'臺灣以施行法讓聯合國身心障礙者權利公約在國內生效。',
+   x:'總統公布《身心障礙者權利公約施行法》，2014 年 12 月 3 日（國際身心障礙者日）施行，公約因此具有國內法的效力。\n政府要定期提出國家報告，並檢討不符合公約的法令。',
+   src:'全國法規資料庫'},
+  {id:'review17', d:'2017-10', lane:'tw', cat:'rights', t:'CRPD 首次國際審查',
+   s:'國際專家來臺審查第一次國家報告，提出結論性意見。',
+   x:'2017 年 10 月 30 日到 11 月 3 日，政府邀請國際專家來臺審查第一次 CRPD 國家報告，身心障礙者團體也提出平行報告。\n審查委員提出結論性意見，包括融合教育、法律能力、去機構化等議題。',
+   src:'衛生福利部社會及家庭署 CRPD 資訊網'},
+  {id:'q5', d:'2018-09', lane:'tw', cat:'assess', tree:true, t:'WISC-V 中文版出版',
+   s:'魏氏兒童智力量表中文第五版出版。',
+   x:'魏氏兒童智力量表中文第五版（WISC-V）出版。',
+   src:'本站「智能障礙重大事件表」'},
+  {id:'sel23', d:'2023-06-21', lane:'tw', cat:'law', t:'特殊教育法全文修正',
+   s:'配合 CRPD 的精神全文修正，之後陸續修訂 36 部子法。',
+   x:'《特殊教育法》全文修正為 57 條，自公布日施行。修法是為了配合《身心障礙者權利公約》的精神與特殊教育思潮的轉變。\n授權子法共 36 部，在 2024 年 5 月前陸續修訂完成，包括特殊教育學生及幼兒鑑定辦法。',
+   src:'全國法規資料庫；教育部'},
+  {id:'l8', d:'2024-04-29', lane:'tw', cat:'law', tree:true, t:'鑑定辦法再修訂',
+   s:'第二次針對智能障礙修訂：改為心智功能、適應行為及學業學習。',
+   x:'特殊教育學生及幼兒鑑定辦法（第二次針對智能障礙修訂）。\n備註：原因說明：智能發展改成心智功能；修正第一項「學習及生活適應能力」為「適應行為及學業學習」（參考國際上評估工具為適應行為量表（adapted behavior），不僅限於生活適應）。\n本法第三條第一款所稱智能障礙，指個人在發展階段，其心智功能、適應行為及學業學習表現，較同年齡者有顯著困難。\n前項所定智能障礙，其鑑定基準依下列各款規定：\n一、心智功能明顯低下或個別智力測驗結果未達平均數負二個標準差。\n二、學生在生活自理、動作與行動能力、語言與溝通、社會人際與情緒行為等任一向度及學科（領域）學習之表現較同年齡者有顯著困難情形。',
+   src:'本站「智能障礙重大事件表」'}
+];
+
+/* ============ 整理資料 ============ */
+const $ = s => document.querySelector(s);
+const el = (tag, cls, html) => { const e = document.createElement(tag); if (cls) e.className = cls; if (html != null) e.innerHTML = html; return e; };
+const esc = s => String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+const parts = d => d.split('-').map(Number);
+// 只寫年份的事件排在那一年的年中，只寫到月的排在那個月的中間
+const sortKey = d => { const [y,m,dd] = parts(d); return y + ((m ? m - 1 : 6) + ((dd || 15) - 1) / 31) / 12; };
+const fmtDate = d => { const [y,m,dd] = parts(d); return y + ' 年' + (m ? ' ' + m + ' 月' : '') + (dd ? ' ' + dd + ' 日' : ''); };
+const fmtMD = d => { const [,m,dd] = parts(d); return m ? m + ' 月' + (dd ? ' ' + dd + ' 日' : '') : ''; };
+EVENTS.forEach(e => { e.k = sortKey(e.d); e.y = parts(e.d)[0]; });
+EVENTS.sort((a,b) => a.k - b.k);
+EVENTS.forEach((e,i) => { e.i = i; e.era = ERAS.findIndex(r => e.y >= r.from && e.y <= r.to); });
+console.assert(EVENTS.length === 50, '事件數應為 50，現在是 ' + EVENTS.length);
+const Y0 = 1795, Y1 = 2030;
+
+/* ============ 畫面 ============ */
+const scroller = $('#scroller'), track = $('#track'), stage = $('#stage');
+const filter = new Set();
+let L = {}; // 版面的尺寸
+
+// 類別篩選
+const legend = document.querySelector('.legend');
+Object.entries(CATS).forEach(([k,c]) => {
+  const b = el('button', 'chip', '<i class="mk ' + k + ' c-' + k + '" aria-hidden="true"></i>' + c.name);
+  b.setAttribute('aria-pressed', 'false'); b.dataset.cat = k;
+  b.onclick = () => { filter.has(k) ? filter.delete(k) : filter.add(k); b.setAttribute('aria-pressed', filter.has(k)); applyFilter(); };
+  legend.appendChild(b);
+});
+
+// 章節
+const erasNav = $('#eras');
+ERAS.forEach((r,i) => {
+  const n = EVENTS.filter(e => e.era === i).length;
+  const first = EVENTS.find(e => e.era === i), last = [...EVENTS].reverse().find(e => e.era === i);
+  const b = el('button', 'era-btn', '<b>' + (i+1) + '　' + r.name + '</b><span>' + first.y + '–' + last.y + '・' + n + ' 件</span>');
+  b.onclick = () => goEra(i);
+  erasNav.appendChild(b);
+});
+
+// 卡片
+const list = $('#events');
+EVENTS.forEach(e => {
+  const li = el('li', 'ev'); li.id = 'ev-' + e.id; li.dataset.cat = e.cat;
+  const c = 'c-' + e.cat;
+  li.innerHTML =
+    '<i class="stem ' + c + '" aria-hidden="true"></i>' +
+    '<i class="dot" aria-hidden="true"><i class="mk ' + e.cat + ' ' + c + '"></i></i>' +
+    '<button class="card ' + c + '" aria-haspopup="dialog">' +
+      '<span class="when"><span class="yr">' + e.y + '</span><span class="md">' + fmtMD(e.d) + '</span></span>' +
+      '<span class="tt">' + esc(e.t) + '</span>' +
+      '<span class="ss">' + esc(e.s) + '</span>' +
+      '<span class="tag"><i class="mk ' + e.cat + ' ' + c + '" aria-hidden="true"></i>' + CATS[e.cat].name + '</span>' +
+      '<span class="vh">，' + LANES[e.lane] + '，' + fmtDate(e.d) + '</span>' +
+    '</button>';
+  const btn = li.querySelector('.card');
+  btn.onclick = ev => { if (dragMoved) { ev.preventDefault(); return; } open(e.i); };
+  btn.onkeydown = ev => {
+    if (ev.key === 'ArrowRight' || ev.key === 'ArrowLeft') {
+      ev.preventDefault(); ev.stopPropagation();
+      const j = e.i + (ev.key === 'ArrowRight' ? 1 : -1);
+      if (EVENTS[j]) { EVENTS[j].btn.focus({preventScroll:true}); scrollToEvent(j); }
+    }
+  };
+  e.li = li; e.btn = btn;
+  list.appendChild(li);
+});
+
+/* ============ 版面 ============
+   每件事依時間排一欄；同一側相鄰的事件放在兩層（靠近時間軸、遠離時間軸），卡片不會重疊。
+   兩件事相隔 15 年以上，時間軸斷開並寫出相隔幾年。 */
+function layout() {
+  const narrow = innerWidth < 760;
+  const topH = document.querySelector('.top').offsetHeight;
+  const avail = Math.max(innerHeight - topH, 480);
+  const short = !narrow && innerHeight <= 820;
+  const ERA_H = narrow ? 58 : short ? 54 : 64, AXIS = narrow ? 40 : short ? 44 : 52, GAP = narrow ? 10 : short ? 10 : 14;
+  const laneH = Math.floor((avail - ERA_H - AXIS) / 2);
+  const cardH = Math.max(100, Math.min(136, Math.floor((laneH - GAP * 3) / 2)));
+  const realLane = cardH * 2 + GAP * 3;
+  const cardW = narrow ? 200 : 268, step = narrow ? 108 : 150, pad = narrow ? 10 : 16;
+  const tagW = narrow ? 30 : 44, introW = narrow ? Math.min(innerWidth - 60, 340) : 520;
+  const H = ERA_H + realLane * 2 + AXIS;
+  const axisY = ERA_H + realLane + AXIS / 2;
+  const lines = cardH >= 114 ? 2 : 1;
+  L = {narrow, cardW, cardH, step, axisY, H, tagW};
+
+  // 每一欄的位置
+  let x = tagW + 40 + introW + 60;
+  const right = {intl:[-1e9,-1e9], tw:[-1e9,-1e9]};
+  const gaps = [];
+  EVENTS.forEach((e,i) => {
+    if (i > 0) {
+      const prev = EVENTS[i-1], dy = e.y - prev.y;
+      x += step;
+      if (e.era !== prev.era) x += narrow ? 40 : 60;
+      if (dy >= 15) { gaps.push({x0: prev.px + 26, x1: x + (narrow ? 70 : 110) - 8, n: dy}); x += narrow ? 70 : 110; }
+    }
+    const r = right[e.lane];
+    let tier = r[0] + pad <= x ? 0 : r[1] + pad <= x ? 1 : -1;
+    if (tier < 0) { tier = r[0] <= r[1] ? 0 : 1; x = r[tier] + pad; }
+    r[tier] = x + cardW;
+    e.px = x; e.tier = tier;
+  });
+  const lastRight = Math.max(...right.intl, ...right.tw);
+  const outroX = lastRight + 80, outroW = narrow ? 300 : 420;
+  const W = outroX + outroW + 80;
+  L.W = W;
+
+  track.style.width = W + 'px'; track.style.height = H + 'px';
+  stage.style.height = H + 'px';
+  $('#axisLine').style.top = axisY + 'px';
+
+  const tagI = $('#tagIntl'), tagT = $('#tagTw');
+  Object.assign($('#corner').style, {width: tagW + 'px', height: ERA_H + 'px'});
+  tagI.style.top = ERA_H + 'px'; tagI.style.height = realLane + AXIS / 2 + 'px';
+  tagT.style.top = axisY + 'px'; tagT.style.height = realLane + AXIS / 2 + 'px';
+  $('#prevBtn').style.top = $('#nextBtn').style.top = axisY + 'px';
+
+  EVENTS.forEach(e => {
+    const cx = e.px + 22;
+    let top;
+    if (e.lane === 'intl') top = e.tier === 0 ? ERA_H + GAP * 2 + cardH : ERA_H + GAP;
+    else top = e.tier === 0 ? axisY + AXIS / 2 + GAP : axisY + AXIS / 2 + GAP * 2 + cardH;
+    const card = e.btn, stem = e.li.querySelector('.stem'), dot = e.li.querySelector('.dot');
+    Object.assign(card.style, {left: e.px + 'px', top: top + 'px', width: cardW + 'px', height: cardH + 'px'});
+    card.style.setProperty('--lines', lines);
+    const y0 = e.lane === 'intl' ? top + cardH : axisY, y1 = e.lane === 'intl' ? axisY : top;
+    Object.assign(stem.style, {left: cx + 'px', top: y0 + 'px', height: (y1 - y0) + 'px'});
+    Object.assign(dot.style, {left: cx + 'px', top: axisY + 'px'});
+  });
+
+  // 章節的底色
+  const bands = $('#bands'); bands.innerHTML = '';
+  ERAS.forEach((r,i) => {
+    const evs = EVENTS.filter(e => e.era === i);
+    const x0 = i === 0 ? tagW + 40 + introW + 30 : evs[0].px - (narrow ? 26 : 36);
+    const nextFirst = EVENTS.find(e => e.era === i + 1);
+    const x1 = nextFirst ? nextFirst.px - (narrow ? 26 : 36) : lastRight + 40;
+    r.x0 = x0; r.x1 = x1;
+    const b = el('div', 'era-band');
+    b.style.left = x0 + 'px'; b.style.width = (x1 - x0) + 'px';
+    b.innerHTML = '<div class="era-h"><div class="no">第 ' + (i+1) + ' 章</div><h2>' + r.name + '<span>' + evs[0].y + '–' + evs[evs.length-1].y + '</span></h2></div>';
+    b.querySelector('.era-h').style.left = (tagW + 12) + 'px';
+    b.querySelector('.era-h').title = r.desc;
+    bands.appendChild(b);
+  });
+
+  // 時間軸上的斷開處
+  const deco = $('#axisDeco'); deco.innerHTML = '';
+  gaps.forEach(g => {
+    const d = el('div', 'gap', '<span>相隔 ' + g.n + ' 年</span>');
+    Object.assign(d.style, {left: g.x0 + 'px', width: (g.x1 - g.x0) + 'px', top: axisY + 'px'});
+    deco.appendChild(d);
+  });
+
+  const intro = $('#intro'), outro = $('#outro');
+  Object.assign(intro.style, {left: tagW + 40 + 'px', width: introW + 'px', top: '24px', height: (H - 48) + 'px'});
+  Object.assign(outro.style, {left: outroX + 'px', width: outroW + 'px', top: '24px', height: (H - 48) + 'px'});
+
+  buildMini();
+  onScroll();
+}
+
+/* ============ 全覽 ============ */
+const mini = $('#mini');
+const yx = y => (y - Y0) / (Y1 - Y0) * 100;
+function buildMini() {
+  mini.innerHTML = '';
+  mini.appendChild(el('div', 'mini-mid'));
+  ERAS.forEach(r => {
+    const d = el('div', 'mini-era');
+    d.style.left = yx(r.from) + '%'; d.style.width = (yx(Math.min(r.to + 1, Y1)) - yx(r.from)) + '%';
+    mini.appendChild(d);
+  });
+  [1800,1850,1900,1950,2000].forEach(y => {
+    const t = el('span', 'mini-yr', y); t.style.left = yx(y) + '%';
+    if (!L.narrow || y % 100 === 0) mini.appendChild(t);
+  });
+  EVENTS.forEach(e => {
+    const t = el('i', 'mini-tick c-' + e.cat + ' ' + (e.lane === 'intl' ? 'up' : 'dn'));
+    t.style.left = yx(e.k) + '%'; e.tick = t;
+    mini.appendChild(t);
+  });
+  mini.appendChild(el('div', 'mini-win')).id = 'miniWin';
+  applyFilter();
+}
+// 把時間軸上的 x 換成年份：在相鄰兩件事之間照比例內插
+function xToYear(x) {
+  const cx = e => e.px + 22;
+  if (x <= cx(EVENTS[0])) return EVENTS[0].k;
+  for (let i = 1; i < EVENTS.length; i++) {
+    const a = EVENTS[i-1], b = EVENTS[i];
+    if (x <= cx(b)) return a.k + (b.k - a.k) * (x - cx(a)) / Math.max(1, cx(b) - cx(a));
+  }
+  return EVENTS[EVENTS.length-1].k;
+}
+function yearToX(y) {
+  const cx = e => e.px + 22;
+  if (y <= EVENTS[0].k) return cx(EVENTS[0]);
+  for (let i = 1; i < EVENTS.length; i++) {
+    const a = EVENTS[i-1], b = EVENTS[i];
+    if (y <= b.k) return cx(a) + (cx(b) - cx(a)) * (y - a.k) / Math.max(1e-6, b.k - a.k);
+  }
+  return cx(EVENTS[EVENTS.length-1]);
+}
+function viewRange() {
+  const left = scroller.scrollLeft + L.tagW, right = scroller.scrollLeft + scroller.clientWidth;
+  return [left, right];
+}
+let raf = 0;
+function onScroll() {
+  cancelAnimationFrame(raf);
+  raf = requestAnimationFrame(() => {
+    const [l, r] = viewRange();
+    const vis = EVENTS.filter(e => e.px + L.cardW > l && e.px < r);
+    const win = $('#miniWin'), read = $('#miniRead');
+    if (vis.length) {
+      const a = xToYear(Math.max(l, EVENTS[0].px)), b = xToYear(r);
+      win.style.left = yx(a) + '%'; win.style.width = Math.max(.8, yx(b) - yx(a)) + '%';
+      win.hidden = false;
+      read.textContent = '畫面上：' + vis[0].y + (vis[vis.length-1].y !== vis[0].y ? '–' + vis[vis.length-1].y : '') + '・' + vis.length + ' 件';
+      mini.setAttribute('aria-valuenow', Math.round(a));
+      mini.setAttribute('aria-valuetext', '目前看到 ' + vis[0].y + ' 到 ' + vis[vis.length-1].y + ' 年');
+    } else {
+      win.hidden = true; read.textContent = scroller.scrollLeft < 200 ? '往右捲動開始' : '';
+    }
+    // 目前的章節：畫面中間落在哪一章
+    const mid = (l + r) / 2;
+    let cur = -1;
+    ERAS.forEach((er,i) => { if (mid >= er.x0 && mid < er.x1) cur = i; });
+    if (mid >= ERAS[ERAS.length-1].x1) cur = ERAS.length - 1;
+    [...erasNav.children].forEach((b,i) => {
+      const on = i === cur;
+      if (on !== (b.getAttribute('aria-current') === 'true')) {
+        b.setAttribute('aria-current', on);
+        if (on) b.scrollIntoView({block:'nearest', inline:'nearest'});
+      }
+    });
+    $('#prevBtn').disabled = scroller.scrollLeft <= 2;
+    $('#nextBtn').disabled = scroller.scrollLeft >= scroller.scrollWidth - scroller.clientWidth - 2;
+  });
+}
+scroller.addEventListener('scroll', onScroll, {passive:true});
+
+/* ============ 移動 ============ */
+const smooth = () => matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth';
+function scrollToX(x, how) { scroller.scrollTo({left: Math.max(0, x), behavior: how || smooth()}); }
+// 讓事件出現在畫面左邊三分之一的位置
+function scrollToEvent(i, how) {
+  const e = EVENTS[i], vw = scroller.clientWidth;
+  const offset = L.narrow ? L.tagW + 14 : Math.max(L.tagW + 60, (vw - (panelOpen() && !L.narrow ? 460 : 0)) * 0.32 - L.cardW / 2);
+  scrollToX(e.px - offset, how);
+}
+function goEra(i) { scrollToX(ERAS[i].x0 - L.tagW - 4); }
+function step(dir) {
+  const [l] = viewRange();
+  const anchor = l + (L.narrow ? 14 : 60);
+  let j;
+  if (dir > 0) j = EVENTS.findIndex(e => e.px > anchor + 8);
+  else { j = -1; EVENTS.forEach((e,i) => { if (e.px < anchor - 8) j = i; }); }
+  if (j < 0) scrollToX(dir > 0 ? L.W : 0);
+  else scrollToX(EVENTS[j].px - (anchor - scroller.scrollLeft));
+}
+$('#prevBtn').onclick = () => step(-1);
+$('#nextBtn').onclick = () => step(1);
+$('#startBtn').onclick = () => { scrollToEvent(0); setTimeout(() => EVENTS[0].btn.focus({preventScroll:true}), 400); };
+
+// 滑鼠滾輪往下＝往右
+scroller.addEventListener('wheel', ev => {
+  if (ev.ctrlKey || Math.abs(ev.deltaX) > Math.abs(ev.deltaY)) return;
+  ev.preventDefault();
+  scroller.scrollLeft += ev.deltaY * (ev.deltaMode === 1 ? 32 : 1);
+}, {passive:false});
+
+// 用滑鼠拖曳
+let dragX = null, dragStart = 0, dragMoved = false;
+scroller.addEventListener('pointerdown', ev => {
+  if (ev.pointerType !== 'mouse' || ev.button !== 0) return;
+  dragX = ev.clientX; dragStart = scroller.scrollLeft; dragMoved = false;
+});
+addEventListener('pointermove', ev => {
+  if (dragX == null) return;
+  const dx = ev.clientX - dragX;
+  if (Math.abs(dx) > 5) { dragMoved = true; scroller.classList.add('drag'); }
+  if (dragMoved) scroller.scrollLeft = dragStart - dx;
+});
+addEventListener('pointerup', () => {
+  if (dragX == null) return;
+  dragX = null; scroller.classList.remove('drag');
+  setTimeout(() => { dragMoved = false; }, 0);
+});
+
+// 鍵盤：焦點在時間軸上時，左右鍵一次移一件、Home／End 到頭尾
+scroller.addEventListener('keydown', ev => {
+  if (ev.key === 'ArrowRight') { ev.preventDefault(); step(1); }
+  else if (ev.key === 'ArrowLeft') { ev.preventDefault(); step(-1); }
+  else if (ev.key === 'Home') { ev.preventDefault(); scrollToX(0); }
+  else if (ev.key === 'End') { ev.preventDefault(); scrollToX(L.W); }
+});
+// Tab 移到畫面外的卡片時，捲過去
+scroller.addEventListener('focusin', ev => {
+  const li = ev.target.closest('.ev'); if (!li) return;
+  const e = EVENTS.find(x => x.li === li), [l, r] = viewRange();
+  if (e.px < l || e.px + L.cardW > r) scrollToEvent(e.i);
+});
+
+// 全覽：點或拖曳，跳到那個年份
+function miniJump(ev, how) {
+  const rect = mini.getBoundingClientRect();
+  const y = Y0 + (ev.clientX - rect.left) / rect.width * (Y1 - Y0);
+  scrollToX(yearToX(y) - (scroller.clientWidth + L.tagW) / 2, how);
+}
+let miniDrag = false;
+mini.addEventListener('pointerdown', ev => { miniDrag = true; mini.setPointerCapture(ev.pointerId); miniJump(ev, 'auto'); });
+mini.addEventListener('pointermove', ev => { if (miniDrag) miniJump(ev, 'auto'); });
+mini.addEventListener('pointerup', () => { miniDrag = false; });
+mini.addEventListener('keydown', ev => {
+  if (ev.key === 'ArrowRight' || ev.key === 'ArrowLeft') { ev.preventDefault(); step(ev.key === 'ArrowRight' ? 1 : -1); }
+});
+
+/* ============ 篩選 ============ */
+function applyFilter() {
+  EVENTS.forEach(e => {
+    const dim = filter.size > 0 && !filter.has(e.cat);
+    e.li.classList.toggle('dim', dim);
+    if (e.tick) e.tick.classList.toggle('dim', dim);
+  });
+}
+
+/* ============ 說明面板 ============ */
+const panel = $('#panel');
+let cur = -1, lastFocus = null;
+const panelOpen = () => !panel.hidden;
+function open(i, fromHash) {
+  const e = EVENTS[i]; if (!e) return;
+  if (!panelOpen()) lastFocus = document.activeElement;
+  if (cur >= 0) EVENTS[cur].li.classList.remove('on');
+  cur = i; e.li.classList.add('on');
+  const paras = e.x.split('\n').map(p => '<p>' + esc(p) + '</p>').join('');
+  $('#pBody').innerHTML =
+    '<div class="p-meta"><span>第 ' + (e.era+1) + ' 章・' + ERAS[e.era].name + '</span><span>' + LANES[e.lane] + '</span>' +
+    '<span><i class="mk ' + e.cat + ' c-' + e.cat + '" aria-hidden="true"></i>' + CATS[e.cat].name + '</span></div>' +
+    '<div class="p-date c-' + e.cat + '" style="color:var(--c)">' + fmtDate(e.d) + '</div>' +
+    '<h2 id="pTitle" tabindex="-1">' + esc(e.t) + '</h2>' +
+    '<div class="p-x">' + paras + '</div>' +
+    '<div class="p-src">來源：' + esc(e.src) + (e.tree ? '<br><span class="p-tree">也在事件樹裡（<a href="index.html">智能障礙事件樹</a>）</span>' : '') + '</div>';
+  $('#pPos').textContent = (i+1) + ' / ' + EVENTS.length;
+  $('#pPrev').disabled = i === 0; $('#pNext').disabled = i === EVENTS.length - 1;
+  panel.style.top = L.narrow ? '' : document.querySelector('.top').offsetHeight + 12 + 'px';
+  panel.hidden = false;
+  $('#pBody').scrollTop = 0;
+  scrollToEvent(i, fromHash ? 'auto' : undefined);
+  history.replaceState(null, '', '#ev-' + e.id);
+  if (!fromHash) $('#pTitle').focus({preventScroll:true});
+}
+function close() {
+  if (cur >= 0) EVENTS[cur].li.classList.remove('on');
+  panel.hidden = true;
+  const back = cur >= 0 ? EVENTS[cur].btn : lastFocus;
+  cur = -1;
+  history.replaceState(null, '', location.pathname + location.search);
+  if (back) back.focus({preventScroll:true});
+}
+$('#pPrev').onclick = () => open(cur - 1);
+$('#pNext').onclick = () => open(cur + 1);
+$('#pClose').onclick = close;
+addEventListener('keydown', ev => {
+  if (ev.key === 'Escape' && panelOpen()) { ev.preventDefault(); close(); }
+});
+panel.addEventListener('keydown', ev => {
+  if (ev.target.closest('a')) return;
+  if (ev.key === 'ArrowRight' && cur < EVENTS.length - 1) { ev.preventDefault(); open(cur + 1); }
+  if (ev.key === 'ArrowLeft' && cur > 0) { ev.preventDefault(); open(cur - 1); }
+});
+
+/* ============ 文字版 ============ */
+const plain = $('#plainList');
+ERAS.forEach((r,i) => {
+  const evs = EVENTS.filter(e => e.era === i);
+  plain.appendChild(el('h3', null, '第 ' + (i+1) + ' 章　' + r.name + '（' + evs[0].y + '–' + evs[evs.length-1].y + '）'));
+  const ol = el('ol');
+  evs.forEach(e => {
+    const li = el('li', null,
+      '<span class="d">' + fmtDate(e.d) + '</span><span class="l">' + LANES[e.lane] + '</span>' +
+      '<span><button>' + esc(e.t) + '</button>　<small style="color:var(--muted)">' + CATS[e.cat].name + '</small></span><p>' + esc(e.s) + '</p>');
+    li.querySelector('button').onclick = () => { window.scrollTo({top:0, behavior:smooth()}); open(e.i); };
+    ol.appendChild(li);
+  });
+  plain.appendChild(ol);
+});
+
+/* ============ 開始 ============ */
+let rs = 0;
+addEventListener('resize', () => { clearTimeout(rs); rs = setTimeout(() => { const y = xToYear(scroller.scrollLeft + scroller.clientWidth / 2); layout(); if (scroller.scrollLeft > 0) scrollToX(yearToX(y) - scroller.clientWidth / 2, 'auto'); }, 120); });
+layout();
+if (document.fonts) document.fonts.ready.then(layout);
+const h = location.hash.match(/^#ev-(.+)$/);
+if (h) { const e = EVENTS.find(x => x.id === h[1]); if (e) requestAnimationFrame(() => open(e.i, true)); }
+</script>
+</body>
+</html>
