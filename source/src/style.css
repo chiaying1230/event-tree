@@ -4,6 +4,8 @@
 :root{
   --bg:#EAECE6; --paper:#F7F8F4; --stage:#E1E4DD; --ink:#1F2A2E; --ink2:#37444A; --muted:#525F65; --line:#CBD2CB; --line2:#AEB7AE;
   --c-iq:#2F6187; --c-ab:#247B62; --c-law:#8C6013;
+  /* 年表每一道的顏色：任兩色在色盲模擬下都分得開（OKLab ΔE ≥ 12，淺色）、對背景至少 3:1 */
+  --k-intl:#1995EA; --k-tw:#0B6817; --k-news:#AE8A0D; --k-lit:#682DAC; --k-people:#D4407C;
   --g1:#EFECE4; --g2:#E1DBCE; --g3:#D0C8B6; --g4:#BCB2A0;
   --d1:#376fb0; --d2:#c26a3d; --d3:#17998a; --d4:#a8841a; --d5:#b0668f; --d6:#5f8f3a; --rose:#2F6187; --link:#2F6187; --ctl:#79847E;
   --trk:rgba(31,42,46,.045); --trk2:rgba(31,42,46,.11); --band:.04;
@@ -17,6 +19,7 @@
 @media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
   --bg:#171B1C; --paper:#20272A; --stage:#14181A; --ink:#E6EAE5; --ink2:#C7CFCB; --muted:#9BA6A8; --line:#384344; --line2:#4E5A5B;
   --c-iq:#82ABCB; --c-ab:#86C9B0; --c-law:#DDB35F;
+  --k-intl:#1479B0; --k-tw:#2CAB36; --k-news:#906B0A; --k-lit:#AC69E9; --k-people:#D4407C;
   --g1:#282C2A; --g2:#333733; --g3:#41453D; --g4:#4F5348;
   --d1:#5289d4; --d2:#c9703f; --d3:#24a08e; --d4:#b08720; --d5:#bd689b; --d6:#6ea040; --rose:#82ABCB; --link:#82ABCB; --ctl:#7E8A8B;
   --trk:rgba(230,234,229,.07); --trk2:rgba(230,234,229,.15); --band:.065;
@@ -25,6 +28,7 @@
 :root[data-theme="dark"]{
   --bg:#171B1C; --paper:#20272A; --stage:#14181A; --ink:#E6EAE5; --ink2:#C7CFCB; --muted:#9BA6A8; --line:#384344; --line2:#4E5A5B;
   --c-iq:#82ABCB; --c-ab:#86C9B0; --c-law:#DDB35F;
+  --k-intl:#1479B0; --k-tw:#2CAB36; --k-news:#906B0A; --k-lit:#AC69E9; --k-people:#D4407C;
   --g1:#282C2A; --g2:#333733; --g3:#41453D; --g4:#4F5348;
   --d1:#5289d4; --d2:#c9703f; --d3:#24a08e; --d4:#b08720; --d5:#bd689b; --d6:#6ea040; --rose:#82ABCB; --link:#82ABCB; --ctl:#7E8A8B;
   --trk:rgba(230,234,229,.07); --trk2:rgba(230,234,229,.15); --band:.065;
@@ -226,8 +230,8 @@ body[data-only] .foot a{display:none}
 .cr-corner{position:absolute;left:0;top:0;background:var(--paper);border-right:1px solid var(--line)}
 .cr-lane{position:absolute;left:0;display:flex;flex-direction:column;justify-content:center;align-items:center;gap:2px;background:var(--paper);border-right:1px solid var(--line);border-top:1px solid var(--line);text-align:center;line-height:1.3}
 .cr-lane b{font-family:var(--serif);font-size:1rem}
+.cr-lane .ico{width:13px;height:13px}
 .cr-lane small{font-size:.7rem;color:var(--muted)}
-.cr-lane.data b{font-weight:600;color:var(--ink2)}
 /* 一件事：形狀標在它的日期上，右邊是年份與名稱 */
 .cr-it{position:absolute;display:grid;grid-template-columns:14px minmax(0,1fr);column-gap:5px;align-items:center;padding:3px 6px 3px 1px;border:0;border-radius:8px;background:none;text-align:left;line-height:1.35;color:var(--ink)}
 .cr-it .ico{align-self:center}
@@ -238,9 +242,9 @@ body[data-only] .foot a{display:none}
 .cr-it:hover{background:var(--trk2)}
 .cr-it[aria-pressed="true"]{background:var(--ink);color:var(--paper)}
 .cr-it[aria-pressed="true"] .cr-y,.cr-it[aria-pressed="true"] .cr-t{color:var(--paper)}
-.cr-it[aria-pressed="true"] .ico *{fill:var(--paper);stroke:var(--paper)}
+.cr-it[aria-pressed="true"] .ico *{stroke:var(--paper);stroke-width:1.5}
 .cr-it:focus-visible{outline-offset:1px}
-.cr-guide{position:absolute;width:0;border-left:1px solid var(--ink);opacity:.5;pointer-events:none}
+.cr-guide{position:absolute;width:0;border-left:2px solid var(--c,var(--ink));opacity:.7;pointer-events:none}
 .cr-flag{position:absolute;top:36px;transform:translateX(-50%);padding:1px 7px;border-radius:999px;background:var(--ink);color:var(--paper);font-size:.74rem;font-variant-numeric:tabular-nums;white-space:nowrap;pointer-events:none;z-index:2}
 .cr-note{margin-top:10px;font-size:.84rem;color:var(--muted)}
 .cr-src{margin-top:14px;font-size:.84rem;color:var(--muted)}

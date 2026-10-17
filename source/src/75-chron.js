@@ -4,13 +4,16 @@
    要加事件：照下面的格式加一筆。d 寫成 1984、1984-12 或 1984-12-17；lane 是 intl、tw、news、lit、people；
    cat（只有大事要寫）是 law 法規與政策、assess 定義與鑑定、edu 教育與普查、rights 權利與社會。
    剪報、研究、人數三道的數字由 source/data.json 算出，資料更新時請重算。 */
+// 每一道有自己的顏色與形狀（顏色寫在 style.css 的 --k-intl 等）。五個顏色用色盲模擬檢查過：任兩色之間都分得開，
+// 形狀也各不相同，所以不靠顏色也認得出來。大事是實心，本站資料是空心
 const CR_LANES = [
   {k:'intl', name:'國際', kind:'大事', shape:'circle'},
   {k:'tw', name:'臺灣', kind:'大事', shape:'diamond'},
   {k:'news', name:'剪報', kind:'本站資料', shape:'square', data:true, go:'news'},
-  {k:'lit', name:'研究', kind:'本站資料', shape:'square', data:true, go:'research'},
-  {k:'people', name:'人數', kind:'本站資料', shape:'square', data:true, go:'people'}
+  {k:'lit', name:'研究', kind:'本站資料', shape:'triangle', data:true, go:'research'},
+  {k:'people', name:'人數', kind:'本站資料', shape:'hexagon', data:true, go:'people'}
 ];
+CR_LANES.forEach(l=>{ l.color = 'var(--k-'+l.k+')'; });
 const CR_CATS = {law:'法規與政策', assess:'定義與鑑定', edu:'教育與普查', rights:'權利與社會'};
 const CR_ERAS = [
   {from:1795, name:'啟蒙與機構'},
@@ -186,19 +189,19 @@ const CR_RAW = [
    x:"2005 年出現第一篇以自我倡議／自我決策為主題的研究，之後一共 16 篇。\n同一時期，CRPD 在 2006 年通過，強調「沒有我們的參與，不要做關於我們的決定」。"},
   {id:"p1999", d:"1999", lane:"people", t:"智能障礙者 68,044 人",
    x:"衛福部統計的全國智能障礙者人數，1999 年底是 68,044 人。\n之後逐年增加，2014 年超過十萬人。"},
-  {id:"p2007", d:"2007", lane:"people", t:"臺北市：學障超過智障",
+  {id:"p2007", d:"2007", lane:"people", t:"臺北市：學習障礙超過智能障礙",
    x:"2007 年，臺北市的特教學生裡，學習障礙 2,196 人，第一次多於智能障礙的 1,918 人。\n臺北市的智能障礙學生從 2003 年的 2,345 人，減少到 2024 年的 506 人。"},
-  {id:"p2009", d:"2009", lane:"people", t:"臺北市：自閉症超過智障",
+  {id:"p2009", d:"2009", lane:"people", t:"臺北市：自閉症超過智能障礙",
    x:"2009 年，臺北市的自閉症學生 2,020 人，第一次多於智能障礙的 1,861 人。\n全國要到 2022 年才出現同樣的交叉。"},
-  {id:"p2010", d:"2010", lane:"people", t:"全國智障學生最多",
+  {id:"p2010", d:"2010", lane:"people", t:"全國智能障礙學生最多",
    x:"全國特教學生裡的智能障礙學生，2010 年是 26,059 人，是有資料的 2008–2024 年裡最多的一年，之後逐年減少。"},
-  {id:"p2013", d:"2013", lane:"people", t:"全國：學障超過智障",
+  {id:"p2013", d:"2013", lane:"people", t:"全國：學習障礙超過智能障礙",
    x:"2013 年，全國的學習障礙學生 26,797 人，第一次多於智能障礙的 25,088 人。臺北市早在 2007 年就出現這個交叉。"},
   {id:"p2014", d:"2014", lane:"people", t:"智能障礙者超過十萬人",
    x:"衛福部統計的全國智能障礙者，2014 年底是 100,588 人，第一次超過十萬。\n之後大致持平，2024 年底是 102,556 人。"},
-  {id:"p2022", d:"2022", lane:"people", t:"全國：自閉症超過智障",
+  {id:"p2022", d:"2022", lane:"people", t:"全國：自閉症超過智能障礙",
    x:"2022 年，全國的自閉症學生 18,853 人，第一次多於智能障礙的 17,608 人。臺北市在 2009 年就已交叉。"},
-  {id:"p2024", d:"2024", lane:"people", t:"智障學生 16,800 人",
+  {id:"p2024", d:"2024", lane:"people", t:"智能障礙學生 16,800 人",
    x:"2024 年，全國的智能障礙學生 16,800 人，比 2010 年的高峰少了 36%。\n占全部特教學生的比例，從 2008 年的 31% 降到 13%。同一時期，衛福部統計的智能障礙者總人數沒有減少，維持在十萬人上下。"}
 ];
 const CR_LANE = Object.fromEntries(CR_LANES.map(l=>[l.k,l]));
@@ -274,8 +277,8 @@ function crFigHtml(L){
   const eras = CR_ERAS.map((r,i)=>{ const a = X(Math.max(r.from,1795)), b = X(i<CR_ERAS.length-1 ? CR_ERAS[i+1].from : CR_END);
     return `<div class="cr-era" style="left:${a.toFixed(0)}px;width:${(b-a).toFixed(0)}px"><span>${esc(r.name)}</span></div>`; }).join('');
   const items = CR.filter(e=>L.pos[e.id]).map(e=>{ const p = L.pos[e.id], ln = CR_LANE[e.lane];
-    return `<button class="cr-it${ln.data?' data':''}" data-cr="${e.id}" aria-pressed="${crSel===e.id}" style="left:${(p.x-8).toFixed(0)}px;top:${p.y}px;width:${p.w}px" title="${esc(e.t)}">${icon(ln.shape,'var(--ink)',ln.data)}<span class="cr-y">${esc(crYear(e))}</span><span class="cr-t">${esc(e.t)}</span><span class="vh">，${ln.name}${ln.data?'（本站資料）':''}</span></button>`; }).join('');
-  const labels = L.lanes.map(l=>`<div class="cr-lane${l.data?' data':''}" style="top:${l.top}px;height:${l.h}px;width:${L.labW}px"><b>${l.name}</b>${L.narrow?'':`<small>${l.kind}</small>`}</div>`).join('');
+    return `<button class="cr-it${ln.data?' data':''}" data-cr="${e.id}" aria-pressed="${crSel===e.id}" style="left:${(p.x-8).toFixed(0)}px;top:${p.y}px;width:${p.w}px" title="${esc(e.t)}">${icon(ln.shape,ln.color,ln.data)}<span class="cr-y">${esc(crYear(e))}</span><span class="cr-t">${esc(e.t)}</span><span class="vh">，${ln.name}${ln.data?'（本站資料）':''}</span></button>`; }).join('');
+  const labels = L.lanes.map(l=>`<div class="cr-lane${l.data?' data':''}" style="top:${l.top}px;height:${l.h}px;width:${L.labW}px;--c:${l.color}">${icon(l.shape,l.color,l.data)}<b>${l.name}</b>${L.narrow?'':`<small>${l.kind}</small>`}</div>`).join('');
   return `<div class="cr-scroll" id="crScroll" tabindex="0" aria-label="年表，可以左右捲動">
       <div class="cr-track" style="width:${L.W}px;height:${L.H}px">${crSvgRuler(L)}${eras}<i class="cr-guide" id="crGuide" hidden></i><span class="cr-flag" id="crFlag" hidden></span>${items}</div>
     </div>
@@ -288,13 +291,14 @@ function crGuide(id){
   if(!p){ g.hidden = fl.hidden = true; return; }
   g.hidden = fl.hidden = false;
   g.style.cssText = `left:${p.x.toFixed(0)}px;top:${CRL.RULER}px;height:${p.y+6-CRL.RULER}px`;
+  g.style.setProperty('--c', CR_LANE[e.lane].color);
   fl.textContent = (e.when && /年代/.test(e.when)) ? e.when : (e.mo ? e.y+'.'+e.mo+(e.dd?'.'+e.dd:'') : e.y);
   fl.style.left = p.x.toFixed(0)+'px';
 }
 function crListHtml(){
   return `<div class="tlist plate">${CR_ERAS.map((r,i)=>{ const ev = crShown().filter(e=>e.era===i); if(!ev.length) return '';
     return `<h2>${esc(r.name)}（${ev[0].y}–${ev[ev.length-1].y}）</h2><ol>${ev.map(e=>{ const ln = CR_LANE[e.lane];
-      return `<li><button class="litem" data-cr="${e.id}" aria-pressed="${crSel===e.id}" style="--c:var(--ink)"><span class="ld">${esc(crDate(e))}</span><b>${esc(e.t)}</b><span class="lm">${icon(ln.shape,'var(--ink)',ln.data)}${ln.name}</span></button></li>`; }).join('')}</ol>`; }).join('')}</div>`;
+      return `<li><button class="litem" data-cr="${e.id}" aria-pressed="${crSel===e.id}" style="--c:${ln.color}"><span class="ld">${esc(crDate(e))}</span><b>${esc(e.t)}</b><span class="lm">${icon(ln.shape,ln.color,ln.data)}${ln.name}</span></button></li>`; }).join('')}</ol>`; }).join('')}</div>`;
 }
 function crPanelHtml(){
   const sh = crShown();
@@ -302,7 +306,7 @@ function crPanelHtml(){
     const n = k => CR.filter(e=>e.lane===k).length;
     return `<h2 tabindex="-1">大事年表</h2>
       <div class="pn-desc"><p>國際與臺灣的 ${n('intl')+n('tw')} 件大事，加上本站剪報、研究與學生人數裡看到的 ${n('news')+n('lit')+n('people')} 個轉折點，放在同一把時間尺上。</p><p>上方是時間尺；一道一種來源。點任何一件，這裡會顯示日期、說明與來源。</p></div>
-      <dl class="pn-sum">${CR_LANES.map(l=>`<div><dt>${l.name}${l.data?'・本站資料':''}</dt><dd>${n(l.k)} ${l.data?'個':'件'}</dd></div>`).join('')}</dl>
+      <dl class="pn-sum">${CR_LANES.map(l=>`<div><dt>${icon(l.shape,l.color,l.data)} ${l.name}${l.data?'・本站資料':''}</dt><dd>${n(l.k)} ${l.data?'個':'件'}</dd></div>`).join('')}</dl>
       <p class="pn-start"><button class="btn solid" data-act="cr-first">從最早的開始看</button></p>`;
   }
   const e = crById[crSel], ln = CR_LANE[e.lane], i = sh.indexOf(e), prev = sh[i-1], next = sh[i+1];
@@ -311,7 +315,7 @@ function crPanelHtml(){
   const memo = k<0 ? '' : `<div class="memo"><h3>備註</h3>${lines.slice(k).map((s,j)=>`<p>${esc(j?s:s.replace(/^備註：/,''))}</p>`).join('')}</div>`;
   const more = ONLY ? '' : e.tree ? `<p class="pn-go"><a href="#tree" data-act="cr-tree" data-id="${e.tree}">在時間軸（事件樹）上看這件事 →</a></p>`
     : ln.go ? `<p class="pn-go"><a href="#${ln.go}" data-go="${ln.go}">到「${SECTIONS[ln.go].name.replace(/・.*/,'')}」展區看 →</a></p>` : '';
-  return `<p class="pn-kind">${icon(ln.shape,'var(--ink)',ln.data)}${ln.name}・${ln.data?'本站資料':esc(CR_CATS[e.cat])}・${esc(CR_ERAS[e.era].name)}</p>
+  return `<p class="pn-kind">${icon(ln.shape,ln.color,ln.data)}${ln.name}・${ln.data?'本站資料':esc(CR_CATS[e.cat])}・${esc(CR_ERAS[e.era].name)}</p>
     <h2 tabindex="-1">${esc(e.t)}</h2>
     <p class="pn-date">${esc(crDate(e))}</p>
     <div class="pn-desc">${main}${memo}</div>
@@ -349,12 +353,12 @@ DRAW.chron = function(){
       <div class="tl-main">
         <div class="tl-filter" id="crFilter" role="group" aria-label="要看哪幾道">
           <span class="lbl" aria-hidden="true">顯示</span>
-          ${CR_LANES.map(l=>`<button class="bchip" data-cr-lane="${l.k}" aria-pressed="${crShow.has(l.k)}">${icon(l.shape,'var(--ink)',l.data || !crShow.has(l.k))}${l.name}</button>`).join('')}
+          ${CR_LANES.map(l=>`<button class="bchip" data-cr-lane="${l.k}" aria-pressed="${crShow.has(l.k)}" style="--c:${l.color}">${icon(l.shape,l.color,l.data || !crShow.has(l.k))}${l.name}</button>`).join('')}
         </div>
         ${crList ? crListHtml() : `<div class="cr-nav" id="crEras" role="group" aria-label="跳到章節">${CR_ERAS.map((r,i)=>`<button data-cr-era="${i}">${esc(r.name)}</button>`).join('')}
             <span class="cr-arrows"><button class="btn rd" id="crPrev" data-act="cr-page" data-dir="-1" aria-label="往前（較早）">‹</button><button class="btn rd" id="crNext" data-act="cr-page" data-dir="1" aria-label="往後（較晚）">›</button></span></div>
           <div class="plate cr-fig" id="crFig"></div>
-          <p class="cr-note">時間尺照年份比例畫，1950 年以前事件較少，尺比較緊。空心方形是由本站資料算出的轉折點。</p>`}
+          <p class="cr-note">時間尺照年份比例畫，1950 年以前事件較少，尺比較緊。實心是大事，空心是由本站資料算出的轉折點；每一道的顏色與形狀都不同。</p>`}
       </div>
       ${wide ? '<aside class="panel plate" id="crPanel" aria-live="polite" aria-label="說明"></aside>' : ''}
     </div>${routeHtml()}</div>`;

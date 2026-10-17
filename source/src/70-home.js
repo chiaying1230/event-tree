@@ -43,7 +43,7 @@ function miniChronSvg(){           // 年表：同一把時間尺，上兩排是
   const W = 300, H = 64, S = crScale(false), k = (W-24)/S.W, rows = {intl:13, tw:26, news:40, lit:46, people:52};
   let g = `<line x1="12" x2="${W-12}" y1="5.5" y2="5.5" stroke="var(--line2)" stroke-width="1"/>`;
   [1800,1900,1950,1980,2000,2020].forEach(y=>{ const x = 12+S.x(y)*k; g += `<line x1="${x.toFixed(1)}" x2="${x.toFixed(1)}" y1="3" y2="8" stroke="var(--line2)" stroke-width="1"/>`; });
-  CR.forEach(e=>{ const ln = CR_LANE[e.lane]; g += mark(ln.shape, 12+S.x(e.k)*k, rows[e.lane], ln.data?2:2.6, ln.data ? `fill="var(--paper)" stroke="var(--muted)" stroke-width="1.1"` : `fill="var(--ink2)" opacity=".8"`); });
+  CR.forEach(e=>{ const ln = CR_LANE[e.lane]; g += mark(ln.shape, 12+S.x(e.k)*k, rows[e.lane], ln.data?2:2.6, ln.data ? `fill="var(--paper)" stroke="${ln.color}" stroke-width="1.2"` : `fill="${ln.color}"`); });
   return `<svg viewBox="0 0 ${W} ${H}" aria-hidden="true" focusable="false">${g}</svg>`;
 }
 function miniBarsSvg(){            // 研究：每年的研究篇數

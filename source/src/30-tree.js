@@ -24,6 +24,8 @@ const ORDER = EVENTS.filter(e=>e.id!=='root').sort((a,b)=>a.t-b.t).map(e=>e.id);
 function mark(shape,x,y,r,attrs){
   attrs = attrs||'';
   if(shape==='square') return `<rect x="${(x-r*.9).toFixed(1)}" y="${(y-r*.9).toFixed(1)}" width="${(r*1.8).toFixed(1)}" height="${(r*1.8).toFixed(1)}" rx="1.5" ${attrs}/>`;
+  if(shape==='triangle') return `<polygon points="${x.toFixed(1)},${(y-r*1.3).toFixed(1)} ${(x+r*1.25).toFixed(1)},${(y+r*.95).toFixed(1)} ${(x-r*1.25).toFixed(1)},${(y+r*.95).toFixed(1)}" ${attrs}/>`;
+  if(shape==='hexagon') return `<polygon points="${[0,1,2,3,4,5].map(k=>{ const a = Math.PI/3*k; return (x+r*1.12*Math.cos(a)).toFixed(1)+','+(y+r*1.12*Math.sin(a)).toFixed(1); }).join(' ')}" ${attrs}/>`;
   if(shape==='diamond') return `<polygon points="${x.toFixed(1)},${(y-r*1.25).toFixed(1)} ${(x+r*1.25).toFixed(1)},${y.toFixed(1)} ${x.toFixed(1)},${(y+r*1.25).toFixed(1)} ${(x-r*1.25).toFixed(1)},${y.toFixed(1)}" ${attrs}/>`;
   return `<circle cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" r="${r}" ${attrs}/>`;
 }
