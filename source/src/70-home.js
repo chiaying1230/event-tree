@@ -39,6 +39,13 @@ function miniTimelineSvg(){        // 時間軸：事件依年份排在三條線
   ORDER.forEach(id=>{ const e = byId[id]; g += mark(shapeOf(e), x(e.t), rows[e.theme], 4.4, `fill="var(--paper)" stroke="var(--c-${e.theme})" stroke-width="2"`); });
   return `<svg viewBox="0 0 ${W} ${H}" aria-hidden="true" focusable="false">${g}</svg>`;
 }
+function miniChronSvg(){           // 年表：同一把時間尺，上兩排是大事，下面是本站資料
+  const W = 300, H = 64, S = crScale(false), k = (W-24)/S.W, rows = {intl:13, tw:26, news:40, lit:46, people:52};
+  let g = `<line x1="12" x2="${W-12}" y1="5.5" y2="5.5" stroke="var(--line2)" stroke-width="1"/>`;
+  [1800,1900,1950,1980,2000,2020].forEach(y=>{ const x = 12+S.x(y)*k; g += `<line x1="${x.toFixed(1)}" x2="${x.toFixed(1)}" y1="3" y2="8" stroke="var(--line2)" stroke-width="1"/>`; });
+  CR.forEach(e=>{ const ln = CR_LANE[e.lane]; g += mark(ln.shape, 12+S.x(e.k)*k, rows[e.lane], ln.data?2:2.6, ln.data ? `fill="var(--paper)" stroke="var(--muted)" stroke-width="1.1"` : `fill="var(--ink2)" opacity=".8"`); });
+  return `<svg viewBox="0 0 ${W} ${H}" aria-hidden="true" focusable="false">${g}</svg>`;
+}
 function miniBarsSvg(){            // 研究：每年的研究篇數
   const y0 = LIT[0].y, y1 = LIT[LIT.length-1].y, n = y1-y0+1, c = new Array(n).fill(0); LIT.forEach(r=>c[r.y-y0]++);
   const W = 300, H = 64, mx = Math.max(...c), bw = (W-24)/n;
@@ -56,15 +63,17 @@ DRAW.home = function(){
   const rows = [
     ['tree','01','時間軸', `重大事件表的 ${ORDER.length} 件事，分成智力測驗、適應行為量表、法規與鑑定三個分支；背景是同一時間報紙用詞的比例。`,
       `<span class="th-line">${miniTimelineSvg()}</span><span class="th-cap"><span>${Y0}</span><span>2024</span></span>`],
-    ['people','02','人數', '各障別的特教學生人數，以及衛福部的智能障礙總人數。',
+    ['chron','02','年表', `國際與臺灣的 ${CR.filter(e=>!CR_LANE[e.lane].data).length} 件大事，加上剪報、研究、人數裡的 ${CR.filter(e=>CR_LANE[e.lane].data).length} 個轉折點，排在同一把時間尺上。`,
+      `<span class="th-line">${miniChronSvg()}</span><span class="th-cap"><span>1801</span><span>上：大事　下：本站資料</span><span>2024</span></span>`],
+    ['people','03','人數', '各障別的特教學生人數，以及衛福部的智能障礙總人數。',
       `<span class="th-line">${sparkSvg(ys.map(y=>P[y]))}</span><span class="th-cap"><span><b>${fmtN(P[ys[0]])}</b>${ys[0]} 年</span><span>全台智能障礙學生人數</span><span><b>${fmtN(P[ys[ys.length-1]])}</b>${ys[ys.length-1]} 年</span></span>`],
-    ['research','03','研究', `${LIT.length} 篇學術文獻的編碼：研究設計、研究主題與使用的名詞。`,
+    ['research','04','研究', `${LIT.length} 篇學術文獻的編碼：研究設計、研究主題與使用的名詞。`,
       `<span class="th-line">${miniBarsSvg()}</span><span class="th-cap"><span>${LIT[0].y}</span><span>每年的研究篇數</span><span>${LIT[LIT.length-1].y}</span></span>`],
-    ['news','04','剪報', `${NEWS.length} 篇報紙新聞，每個年代一圈。凸出越多，代表那種觀點的比例越高。`,
+    ['news','05','剪報', `${NEWS.length} 篇報紙新聞，每個年代一圈。凸出越多，代表那種觀點的比例越高。`,
       `<span class="th-roses">${DECADES.map(d=>`<span>${roseSvg('view',newsStats('view',d,false),max,{era:d, kind:'glyph', hidden:true})}<i>${d}</i></span>`).join('')}</span>`],
-    ['photos','05','照片', PHOTOS.length && !sampleP ? PHOTOS.length+' 張照片，以投影片播放。' : '一張一張播放的照片投影片。目前是版面示意。',
+    ['photos','06','照片', PHOTOS.length && !sampleP ? PHOTOS.length+' 張照片，以投影片播放。' : '一張一張播放的照片投影片。目前是版面示意。',
       `<span class="th-photos">${PHOTOS.slice(0,4).map(p=>`<img src="${esc(p.src)}" alt="">`).join('')}</span>`],
-    ['audio','06','訪談', INTERVIEWS.length && !sampleA ? INTERVIEWS.length+' 段訪談錄音與逐字稿。' : '錄音與同步的逐字稿。目前是版面示意。',
+    ['audio','07','訪談', INTERVIEWS.length && !sampleA ? INTERVIEWS.length+' 段訪談錄音與逐字稿。' : '錄音與同步的逐字稿。目前是版面示意。',
       `<span class="th-wave">${wavePeaks(1,56).map(v=>`<i style="height:${Math.round(v*100)}%"></i>`).join('')}</span>`],
     ['about','','關於', '計畫資訊、資料來源與整理方式、圖表怎麼看、無障礙說明。', '']
   ];

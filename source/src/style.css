@@ -204,6 +204,56 @@ body[data-view="home"] .mast{margin-bottom:calc(-1*var(--mast) - 1px - env(safe-
 .tl-filter .hint{margin-left:6px;font-size:.88rem;color:var(--muted)}
 .plate.tl-fig{padding:0;overflow:hidden;margin-bottom:0}
 .tl-fig svg{display:block}
+
+/* ============ 年表：上方一把時間尺，一道一種來源，可以左右捲動 ============ */
+.cr-nav{display:flex;flex-wrap:wrap;align-items:center;gap:4px 2px;margin-bottom:10px}
+.cr-nav > button{position:relative;min-height:38px;padding:4px 12px;border:0;border-radius:8px;background:none;font-size:.92rem;color:var(--muted)}
+.cr-nav > button:hover{color:var(--ink);background:var(--trk2)}
+.cr-nav > button[aria-current="true"]{color:var(--ink);font-weight:700}
+.cr-nav > button[aria-current="true"]::after{content:"";position:absolute;left:12px;right:12px;bottom:3px;height:2px;border-radius:2px;background:var(--ink)}
+.cr-arrows{display:flex;gap:6px;margin-left:auto}
+.btn.rd{width:40px;min-height:40px;padding:0;font-size:1.25rem;line-height:1}
+.plate.cr-fig{position:relative;padding:0;overflow:hidden;margin-bottom:0}
+.cr-scroll{position:absolute;inset:0;overflow-x:auto;overflow-y:hidden;overscroll-behavior-x:contain;scrollbar-width:thin;cursor:grab}
+.cr-scroll.drag{cursor:grabbing;user-select:none}
+.cr-scroll:focus-visible{outline-offset:-4px}
+.cr-track{position:relative}
+.cr-bg{position:absolute;left:0;top:0}
+.cr-era{position:absolute;top:0;height:30px;pointer-events:none}
+.cr-era span{position:sticky;left:76px;display:inline-block;padding:9px 0 0 10px;font-size:.78rem;font-weight:700;letter-spacing:.12em;color:var(--ink2);white-space:nowrap}
+.cr-labels{position:absolute;left:0;top:0;bottom:0;pointer-events:none}
+.cr-corner{position:absolute;left:0;top:0;background:var(--paper);border-right:1px solid var(--line)}
+.cr-lane{position:absolute;left:0;display:flex;flex-direction:column;justify-content:center;align-items:center;gap:2px;background:var(--paper);border-right:1px solid var(--line);border-top:1px solid var(--line);text-align:center;line-height:1.3}
+.cr-lane b{font-family:var(--serif);font-size:1rem}
+.cr-lane small{font-size:.7rem;color:var(--muted)}
+.cr-lane.data b{font-weight:600;color:var(--ink2)}
+/* 一件事：形狀標在它的日期上，右邊是年份與名稱 */
+.cr-it{position:absolute;display:grid;grid-template-columns:14px minmax(0,1fr);column-gap:5px;align-items:center;padding:3px 6px 3px 1px;border:0;border-radius:8px;background:none;text-align:left;line-height:1.35;color:var(--ink)}
+.cr-it .ico{align-self:center}
+.cr-it .cr-y{font-size:.78rem;color:var(--muted);font-variant-numeric:tabular-nums}
+.cr-it .cr-y{line-height:1.25}
+.cr-it .cr-t{grid-column:2;font-size:.92rem;font-weight:500;line-height:1.4;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.cr-it.data .cr-t{font-weight:400;color:var(--ink2)}
+.cr-it:hover{background:var(--trk2)}
+.cr-it[aria-pressed="true"]{background:var(--ink);color:var(--paper)}
+.cr-it[aria-pressed="true"] .cr-y,.cr-it[aria-pressed="true"] .cr-t{color:var(--paper)}
+.cr-it[aria-pressed="true"] .ico *{fill:var(--paper);stroke:var(--paper)}
+.cr-it:focus-visible{outline-offset:1px}
+.cr-guide{position:absolute;width:0;border-left:1px solid var(--ink);opacity:.5;pointer-events:none}
+.cr-flag{position:absolute;top:36px;transform:translateX(-50%);padding:1px 7px;border-radius:999px;background:var(--ink);color:var(--paper);font-size:.74rem;font-variant-numeric:tabular-nums;white-space:nowrap;pointer-events:none;z-index:2}
+.cr-note{margin-top:10px;font-size:.84rem;color:var(--muted)}
+.cr-src{margin-top:14px;font-size:.84rem;color:var(--muted)}
+@media (max-width:719px){
+  .cr-era span{left:52px}
+  .cr-lane b{font-size:.9rem}
+  .cr-it .cr-t{font-size:.86rem}
+  .cr-nav > button{flex:none;padding:4px 8px;font-size:.86rem}
+  .cr-nav{flex-wrap:nowrap;overflow-x:auto;scrollbar-width:none;margin-inline:calc(-1*var(--gut));padding-inline:var(--gut)}
+  .cr-nav::-webkit-scrollbar,#crFilter::-webkit-scrollbar{display:none}
+  .cr-arrows{display:none}
+  #crFilter{flex-wrap:nowrap;overflow-x:auto;scrollbar-width:none;margin-inline:calc(-1*var(--gut));padding-inline:var(--gut)}
+  #crFilter .bchip{flex:none;min-height:38px;padding:4px 12px}
+}
 .tl-terms{display:flex;flex-wrap:wrap;align-items:center;gap:8px;margin-top:12px}
 .tchip{display:inline-flex;align-items:center;gap:8px;min-height:40px;padding:5px 14px;border:1.5px solid var(--ctl);border-radius:999px;background:var(--paper);font-size:.92rem}
 .tchip i{flex:none;width:15px;height:15px;border-radius:4px;background:var(--c);border:1px solid var(--line2)}

@@ -17,17 +17,18 @@ const SITE = '智能障礙事件樹';
 // 是不是發布在 Google Apps Script 的網頁應用程式裡（頁面會被放在一個內框中，網址上的 #展區 要透過 google.script 讀寫）
 const GAS = typeof google!=='undefined' && !!(google.script && google.script.history && google.script.url);
 let gasReady = false;          // 先讀完網址上原本的 #展區，才開始改寫網址
-const NAV = [['home','導覽'],['tree','時間軸'],['people','人數'],['research','研究'],['news','剪報'],['photos','照片'],['audio','訪談'],['about','關於']];
+const NAV = [['home','導覽'],['tree','時間軸'],['chron','年表'],['people','人數'],['research','研究'],['news','剪報'],['photos','照片'],['audio','訪談'],['about','關於']];
 const GROUP = {list:'news'};          // 子頁屬於哪一個展區
 const SECTIONS = {
   home:{name:'導覽'},
   tree:{no:'01', name:'時間軸', title:'時間軸：重大事件'},
-  people:{no:'02', name:'人數', title:'學生人數', lead:'各障別的特教學生人數，以及衛福部的智能障礙總人數。'},
-  research:{no:'03', name:'研究', title:'研究文獻', lead:LIT.length+' 篇學術文獻的編碼結果：研究設計、研究主題、權利議題與輔助科技、使用的名詞。'},
-  news:{no:'04', name:'剪報・編碼分析', title:'剪報：編碼分析', lead:NEWS.length+' 篇報紙新聞（'+NEWS[0].y+'–'+NEWS[NEWS.length-1].y+' 年）的編碼結果，依年代畫成圓圈圖。'},
-  list:{no:'04', name:'剪報・清單', title:'剪報：清單', lead:NEWS.length+' 篇剪報的清單，可以用關鍵字、年代與報別篩選。標題取自整理時的檔名。'},
-  photos:{no:'05', name:'照片', title:'照片', lead:'照片依年代排序，以投影片的方式一張一張播放。可以按左右鍵或左右滑動換張，也可以開啟自動播放。'},
-  audio:{no:'06', name:'訪談', title:'訪談', lead:'每段訪談可以播放錄音；逐字稿會跟著播放位置標示，也可以點時間跳到那一段。'},
+  chron:{no:'02', name:'年表', title:'大事年表', lead:'1801 到 2024 年，國際與臺灣的大事，加上本站剪報、研究與學生人數裡看到的轉折點，排在同一把時間尺上。'},
+  people:{no:'03', name:'人數', title:'學生人數', lead:'各障別的特教學生人數，以及衛福部的智能障礙總人數。'},
+  research:{no:'04', name:'研究', title:'研究文獻', lead:LIT.length+' 篇學術文獻的編碼結果：研究設計、研究主題、權利議題與輔助科技、使用的名詞。'},
+  news:{no:'05', name:'剪報・編碼分析', title:'剪報：編碼分析', lead:NEWS.length+' 篇報紙新聞（'+NEWS[0].y+'–'+NEWS[NEWS.length-1].y+' 年）的編碼結果，依年代畫成圓圈圖。'},
+  list:{no:'05', name:'剪報・清單', title:'剪報：清單', lead:NEWS.length+' 篇剪報的清單，可以用關鍵字、年代與報別篩選。標題取自整理時的檔名。'},
+  photos:{no:'06', name:'照片', title:'照片', lead:'照片依年代排序，以投影片的方式一張一張播放。可以按左右鍵或左右滑動換張，也可以開啟自動播放。'},
+  audio:{no:'07', name:'訪談', title:'訪談', lead:'每段訪談可以播放錄音；逐字稿會跟著播放位置標示，也可以點時間跳到那一段。'},
   about:{name:'關於', title:'關於本站', lead:'計畫資訊、資料來源與整理方式、圖表閱讀方式與無障礙說明。'}
 };
 // 剪報展區有兩種看法：圓圈圖（編碼分析）與清單

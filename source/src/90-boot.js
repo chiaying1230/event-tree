@@ -19,6 +19,7 @@ document.addEventListener('keydown', e=>{
   if(e.key!=='Escape') return;
   if(page==='tree' && tAny()){ const id = tSel; tlClear(); render(); const el = id && $('#view [data-id="'+id+'"]'); if(el){ try{ el.focus({preventScroll:true}); }catch(err){} } }
   else if(page==='news' && newsCat){ newsCat = null; render(); }
+  else if(page==='chron' && crSel){ const id = crSel; crSel = null; render(); const el = $('#view [data-cr="'+id+'"]'); if(el){ try{ el.focus({preventScroll:true}); }catch(err){} } }
 });
 $('#skipMain').addEventListener('click', e=>{ e.preventDefault(); const h = $('#pageTitle')||$('#heroTitle'); if(h) h.focus(); });
 { const h = (location.hash||'').slice(1); if(SECTIONS[h]) page = h; }
@@ -42,6 +43,7 @@ window.addEventListener('resize', ()=>{ clearTimeout(rT); rT = setTimeout(()=>{
   const w = vw(), h = window.innerHeight; if(w===rW && h===rH) return; const wChanged = w!==rW; rW = w; rH = h;
   if(page==='tree'){ if(wChanged || (TL && TL.mode==='tree' && !tList)) render(); }
   else if(page==='photos') fitShow();
+  else if(page==='chron'){ if(wChanged) render(); }
   else if(wChanged){ if(page==='news') render(); else fillCharts(); }
   syncMast();
 }, 140); });
