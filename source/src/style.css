@@ -247,6 +247,13 @@ body[data-only] .foot a{display:none}
 .cr-guide{position:absolute;width:0;border-left:2px solid var(--c,var(--ink));opacity:.7;pointer-events:none}
 .cr-flag{position:absolute;top:36px;transform:translateX(-50%);padding:1px 7px;border-radius:999px;background:var(--ink);color:var(--paper);font-size:.74rem;font-variant-numeric:tabular-nums;white-space:nowrap;pointer-events:none;z-index:2}
 .cr-note{margin-top:10px;font-size:.84rem;color:var(--muted)}
+/* 浮在事件旁邊的說明卡片 */
+.cr-pop{position:fixed;z-index:45;width:min(380px,calc(100vw - 24px));max-height:min(560px,calc(100vh - var(--mast) - 40px));overflow:auto;padding:20px 22px 20px;background:var(--paper);border:1px solid var(--line2);border-radius:var(--r);box-shadow:0 12px 40px rgba(0,0,0,.18),0 2px 6px rgba(0,0,0,.08)}
+.cr-pop h2{font-family:var(--serif);font-weight:700;font-size:1.32rem;line-height:1.35;margin-top:2px;padding-right:28px}
+.cr-pop h2:focus{outline:none}
+.cr-pop .pn-desc{font-size:.94rem}
+.cr-x{position:absolute;right:10px;top:10px;width:36px;height:36px;border:0;border-radius:50%;background:none;font-size:1.4rem;line-height:1;color:var(--muted)}
+.cr-x:hover{background:var(--trk2);color:var(--ink)}
 .cr-src{margin-top:14px;font-size:.84rem;color:var(--muted)}
 @media (max-width:719px){
   .cr-era span{left:52px}

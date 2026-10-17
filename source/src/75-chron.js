@@ -302,7 +302,7 @@ function crListHtml(){
 }
 function crPanelHtml(){
   const sh = crShown();
-  if(!crSel || !crById[crSel]){
+  if(!crSel || !crById[crSel]){          // 手機的說明紙只在選了一件時出現，這段留給清單模式用
     const n = k => CR.filter(e=>e.lane===k).length;
     return `<h2 tabindex="-1">大事年表</h2>
       <div class="pn-desc"><p>國際與臺灣的 ${n('intl')+n('tw')} 件大事，加上本站剪報、研究與學生人數裡看到的 ${n('news')+n('lit')+n('people')} 個轉折點，放在同一把時間尺上。</p><p>上方是時間尺；一道一種來源。點任何一件，這裡會顯示日期、說明與來源。</p></div>
@@ -323,9 +323,43 @@ function crPanelHtml(){
     ${more}
     <div class="pager"><button class="btn" data-act="cr-go" data-to="${prev?prev.id:''}"${prev?'':' disabled'}>‹ 上一件</button><span>${i+1} / ${sh.length}</span><button class="btn" data-act="cr-go" data-to="${next?next.id:''}"${next?'':' disabled'}>下一件 ›</button></div>`;
 }
+/* 說明：電腦上是浮在那件事旁邊的一張卡片（年表可以用滿整個寬度）；手機上從畫面下方滑出來 */
+const crPopOK = () => vw()>=720 && !crList;
+let crPopEl = null;
+function crPop(){
+  if(!crPopEl){
+    crPopEl = document.createElement('div');
+    crPopEl.className = 'cr-pop'; crPopEl.id = 'crPop'; crPopEl.hidden = true;
+    crPopEl.setAttribute('role','dialog'); crPopEl.setAttribute('aria-modal','false'); crPopEl.setAttribute('aria-label','說明');
+    document.body.appendChild(crPopEl);
+    crPopEl.addEventListener('click', chronClick);
+  }
+  return crPopEl;
+}
+function crHidePop(){ if(crPopEl) crPopEl.hidden = true; }
+LEAVE.push(crHidePop);
+// 卡片放在那件事的右邊，放不下就放左邊；上下不超出畫面。那件事捲出時間軸的可見範圍時，卡片先藏起來
+function crPlacePop(){
+  const p = crPopEl; if(!p || p.hidden || !crSel) return;
+  const el = $('#view .cr-it[data-cr="'+crSel+'"]'), sc = $('#crScroll'); if(!el || !sc) return;
+  const r = el.getBoundingClientRect(), f = sc.getBoundingClientRect(), W = vw(), H = window.innerHeight, pw = p.offsetWidth, ph = p.offsetHeight, g = 12;
+  const out = r.right < f.left+CRL.labW+8 || r.left > f.right-8 || r.bottom < mastBottom() || r.top > H;
+  p.style.visibility = out ? 'hidden' : '';
+  let x = r.right+g; if(x+pw > W-g) x = r.left-g-pw; if(x < g) x = Math.max(g, Math.min(W-pw-g, r.left));
+  const lo = mastBottom()+g, y = Math.min(Math.max(r.top-24, lo), Math.max(lo, H-ph-g));
+  p.style.left = Math.round(x)+'px'; p.style.top = Math.round(y)+'px';
+}
+window.addEventListener('scroll', crPlacePop, {passive:true});
+window.addEventListener('resize', crPlacePop);
 function crDrawPanel(){
-  const p = $('#crPanel');
-  if(p){ closeSheet(true); p.innerHTML = crPanelHtml(); p.scrollTop = 0; return; }
+  if(crPopOK()){
+    closeSheet(true);
+    const p = crPop();
+    if(!crSel){ p.hidden = true; return; }
+    p.innerHTML = `<button class="cr-x" data-act="cr-close" aria-label="關閉說明">×</button>${crPanelHtml()}`;
+    p.hidden = false; p.scrollTop = 0; crPlacePop(); return;
+  }
+  crHidePop();
   if(crSel) openSheet(crPanelHtml(), ()=>{ const id = crSel; crSel = null; render(); const el = id && $('#view [data-cr="'+id+'"]'); if(el){ try{ el.focus({preventScroll:true}); }catch(e){} } });
   else closeSheet(true);
 }
@@ -347,9 +381,8 @@ function crYearAt(x){ const S = CRL.S; let lo = 1795, hi = CR_END; for(let n=0;n
 function crToEra(i){ const sc = $('#crScroll'); if(!sc) return; sc.scrollTo({left:Math.max(0, CRL.padL+CRL.S.x(CR_ERAS[i].from)-CRL.labW-12), behavior:calm()?'auto':'smooth'}); }
 
 DRAW.chron = function(){
-  const wide = vw()>=1040;
-  view.innerHTML = `<div class="wrap">${pageHead('chron',{tools:`<button class="btn" data-act="cr-clear"${crSel?'':' hidden'}>清除選取</button><button class="btn" id="crListBtn" data-act="cr-list" aria-pressed="${crList}">文字清單</button>`})}
-    <div class="tl${wide?' wide':''}">
+  view.innerHTML = `<div class="wrap">${pageHead('chron',{tools:`<button class="btn solid" data-act="cr-first">從最早的開始看</button><button class="btn" id="crListBtn" data-act="cr-list" aria-pressed="${crList}">文字清單</button>`})}
+    <div class="tl">
       <div class="tl-main">
         <div class="tl-filter" id="crFilter" role="group" aria-label="要看哪幾道">
           <span class="lbl" aria-hidden="true">顯示</span>
@@ -360,7 +393,6 @@ DRAW.chron = function(){
           <div class="plate cr-fig" id="crFig"></div>
           <p class="cr-note">時間尺照年份比例畫，1950 年以前事件較少，尺比較緊。實心是大事，空心是由本站資料算出的轉折點；每一道的顏色與形狀都不同。</p>`}
       </div>
-      ${wide ? '<aside class="panel plate" id="crPanel" aria-live="polite" aria-label="說明"></aside>' : ''}
     </div>${routeHtml()}</div>`;
   if(!crList) crDrawFig();
   crDrawPanel();
@@ -372,7 +404,7 @@ function crDrawFig(){
   fig.innerHTML = crFigHtml(CRL);
   const sc = $('#crScroll');
   sc.scrollLeft = crX;
-  sc.addEventListener('scroll', ()=>{ crX = sc.scrollLeft; crEraNow(); }, {passive:true});
+  sc.addEventListener('scroll', ()=>{ crX = sc.scrollLeft; crEraNow(); crPlacePop(); }, {passive:true});
   // 滾輪往下＝往右；捲到頭尾時，交還給整頁捲動
   sc.addEventListener('wheel', e=>{
     if(e.ctrlKey || Math.abs(e.deltaX)>Math.abs(e.deltaY)) return;
@@ -403,7 +435,10 @@ function crPick(id){
   const inSheet = sheet.contains(document.activeElement);
   crSel = id; hideTip(); render();
   if(id){ crReveal(id); const el = $('#view [data-cr="'+id+'"]');
-    if($('#crPanel')){ if(el){ try{ el.focus({preventScroll:true}); }catch(e){} } }
+    // 電腦：卡片要放在那件事的右邊；右邊放不下時，把年表往左捲一點
+    if(crPopOK() && el){ const sc = $('#crScroll'), r = el.getBoundingClientRect(), need = r.right+12+crPopEl.offsetWidth-(vw()-12);
+      if(need>0 && sc.scrollLeft < sc.scrollWidth-sc.clientWidth-1) sc.scrollBy({left:need+24, behavior:calm()?'auto':'smooth'}); }
+    if(crPopOK()){ if(!crPopEl.contains(document.activeElement)){ const h = crPopEl.querySelector('h2'); if(h){ try{ h.focus({preventScroll:true}); }catch(e){} } } }
     else {
       // 手機：說明從下方滑出來，把選到的那一件捲到說明上方看得到的位置
       if(el && !sheet.hidden){ const r = el.getBoundingClientRect(), top = mastBottom()+10, bot = window.innerHeight-sheet.offsetHeight-14;
@@ -414,7 +449,7 @@ function chronClick(e){
   if(page!=='chron') return;
   const t = e.target; let el;
   if((el = t.closest('[data-act]'))){ const a = el.dataset.act;
-    if(a==='cr-clear'){ crSel = null; render(); const b = $('#crListBtn'); if(b) b.focus(); return; }
+    if(a==='cr-close'){ const id = crSel; crSel = null; render(); const b = id && $('#view [data-cr="'+id+'"]'); if(b){ try{ b.focus({preventScroll:true}); }catch(err){} } return; }
     if(a==='cr-list'){ crList = !crList; render(); return; }
     if(a==='cr-first') return crPick(crShown()[0].id);
     if(a==='cr-go'){ if(el.dataset.to) crPick(el.dataset.to); return; }
@@ -427,6 +462,7 @@ function chronClick(e){
     return render(); }
   if((el = t.closest('[data-cr-era]'))) return crToEra(+el.dataset.crEra);
   if((el = t.closest('[data-cr]'))){ if(crDragged) return; const id = el.dataset.cr; return crPick(crSel===id && el.closest('#crFig') ? null : id); }
+  if(crSel && !crDragged && t.closest('#crFig')){ crSel = null; render(); }
 }
 view.addEventListener('click', chronClick);
 sheet.addEventListener('click', chronClick);
@@ -434,6 +470,6 @@ TOURS.chron = () => [
   {sel:crList?'.tlist':'#crFig', title:'年表', text:crList ? '全部的時間點依章節排成清單。' : '由左往右是由早到晚，上方是時間尺。一道一種來源：國際、臺灣的大事，以及本站剪報、研究、人數裡看到的轉折點。可以左右捲動、拖曳，或用滾輪。'},
   {sel:'#crFilter', title:'選要看哪幾道', text:'點一下可以收起或打開一道。'},
   {sel:'#crEras', title:'跳到章節', text:'兩百多年分成五章，點章節名稱就會捲到那裡；右邊的箭頭一次捲一段。'},
-  {sel:'#view .cr-it', title:'點一件看說明', text:'滑鼠移上去，時間尺上會標出日期。點一下會顯示說明與來源，可以用「上一件／下一件」依時間一件一件看。'},
+  {sel:'#view .cr-it', title:'點一件看說明', text:'滑鼠移上去，時間尺上會標出日期。點一下，旁邊會浮出說明與來源，可以用「上一件／下一件」依時間一件一件看；按 Esc、× 或點空白處關掉。'},
   {sel:'#crListBtn', title:'文字清單', text:'把全部的時間點排成純文字的清單。'}
 ];
