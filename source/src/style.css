@@ -4,8 +4,8 @@
 :root{
   --bg:#EAECE6; --paper:#F7F8F4; --stage:#E1E4DD; --ink:#1F2A2E; --ink2:#37444A; --muted:#525F65; --line:#CBD2CB; --line2:#AEB7AE;
   --c-iq:#2F6187; --c-ab:#247B62; --c-law:#8C6013;
-  /* 年表每一道的顏色：任兩色在色盲模擬下都分得開（OKLab ΔE ≥ 12，淺色）、對背景至少 3:1 */
-  --k-intl:#1995EA; --k-tw:#0B6817; --k-news:#AE8A0D; --k-lit:#682DAC; --k-people:#D4407C;
+  /* 年表兩道的顏色：政府藍、民間橘，用色盲模擬檢查過（ΔE 26，對背景至少 3:1） */
+  --k-gov:#2A78D6; --k-civ:#C4501E;
   --g1:#EFECE4; --g2:#E1DBCE; --g3:#D0C8B6; --g4:#BCB2A0;
   --d1:#376fb0; --d2:#c26a3d; --d3:#17998a; --d4:#a8841a; --d5:#b0668f; --d6:#5f8f3a; --rose:#2F6187; --link:#2F6187; --ctl:#79847E;
   --trk:rgba(31,42,46,.045); --trk2:rgba(31,42,46,.11); --band:.04;
@@ -19,7 +19,7 @@
 @media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
   --bg:#171B1C; --paper:#20272A; --stage:#14181A; --ink:#E6EAE5; --ink2:#C7CFCB; --muted:#9BA6A8; --line:#384344; --line2:#4E5A5B;
   --c-iq:#82ABCB; --c-ab:#86C9B0; --c-law:#DDB35F;
-  --k-intl:#1479B0; --k-tw:#2CAB36; --k-news:#906B0A; --k-lit:#AC69E9; --k-people:#D4407C;
+  --k-gov:#3987E5; --k-civ:#D95926;
   --g1:#282C2A; --g2:#333733; --g3:#41453D; --g4:#4F5348;
   --d1:#5289d4; --d2:#c9703f; --d3:#24a08e; --d4:#b08720; --d5:#bd689b; --d6:#6ea040; --rose:#82ABCB; --link:#82ABCB; --ctl:#7E8A8B;
   --trk:rgba(230,234,229,.07); --trk2:rgba(230,234,229,.15); --band:.065;
@@ -28,7 +28,7 @@
 :root[data-theme="dark"]{
   --bg:#171B1C; --paper:#20272A; --stage:#14181A; --ink:#E6EAE5; --ink2:#C7CFCB; --muted:#9BA6A8; --line:#384344; --line2:#4E5A5B;
   --c-iq:#82ABCB; --c-ab:#86C9B0; --c-law:#DDB35F;
-  --k-intl:#1479B0; --k-tw:#2CAB36; --k-news:#906B0A; --k-lit:#AC69E9; --k-people:#D4407C;
+  --k-gov:#3987E5; --k-civ:#D95926;
   --g1:#282C2A; --g2:#333733; --g3:#41453D; --g4:#4F5348;
   --d1:#5289d4; --d2:#c9703f; --d3:#24a08e; --d4:#b08720; --d5:#bd689b; --d6:#6ea040; --rose:#82ABCB; --link:#82ABCB; --ctl:#7E8A8B;
   --trk:rgba(230,234,229,.07); --trk2:rgba(230,234,229,.15); --band:.065;
@@ -263,6 +263,17 @@ body[data-only] .foot a{display:none}
 .cr-detail.intro{grid-template-columns:minmax(0,1fr) minmax(0,1fr)}
 .cr-detail.intro .pn-sum{margin-top:0}
 .cr-hint{margin-top:6px;color:var(--ink2);line-height:1.8}
+/* 道的顏色小色條 */
+.cr-sw{display:inline-block;flex:none;width:18px;height:5px;border-radius:3px;background:var(--c);vertical-align:middle;margin-right:6px}
+.cr-lane .cr-sw{margin:0 0 4px}
+.cr-lane b{font-size:1.05rem}
+/* 介紹：兩道、四種形狀各有幾件 */
+.cr-key{width:100%;border-collapse:collapse;font-size:.92rem}
+.cr-key th,.cr-key td{padding:7px 8px;border-bottom:1px solid var(--line);text-align:right;font-variant-numeric:tabular-nums}
+.cr-key thead th{font-weight:700;white-space:nowrap;vertical-align:bottom}
+.cr-key thead th small{display:block;font-weight:400;font-size:.76rem;color:var(--muted)}
+.cr-key tbody th{text-align:left;font-weight:400;display:flex;align-items:center;gap:7px}
+.cr-key tbody th small{color:var(--muted);font-size:.78rem}
 /* 顯示與章節排在同一行 */
 .cr-bar{display:flex;flex-wrap:wrap;align-items:center;gap:6px 18px;margin-bottom:10px}
 .cr-bar .tl-filter,.cr-bar .cr-nav{margin-bottom:0}
@@ -281,17 +292,14 @@ html.cr-fixed .cr-app .tl-main{flex:1 1 auto;min-height:0;display:flex;flex-dire
 html.cr-fixed .cr-bar{flex:none;flex-wrap:nowrap;overflow-x:auto;scrollbar-width:thin;padding-bottom:2px}
 html.cr-fixed .cr-bar > *,html.cr-fixed .cr-bar .tl-filter{flex:none;flex-wrap:nowrap}
 html.cr-fixed .cr-bar .cr-nav{flex:1 0 auto;flex-wrap:nowrap}
-html.cr-fixed .cr-fig{flex:1 1 0;min-height:140px}
-html.cr-fixed .cr-detail{flex:0 0 40%;min-height:0;overflow:auto;margin-top:10px;overscroll-behavior:contain}
-@media (max-height:820px){ html.cr-fixed .cr-detail{flex-basis:33%} }
-@media (max-height:760px){ html.cr-fixed .cr-detail{flex-basis:28%} }
+html.cr-fixed .cr-fig{flex:none}
+html.cr-fixed .cr-detail{flex:1 1 0;min-height:0;overflow:auto;margin-top:10px;overscroll-behavior:contain}
 /* 一排變矮時，字與上下的留白也小一點 */
 .cr-fig.compact .cr-it{padding-top:1px;padding-bottom:1px}
 .cr-fig.compact .cr-it .cr-t{font-size:.88rem}
 .cr-fig.compact .cr-era span{padding-top:5px}
 html.cr-fixed .cr-note{display:none}
 @media (max-width:719px){
-  html.cr-fixed .cr-detail{flex-basis:46%}
   html.cr-fixed .cr-app .ph-row{flex-wrap:nowrap}
   html.cr-fixed .cr-app .ph-tools{flex-wrap:nowrap;overflow-x:auto;scrollbar-width:none}
   html.cr-fixed .cr-app .ph-tools .btn{flex:none}

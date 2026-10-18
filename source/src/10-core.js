@@ -24,7 +24,7 @@ const GROUP = {list:'news'};          // 子頁屬於哪一個展區
 const SECTIONS = {
   home:{name:'導覽'},
   tree:{no:'01', name:'時間軸', title:'時間軸：重大事件'},
-  chron:{no:'02', name:'年表', title:'大事年表', lead:'1801 到 2024 年，國際與臺灣的大事，加上本站剪報、研究與學生人數裡看到的轉折點，排在同一把時間尺上。'},
+  chron:{no:'02', name:'年表', title:'大事年表', lead:'1962 到 2024 年，臺灣智能障礙的大事與本站資料裡的轉折點，分成政府與民間兩道。'},
   people:{no:'03', name:'人數', title:'學生人數', lead:'各障別的特教學生人數，以及衛福部的智能障礙總人數。'},
   research:{no:'04', name:'研究', title:'研究文獻', lead:LIT.length+' 篇學術文獻的編碼結果：研究設計、研究主題、權利議題與輔助科技、使用的名詞。'},
   news:{no:'05', name:'剪報・編碼分析', title:'剪報：編碼分析', lead:NEWS.length+' 篇報紙新聞（'+NEWS[0].y+'–'+NEWS[NEWS.length-1].y+' 年）的編碼結果，依年代畫成圓圈圖。'},

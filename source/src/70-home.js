@@ -39,11 +39,11 @@ function miniTimelineSvg(){        // 時間軸：事件依年份排在三條線
   ORDER.forEach(id=>{ const e = byId[id]; g += mark(shapeOf(e), x(e.t), rows[e.theme], 4.4, `fill="var(--paper)" stroke="var(--c-${e.theme})" stroke-width="2"`); });
   return `<svg viewBox="0 0 ${W} ${H}" aria-hidden="true" focusable="false">${g}</svg>`;
 }
-function miniChronSvg(){           // 年表：同一把時間尺，上兩排是大事，下面是本站資料
-  const W = 300, H = 64, S = crScale(false), k = (W-24)/S.W, rows = {intl:13, tw:26, news:40, lit:46, people:52};
-  let g = `<line x1="12" x2="${W-12}" y1="5.5" y2="5.5" stroke="var(--line2)" stroke-width="1"/>`;
-  [1800,1900,1950,1980,2000,2020].forEach(y=>{ const x = 12+S.x(y)*k; g += `<line x1="${x.toFixed(1)}" x2="${x.toFixed(1)}" y1="3" y2="8" stroke="var(--line2)" stroke-width="1"/>`; });
-  CR.forEach(e=>{ const ln = CR_LANE[e.lane]; g += mark(ln.shape, 12+S.x(e.k)*k, rows[e.lane], ln.data?2:2.6, ln.data ? `fill="var(--paper)" stroke="${ln.color}" stroke-width="1.2"` : `fill="${ln.color}"`); });
+function miniChronSvg(){           // 年表：同一把時間尺，上面一道政府、下面一道民間
+  const W = 300, H = 64, S = crScale(false), k = (W-24)/S.W, rows = {gov:24, civ:46};
+  let g = `<line x1="12" x2="${W-12}" y1="6.5" y2="6.5" stroke="var(--line2)" stroke-width="1"/>`;
+  [1960,1970,1980,1990,2000,2010,2020].forEach(y=>{ const x = 12+S.x(y)*k; g += `<line x1="${x.toFixed(1)}" x2="${x.toFixed(1)}" y1="4" y2="9" stroke="var(--line2)" stroke-width="1"/>`; });
+  CR.forEach(e=>{ const kd = CR_KINDS[e.kind], c = CR_LANE[e.lane].color; g += mark(kd.shape, 12+S.x(e.k)*k, rows[e.lane]+(kd.data?6:-4), kd.data?2.2:2.8, kd.data ? `fill="var(--paper)" stroke="${c}" stroke-width="1.2"` : `fill="${c}"`); });
   return `<svg viewBox="0 0 ${W} ${H}" aria-hidden="true" focusable="false">${g}</svg>`;
 }
 function miniBarsSvg(){            // 研究：每年的研究篇數
@@ -63,8 +63,8 @@ DRAW.home = function(){
   const rows = [
     ['tree','01','時間軸', `重大事件表的 ${ORDER.length} 件事，分成智力測驗、適應行為量表、法規與鑑定三個分支；背景是同一時間報紙用詞的比例。`,
       `<span class="th-line">${miniTimelineSvg()}</span><span class="th-cap"><span>${Y0}</span><span>2024</span></span>`],
-    ['chron','02','年表', `國際與臺灣的 ${CR.filter(e=>!CR_LANE[e.lane].data).length} 件大事，加上剪報、研究、人數裡的 ${CR.filter(e=>CR_LANE[e.lane].data).length} 個轉折點，排在同一把時間尺上。`,
-      `<span class="th-line">${miniChronSvg()}</span><span class="th-cap"><span>1801</span><span>上：大事　下：本站資料</span><span>2024</span></span>`],
+    ['chron','02','年表', `臺灣的 ${CR.filter(e=>e.kind==='ev').length} 件大事，加上剪報、研究、人數裡的 ${CR.filter(e=>e.kind!=='ev').length} 個轉折點，分成政府與民間兩道。`,
+      `<span class="th-line">${miniChronSvg()}</span><span class="th-cap"><span>1962</span><span>上：政府　下：民間</span><span>2024</span></span>`],
     ['people','03','人數', '各障別的特教學生人數，以及衛福部的智能障礙總人數。',
       `<span class="th-line">${sparkSvg(ys.map(y=>P[y]))}</span><span class="th-cap"><span><b>${fmtN(P[ys[0]])}</b>${ys[0]} 年</span><span>全台智能障礙學生人數</span><span><b>${fmtN(P[ys[ys.length-1]])}</b>${ys[ys.length-1]} 年</span></span>`],
     ['research','04','研究', `${LIT.length} 篇學術文獻的編碼：研究設計、研究主題與使用的名詞。`,
