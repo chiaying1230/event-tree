@@ -218,6 +218,85 @@ const crById = Object.fromEntries(CR.map(e=>[e.id,e]));
 const crYear = e => e.when && /年代/.test(e.when) ? e.when : String(e.y);          // 卡片上只寫年份；「1970年代」這種照寫
 const crDate = e => e.when || (e.dd ? `${e.y} 年 ${e.mo} 月 ${e.dd} 日` : e.mo ? `${e.y} 年 ${e.mo} 月` : `${e.y} 年`);
 
+/* 易讀版：每件大事一段，短句、常用詞、一句一個意思（一行一句）。
+   這是草稿，請特教專業人員或自我倡議者審閱；審閱過後把 CR_EASY_DRAFT 改成 false，卡片上就不再寫「草稿」 */
+const CR_EASY_DRAFT = true;
+const CR_EASY = {
+  itard:'1801 年，法國有一位醫生叫伊塔。\n他想教一個在森林裡長大的男孩說話和生活。\n這是很早開始教智能障礙者的例子。',
+  down:'1866 年，英國醫生唐約翰寫下一群人共同的樣子。\n後來大家用他的名字，叫做「唐氏症」。',
+  aaidd1876:'1876 年，美國的醫生和老師組成一個學會。\n這個學會後來決定「智能障礙」要怎麼定義。',
+  binet:'1905 年，法國有了第一份智力測驗。\n它用來找出需要多一點幫忙的學生。',
+  buck:'1927 年，美國法院說：政府可以強迫一些人不能生小孩。\n這是很不公平、傷害人權的判決。',
+  vineland:'1935 年，美國有了一份新的評量。\n它看一個人在生活中會做哪些事，不只看智力測驗的分數。',
+  t4:'1939 年起，納粹德國殺害了很多身心障礙者。\n大家記得這件事，是為了不讓它再發生。',
+  wisc:'1949 年，魏克斯勒做了給兒童用的智力測驗。\n臺灣到現在還在用它的新版本。',
+  arc:'1950 年，美國有很多智能障礙者的家長聚在一起。\n他們一起要求孩子能在社區裡上學和生活。',
+  denmark:'1959 年，丹麥說：智能障礙者的生活，要和大家一樣普通。\n這個想法叫做「正常化」。',
+  heber:'1961 年，定義加進「適應行為」。\n意思是：不只看智力，也要看一個人在生活上會不會做事。',
+  so:'1968 年，第一屆特殊奧運在美國芝加哥舉行。\n大約一千位智能障礙運動員參加比賽。',
+  un71:'1971 年，聯合國說：智能障礙者也有和別人一樣的權利。',
+  grossman:'1973 年，美國改了標準。\n智力測驗的分數要更低，才算智能障礙。',
+  pf:'1974 年，智能障礙者自己組成團體，叫做「先是人」。\n他們說：我們首先是人，請不要用不好的名字叫我們。',
+  pl94:'1975 年，美國有了新的法律。\n所有身心障礙的孩子，都可以免費上公立學校。',
+  ada:'1990 年，美國有了新的法律。\n工作和公共場所，都不可以歧視身心障礙者。',
+  aamr92:'1992 年，定義改了。\n重點變成：一個人需要多少支持，而不是分數有多低。',
+  salamanca:'1994 年，很多國家一起說：\n普通學校要歡迎所有孩子，大家一起學習。',
+  icf:'2001 年，世界衛生組織有了新的分類方法。\n障礙不只看身體，也要看環境有沒有幫忙。',
+  crpd:'2006 年，聯合國通過《身心障礙者權利公約》。\n身心障礙者有權利自己做決定，參加社會生活。',
+  aaidd:'2007 年，美國的學會改了名字。\n不再用讓人難過的舊稱呼，改說「智能障礙」。',
+  dsm5:'2013 年，醫生用的診斷手冊改版了。\n要看生活上的能力，決定一個人需要多少幫忙。',
+  icd11:'2019 年，世界衛生組織改用新的名稱：「智能發展障礙」。',
+  zs:'1962 年，臺北市中山國小開了臺灣第一個啟智班。\n智能障礙的孩子開始在學校裡有自己的班級。',
+  tj70:'1970 年，教育部訂了辦法。\n很多普通學校開始設立特殊班。',
+  census76:'1976 年，教育部第一次調查：\n臺灣有多少需要特殊教育的孩子。',
+  't-q1':'1979 年，臺灣完成兒童智力測驗的修訂版。\n學校用它來了解學生。',
+  cfl80:'1980 年，臺灣有了《殘障福利法》。\n這是第一部照顧身心障礙者的法律。',
+  't-l1':'1981 年，法律寫清楚：\n要用智力測驗或生活能力的評量，判斷是不是智能障礙。',
+  sel84:'1984 年，臺灣有了第一部特殊教育的法律。\n法律說：身心障礙的學生也要能上學。\n學校要依照每個人的需要來教。',
+  't-b3':'1986 年，臺灣開始用一份新的評量。\n它看學生在生活中會做哪些事。',
+  't-l2':'1987 年，法律依照智力測驗的分數，\n把智能障礙分成輕度、中度、重度三種。',
+  syinlu:'1987 年，一群家長成立心路基金會。\n他們一起為孩子爭取權利和服務。',
+  't-l3':'1990 年，法律把舊的稱呼「智能不足」，\n改成「智能障礙者」。',
+  't-l4':'1990 年，教育部第二次調查：\n有多少需要特殊教育的學生。',
+  pac92:'1992 年，各地的家長團體一起成立智障者家長總會。\n大家一起向政府爭取更好的政策。',
+  ccb95:'1995 年，高雄的家長成立喜憨兒基金會。\n他們開烘焙屋，讓心智障礙者可以工作。',
+  't-l5':'1997 年，特殊教育法也改用「智能障礙」這個名稱。',
+  pp97:'1997 年，法律改名為《身心障礙者保護法》。\n「殘障」改說「身心障礙」。',
+  't-l6':'2002 年，政府寫下新的標準，用來判斷學生是不是智能障礙。\n要同時看智力，和學習、生活上的困難。',
+  't-b4':'2003 年，臺灣有了自己做的生活能力評量。',
+  rights07:'2007 年，法律改名為《身心障礙者權益保障法》。\n重點從「保護」變成「保障權利」。',
+  icf12:'2012 年，判斷身心障礙的方法改了。\n除了看身體，也會看一個人需要什麼服務。',
+  't-l7':'2012 年，判斷學生是不是智能障礙的標準修改了。\n要看的生活能力項目，寫得更清楚。',
+  crpd14:'2014 年，臺灣讓聯合國的《身心障礙者權利公約》在國內生效。\n政府要照著公約，保障身心障礙者的權利。',
+  review17:'2017 年，國際專家來臺灣檢查：\n政府有沒有做到公約的要求，並給建議。',
+  't-q5':'2018 年，新的兒童智力測驗中文版出版。',
+  sel23:'2023 年，特殊教育法大幅修改。\n更重視讓身心障礙學生和大家一起學習。',
+  't-l8':'2024 年，判斷學生是不是智能障礙的辦法又修改了。\n要看想事情的能力、生活能力和學習表現。'
+};
+CR.forEach(e=>{ e.easy = CR_EASY[e.id]||''; });
+
+/* 照片、剪報、訪談：寫在 60-media.js 的 PHOTOS、CLIPS、INTERVIEWS，用 ev（或訪談的 evSegs）掛到這裡的事件 */
+const CR_MI = {
+  photo:'<path d="M4 8h3l2-3h6l2 3h3v11H4z"/><circle cx="12" cy="13" r="3.5"/>',
+  clip:'<rect x="4" y="4" width="16" height="16" rx="1"/><path d="M8 8h8M8 12h8M8 16h5"/>',
+  talk:'<path d="M5 10v4M9 7v10M13 4v16M17 8v8M21 11v2"/>'
+};
+const crMi = (k,s) => `<svg class="mi" width="${s||16}" height="${s||16}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">${CR_MI[k]}</svg>`;
+function crMedia(e){
+  const photos = PHOTOS.filter(p=>p.ev===e.id), clips = CLIPS.filter(c=>c.ev===e.id);
+  const talks = INTERVIEWS.map((a,i)=>{ const ix = a.ev===e.id ? a.segs.map((x,k)=>k) : (a.evSegs && a.evSegs[e.id]); return ix && ix.length ? {a, i, ix} : null; }).filter(Boolean);
+  return {photos, clips, talks, n: photos.length+clips.length+talks.length};
+}
+CR.forEach(e=>{ e.m = crMedia(e); });
+const crMediaText = m => [m.photos.length && m.photos.length+' 張照片', m.clips.length && m.clips.length+' 篇剪報', m.talks.length && m.talks.length+' 段訪談'].filter(Boolean).join('、');
+const crBadges = m => [['photo',m.photos.length],['clip',m.clips.length],['talk',m.talks.length]].filter(x=>x[1]).map(x=>`<span class="cr-b">${crMi(x[0],14)}${x[1]}</span>`).join('');
+const crDay = d => { const [y,mo,dd] = String(d).split('-').map(Number); return y+' 年'+(mo?' '+mo+' 月':'')+(dd?' '+dd+' 日':''); };
+
+// 大字：放大年表與說明卡片的字，設定記在瀏覽器裡（記不住也沒關係）
+let crBig = false;
+try{ crBig = localStorage.getItem('idtree.big')==='1'; }catch(e){}
+function crSetBig(on){ crBig = on; try{ localStorage.setItem('idtree.big', on?'1':'0'); }catch(e){} }
+
 let crSel = null, crList = false, crX = 0;
 const crShow = new Set(CR_LANES.map(l=>l.k));
 const crShown = () => CR.filter(e=>crShow.has(e.lane));
@@ -240,9 +319,12 @@ function crTicks(S){
   return out;
 }
 function crLayout(width){
-  const narrow = vw()<720, S = crScale(narrow), labW = narrow ? 44 : 64, padL = labW+24, padR = narrow ? 140 : 200;
-  const fs = narrow ? 13.8 : 14.7, rowH = narrow ? 44 : 46, RULER = 58, lanePad = 6;
-  const wOf = e => Math.ceil(34+Math.max(textW(crYear(e), 12.5), Math.min(textW(e.t, fs)*1.06, narrow ? 180 : 240)));          // 一件事的寬度：依名稱長短
+  const narrow = vw()<720, S = crScale(narrow), labW = Math.round(((narrow ? 44 : 64)+(crBig ? 14 : 0))*((parseFloat(getComputedStyle(document.documentElement).fontSize)||16)/16)), padL = labW+24, padR = narrow ? 140 : 200;
+  // 讀者把瀏覽器的字放大時（例如 200%），寬度與行高也跟著放大，名稱才不會被截掉
+  const rem = (parseFloat(getComputedStyle(document.documentElement).fontSize)||16)/16;
+  const k = (crBig ? 1.3 : 1)*rem, fs = (narrow ? 13.8 : 14.7)*k, rowH = Math.round((narrow ? 44 : 46)*k), RULER = 58, lanePad = 6;
+  const bw = m => (m.photos.length?30:0)+(m.clips.length?30:0)+(m.talks.length?30:0)+(m.n?6:0);          // 名稱後面的小標記
+  const wOf = e => Math.ceil(34*k+Math.max(textW(crYear(e), 12.5*k), Math.min(textW(e.t, fs)*1.06, (narrow ? 180 : 240)*k)+bw(e.m)*k));          // 一件事的寬度：依名稱長短
   const pos = {}, lanes = [];
   let top = RULER;
   CR_LANES.filter(l=>crShow.has(l.k)).forEach(l=>{
@@ -277,7 +359,7 @@ function crFigHtml(L){
   const eras = CR_ERAS.map((r,i)=>{ const a = X(Math.max(r.from,1795)), b = X(i<CR_ERAS.length-1 ? CR_ERAS[i+1].from : CR_END);
     return `<div class="cr-era" style="left:${a.toFixed(0)}px;width:${(b-a).toFixed(0)}px"><span>${esc(r.name)}</span></div>`; }).join('');
   const items = CR.filter(e=>L.pos[e.id]).map(e=>{ const p = L.pos[e.id], ln = CR_LANE[e.lane];
-    return `<button class="cr-it${ln.data?' data':''}" data-cr="${e.id}" aria-pressed="${crSel===e.id}" style="left:${(p.x-8).toFixed(0)}px;top:${p.y}px;width:${p.w}px" title="${esc(e.t)}">${icon(ln.shape,ln.color,ln.data)}<span class="cr-y">${esc(crYear(e))}</span><span class="cr-t">${esc(e.t)}</span><span class="vh">，${ln.name}${ln.data?'（本站資料）':''}</span></button>`; }).join('');
+    return `<button class="cr-it${ln.data?' data':''}" data-cr="${e.id}" aria-pressed="${crSel===e.id}" style="left:${(p.x-8).toFixed(0)}px;top:${p.y}px;width:${p.w}px" title="${esc(e.t)}">${icon(ln.shape,ln.color,ln.data)}<span class="cr-y">${esc(crYear(e))}</span><span class="cr-t"><span class="cr-tt">${esc(e.t)}</span>${crBadges(e.m)}</span><span class="vh">，${ln.name}${ln.data?'（本站資料）':''}${e.m.n?'，有'+crMediaText(e.m):''}</span></button>`; }).join('');
   const labels = L.lanes.map(l=>`<div class="cr-lane${l.data?' data':''}" style="top:${l.top}px;height:${l.h}px;width:${L.labW}px;--c:${l.color}">${icon(l.shape,l.color,l.data)}<b>${l.name}</b>${L.narrow?'':`<small>${l.kind}</small>`}</div>`).join('');
   return `<div class="cr-scroll" id="crScroll" tabindex="0" aria-label="年表，可以左右捲動">
       <div class="cr-track" style="width:${L.W}px;height:${L.H}px">${crSvgRuler(L)}${eras}<i class="cr-guide" id="crGuide" hidden></i><span class="cr-flag" id="crFlag" hidden></span>${items}</div>
@@ -298,8 +380,87 @@ function crGuide(id){
 function crListHtml(){
   return `<div class="tlist plate">${CR_ERAS.map((r,i)=>{ const ev = crShown().filter(e=>e.era===i); if(!ev.length) return '';
     return `<h2>${esc(r.name)}（${ev[0].y}–${ev[ev.length-1].y}）</h2><ol>${ev.map(e=>{ const ln = CR_LANE[e.lane];
-      return `<li><button class="litem" data-cr="${e.id}" aria-pressed="${crSel===e.id}" style="--c:${ln.color}"><span class="ld">${esc(crDate(e))}</span><b>${esc(e.t)}</b><span class="lm">${icon(ln.shape,ln.color,ln.data)}${ln.name}</span></button></li>`; }).join('')}</ol>`; }).join('')}</div>`;
+      return `<li><button class="litem" data-cr="${e.id}" aria-pressed="${crSel===e.id}" style="--c:${ln.color}"><span class="ld">${esc(crDate(e))}</span><b>${esc(e.t)}${e.m.n?`<small class="cr-lmm">${crMediaText(e.m)}</small>`:''}</b><span class="lm">${icon(ln.shape,ln.color,ln.data)}${ln.name}</span></button></li>`; }).join('')}</ol>`; }).join('')}</div>`;
 }
+// 卡片裡的素材：順序固定（照片、剪報、訪談），沒有就不出現
+function crMediaHtml(e){
+  const m = e.m; if(!m.n) return '';
+  let h = '', n = 0;
+  if(m.photos.length) h += `<section class="cr-ms" aria-label="照片"><h3>${crMi('photo',18)}照片（${m.photos.length} 張）</h3><div class="cr-thumbs">${m.photos.map(p=>
+    `<button class="cr-th" data-cr-lb="${n++}"><span class="cr-img"><img src="${esc(p.src)}" alt="" loading="lazy">${p.sample?'<i class="cr-sample">示意</i>':''}</span><span class="cr-cap">${esc(p.title||'照片')}${p.year?'<small>'+p.year+'</small>':''}</span><span class="vh">：看大圖</span></button>`).join('')}</div></section>`;
+  if(m.clips.length) h += `<section class="cr-ms" aria-label="剪報"><h3>${crMi('clip',18)}剪報（${m.clips.length} 篇）</h3>${m.clips.map(c=>{
+    const t = c.text||'', short = t.length<=90;
+    return `<article class="cr-clip">${c.src ? `<button class="cr-scan" data-cr-lb="${n++}"><img src="${esc(c.src)}" alt="" loading="lazy">${c.sample?'<i class="cr-sample">示意</i>':''}<span class="vh">看掃描大圖：${esc(c.title)}</span></button>` : ''}
+      <div class="cr-cb"><p class="cr-cm">${esc([c.paper, c.date && crDay(c.date)].filter(Boolean).join('・'))}</p><h4>${esc(c.title)}</h4>
+      ${short ? `<p class="cr-ct">${esc(t)}</p>` : `<p class="cr-ct">${esc(t.slice(0,60))}……</p><details class="cr-full"><summary>讀全文</summary>${t.split('\n').map(x=>`<p>${esc(x)}</p>`).join('')}</details>`}
+      ${c.credit ? `<p class="cr-cr">來源：${esc(c.credit)}</p>` : ''}</div></article>`; }).join('')}</section>`;
+  if(m.talks.length) h += `<section class="cr-ms" aria-label="訪談"><h3>${crMi('talk',18)}訪談（${m.talks.length} 段）</h3>${m.talks.map(({a,i,ix})=>{
+    const s0 = a.segs[ix[0]], nx = a.segs[ix[ix.length-1]+1], end = nx ? nx[0] : a.dur;
+    return `<div class="cr-talk" data-iv="${i}"><div class="cr-th2"><p><b>${esc(a.who||a.title)}</b><span>${esc([a.title, a.date].filter(Boolean).join('・'))}・片段 ${mmss(s0[0])}–${mmss(end)}</span></p>
+        <button class="btn" data-cr-play="${i}:${s0[0]}" aria-pressed="false">${PLAY_ICON}<span>播放這一段</span></button></div>
+      <ol>${ix.map(k=>{ const sg = a.segs[k]; return `<li data-k="${k}"><button class="cr-ts" data-cr-ts="${i}:${sg[0]}" aria-label="從 ${mmss(sg[0])} 開始播放">${mmss(sg[0])}</button><p><b>${esc(sg[1])}</b>　${esc(sg[2])}</p></li>`; }).join('')}</ol>
+      ${a.sample ? '<p class="cr-cr">示意訪談沒有聲音，按播放只示範進度與逐字稿的同步。</p>' : ''}
+      ${ONLY ? '' : '<p class="pn-go"><a href="#audio" data-go="audio">看完整訪談與逐字稿 →</a></p>'}</div>`; }).join('')}</section>`;
+  return `<div class="cr-media">${h}</div>`;
+}
+// 訪談正在播放時，卡片裡對應的那一段標出來，按鈕改成「暫停」（由 60-media.js 的 plPaint 呼叫）
+function crPaintTalk(i, t, cur){
+  crPlacePop();
+  $$('.cr-talk').forEach(el=>{
+    const me = +el.dataset.iv===PL.i, on = me && PL.playing, b = $('[data-cr-play]', el);
+    if(b){ b.setAttribute('aria-pressed', on); b.classList.toggle('solid', on); const sp = $('span', b); if(sp) sp.textContent = on ? '暫停這一段' : '播放這一段'; const ic = $('svg', b); if(ic) ic.classList.toggle('playing', on); }
+    $$('li[data-k]', el).forEach(li=>{ const now = me && +li.dataset.k===cur && (PL.playing || t>0); li.classList.toggle('now', now); if(now) li.setAttribute('aria-current','true'); else li.removeAttribute('aria-current'); });
+  });
+}
+/* 看大圖：照片與剪報掃描共用。開啟時焦點在「關閉」，Esc 關閉後回到原本的縮圖；Tab 只在這個框裡移動 */
+let crLbEl = null, crLb = null;
+function crLbItems(e){
+  return e.m.photos.map(p=>({src:p.src, title:p.title||'照片', sub:[p.year && p.year+' 年', p.caption].filter(Boolean).join('　'), credit:p.credit, alt:p.alt||'', sample:p.sample}))
+    .concat(e.m.clips.filter(c=>c.src).map(c=>({src:c.src, title:c.title, sub:[c.paper, c.date && crDay(c.date)].filter(Boolean).join('・'), credit:c.credit, text:c.text||'', sample:c.sample})));
+}
+function crLbOpen(k, opener){
+  const e = crById[crSel]; if(!e) return;
+  const items = crLbItems(e); if(!items[k]) return;
+  if(!crLbEl){
+    crLbEl = document.createElement('div'); crLbEl.className = 'cr-lb'; crLbEl.id = 'crLb'; crLbEl.hidden = true;
+    crLbEl.setAttribute('role','dialog'); crLbEl.setAttribute('aria-modal','true'); crLbEl.setAttribute('aria-labelledby','crLbT');
+    crLbEl.innerHTML = `<div class="cr-lb-top"><span id="crLbN"></span><button class="cr-lb-x" data-lb="close"><span aria-hidden="true">×</span>關閉（Esc）</button></div>
+      <div class="cr-lb-mid"><button class="cr-lb-nav" data-lb="prev" aria-label="上一張">‹</button><figure><img id="crLbImg" alt=""><i class="cr-sample" id="crLbS" hidden>示意</i></figure><button class="cr-lb-nav" data-lb="next" aria-label="下一張">›</button></div>
+      <div class="cr-lb-cap"><div><h2 id="crLbT"></h2><p id="crLbSub"></p><p class="cr-lb-cr" id="crLbCr"></p></div><div class="cr-lb-alt" id="crLbBox"><h3 id="crLbH"></h3><p id="crLbA"></p></div></div>`;
+    document.body.appendChild(crLbEl);
+    crLbEl.addEventListener('click', ev=>{ const b = ev.target.closest('[data-lb]'); if(!b) return; const v = b.dataset.lb;
+      if(v==='close') crLbClose(); else crLbShow(crLb.k+(v==='next'?1:-1)); });
+    document.addEventListener('keydown', ev=>{
+      if(!crLb) return;
+      if(ev.key==='Escape'){ ev.preventDefault(); ev.stopImmediatePropagation(); crLbClose(); }
+      else if(ev.key==='ArrowLeft' || ev.key==='ArrowRight'){ ev.preventDefault(); ev.stopImmediatePropagation(); crLbShow(crLb.k+(ev.key==='ArrowRight'?1:-1)); }
+      else if(ev.key==='Tab'){ const f = $$('button:not([hidden])', crLbEl), j = f.indexOf(document.activeElement); ev.preventDefault(); f[(j+(ev.shiftKey?-1:1)+f.length)%f.length].focus(); }
+    }, true);
+  }
+  crLb = {items, k:0, back:opener||document.activeElement};
+  crLbEl.hidden = false; document.documentElement.classList.add('lb-open');
+  crLbShow(k);
+  $('.cr-lb-x', crLbEl).focus();
+}
+function crLbShow(k){
+  const it = crLb.items, n = it.length; k = (k+n)%n; crLb.k = k; const x = it[k];
+  const img = $('#crLbImg'); img.src = x.src;
+  // 照片：替代文字給報讀軟體，同一段文字也顯示在旁邊給所有人看（顯示的那段對報讀軟體隱藏，避免唸兩次）
+  img.alt = x.text!=null ? '剪報掃描圖，內文在下方' : (x.alt || x.title);
+  $('#crLbS').hidden = !x.sample;
+  $('#crLbN').textContent = (x.text!=null ? '剪報' : '照片')+' '+(k+1)+' / '+n;
+  $('#crLbT').textContent = x.title; $('#crLbSub').textContent = x.sub||''; $('#crLbCr').textContent = x.credit ? '來源：'+x.credit : '';
+  $('#crLbH').textContent = x.text!=null ? '內文' : '畫面描述'; $('#crLbA').textContent = x.text!=null ? x.text : (x.alt||'（沒有畫面描述）');
+  $('#crLbBox').setAttribute('aria-hidden', x.text!=null ? 'false' : 'true');
+  $$('.cr-lb-nav', crLbEl).forEach(b=>{ b.hidden = n<2; });
+}
+function crLbClose(){
+  if(!crLb) return; const back = crLb.back; crLb = null;
+  crLbEl.hidden = true; document.documentElement.classList.remove('lb-open');
+  if(back && document.contains(back)){ try{ back.focus({preventScroll:true}); }catch(e){} }
+}
+LEAVE.push(crLbClose);
+LEAVE.push(()=>document.documentElement.classList.remove('cr-big'));          // 大字只用在年表
 function crPanelHtml(){
   const sh = crShown();
   if(!crSel || !crById[crSel]){          // 手機的說明紙只在選了一件時出現，這段留給清單模式用
@@ -315,12 +476,15 @@ function crPanelHtml(){
   const memo = k<0 ? '' : `<div class="memo"><h3>備註</h3>${lines.slice(k).map((s,j)=>`<p>${esc(j?s:s.replace(/^備註：/,''))}</p>`).join('')}</div>`;
   const more = ONLY ? '' : e.tree ? `<p class="pn-go"><a href="#tree" data-act="cr-tree" data-id="${e.tree}">在時間軸（事件樹）上看這件事 →</a></p>`
     : ln.go ? `<p class="pn-go"><a href="#${ln.go}" data-go="${ln.go}">到「${SECTIONS[ln.go].name.replace(/・.*/,'')}」展區看 →</a></p>` : '';
+  const easy = e.easy ? `<div class="cr-easy"><p class="cr-easy-h">易讀版${CR_EASY_DRAFT?'<span>草稿，待審閱</span>':''}</p>${e.easy.split('\n').map(t=>`<p>${esc(t)}</p>`).join('')}</div>` : '';
+  const full = e.easy ? `<details class="cr-more"><summary>看完整說明</summary><div class="pn-desc">${main}${memo}</div></details>` : `<div class="pn-desc">${main}${memo}</div>`;
   return `<p class="pn-kind">${icon(ln.shape,ln.color,ln.data)}${ln.name}・${ln.data?'本站資料':esc(CR_CATS[e.cat])}・${esc(CR_ERAS[e.era].name)}</p>
     <h2 tabindex="-1">${esc(e.t)}</h2>
     <p class="pn-date">${esc(crDate(e))}</p>
-    <div class="pn-desc">${main}${memo}</div>
+    ${easy}${full}
     <p class="cr-src">來源：${esc(e.src)}</p>
     ${more}
+    ${crMediaHtml(e)}
     <div class="pager"><button class="btn" data-act="cr-go" data-to="${prev?prev.id:''}"${prev?'':' disabled'}>‹ 上一件</button><span>${i+1} / ${sh.length}</span><button class="btn" data-act="cr-go" data-to="${next?next.id:''}"${next?'':' disabled'}>下一件 ›</button></div>`;
 }
 /* 說明：電腦上是浮在那件事旁邊的一張卡片（年表可以用滿整個寬度）；手機上從畫面下方滑出來 */
@@ -342,7 +506,10 @@ LEAVE.push(crHidePop);
 function crPlacePop(){
   const p = crPopEl; if(!p || p.hidden || !crSel) return;
   const el = $('#view .cr-it[data-cr="'+crSel+'"]'), sc = $('#crScroll'); if(!el || !sc) return;
-  const r = el.getBoundingClientRect(), f = sc.getBoundingClientRect(), W = vw(), H = window.innerHeight, pw = p.offsetWidth, ph = p.offsetHeight, g = 12;
+  // 下方的播放列出現時，卡片不要被它蓋住
+  const H = window.innerHeight-(dock.hidden ? 0 : dock.offsetHeight);
+  p.style.maxHeight = Math.max(240, H-mastBottom()-24)+'px';
+  const r = el.getBoundingClientRect(), f = sc.getBoundingClientRect(), W = vw(), pw = p.offsetWidth, ph = p.offsetHeight, g = 12;
   const out = r.right < f.left+CRL.labW+8 || r.left > f.right-8 || r.bottom < mastBottom() || r.top > H;
   p.style.visibility = out ? 'hidden' : '';
   let x = r.right+g; if(x+pw > W-g) x = r.left-g-pw; if(x < g) x = Math.max(g, Math.min(W-pw-g, r.left));
@@ -357,6 +524,7 @@ function crDrawPanel(){
     const p = crPop();
     if(!crSel){ p.hidden = true; return; }
     p.innerHTML = `<button class="cr-x" data-act="cr-close" aria-label="關閉說明">×</button>${crPanelHtml()}`;
+    p.classList.toggle('wide', !!crById[crSel].m.n);
     p.hidden = false; p.scrollTop = 0; crPlacePop(); return;
   }
   crHidePop();
@@ -381,7 +549,8 @@ function crYearAt(x){ const S = CRL.S; let lo = 1795, hi = CR_END; for(let n=0;n
 function crToEra(i){ const sc = $('#crScroll'); if(!sc) return; sc.scrollTo({left:Math.max(0, CRL.padL+CRL.S.x(CR_ERAS[i].from)-CRL.labW-12), behavior:calm()?'auto':'smooth'}); }
 
 DRAW.chron = function(){
-  view.innerHTML = `<div class="wrap">${pageHead('chron',{tools:`<button class="btn solid" data-act="cr-first">從最早的開始看</button><button class="btn" id="crListBtn" data-act="cr-list" aria-pressed="${crList}">文字清單</button>`})}
+  document.documentElement.classList.toggle('cr-big', crBig);
+  view.innerHTML = `<div class="wrap">${pageHead('chron',{tools:`<button class="btn solid" data-act="cr-first">從最早的開始看</button><button class="btn" id="crBigBtn" data-act="cr-big" aria-pressed="${crBig}"><span class="big-a" aria-hidden="true">大</span>大字</button><button class="btn" id="crListBtn" data-act="cr-list" aria-pressed="${crList}">文字清單</button>`})}
     <div class="tl">
       <div class="tl-main">
         <div class="tl-filter" id="crFilter" role="group" aria-label="要看哪幾道">
@@ -391,7 +560,7 @@ DRAW.chron = function(){
         ${crList ? crListHtml() : `<div class="cr-nav" id="crEras" role="group" aria-label="跳到章節">${CR_ERAS.map((r,i)=>`<button data-cr-era="${i}">${esc(r.name)}</button>`).join('')}
             <span class="cr-arrows"><button class="btn rd" id="crPrev" data-act="cr-page" data-dir="-1" aria-label="往前（較早）">‹</button><button class="btn rd" id="crNext" data-act="cr-page" data-dir="1" aria-label="往後（較晚）">›</button></span></div>
           <div class="plate cr-fig" id="crFig"></div>
-          <p class="cr-note">時間尺照年份比例畫，1950 年以前事件較少，尺比較緊。實心是大事，空心是由本站資料算出的轉折點；每一道的顏色與形狀都不同。</p>`}
+          <p class="cr-note">時間尺照年份比例畫，1950 年以前事件較少，尺比較緊。實心是大事，空心是由本站資料算出的轉折點；每一道的顏色與形狀都不同。名稱後面的小圖示，表示這件事有照片、剪報或訪談。${[...PHOTOS,...CLIPS,...INTERVIEWS].some(x=>x.sample && (x.ev||x.evSegs)) ? '目前的照片、剪報內文與訪談是版面示意。' : ''}</p>`}
       </div>
     </div>${routeHtml()}</div>`;
   if(!crList) crDrawFig();
@@ -451,11 +620,15 @@ function chronClick(e){
   if((el = t.closest('[data-act]'))){ const a = el.dataset.act;
     if(a==='cr-close'){ const id = crSel; crSel = null; render(); const b = id && $('#view [data-cr="'+id+'"]'); if(b){ try{ b.focus({preventScroll:true}); }catch(err){} } return; }
     if(a==='cr-list'){ crList = !crList; render(); return; }
+    if(a==='cr-big'){ crSetBig(!crBig); render(); const b = $('#crBigBtn'); if(b) b.focus(); return; }
     if(a==='cr-first') return crPick(crShown()[0].id);
     if(a==='cr-go'){ if(el.dataset.to) crPick(el.dataset.to); return; }
     if(a==='cr-page'){ const sc = $('#crScroll'); if(sc) sc.scrollBy({left:+el.dataset.dir*sc.clientWidth*.7, behavior:calm()?'auto':'smooth'}); return; }
     if(a==='cr-tree'){ e.preventDefault(); tlClear(); tSel = el.dataset.id; return go('tree', undefined, {quiet:true}); }
     return; }
+  if((el = t.closest('[data-cr-lb]'))) return crLbOpen(+el.dataset.crLb, el);
+  if((el = t.closest('[data-cr-play]'))){ const [i,s0] = el.dataset.crPlay.split(':').map(Number); return PL.i===i ? plToggle(i) : plSeek(i, s0, true); }
+  if((el = t.closest('[data-cr-ts]'))){ const [i,s0] = el.dataset.crTs.split(':').map(Number); return plSeek(i, s0, true); }
   if((el = t.closest('[data-cr-lane]'))){ const k = el.dataset.crLane;
     if(crShow.has(k) && crShow.size>1) crShow.delete(k); else crShow.add(k);
     if(crSel && !crShow.has(crById[crSel].lane)) crSel = null;
@@ -471,5 +644,7 @@ TOURS.chron = () => [
   {sel:'#crFilter', title:'選要看哪幾道', text:'點一下可以收起或打開一道。'},
   {sel:'#crEras', title:'跳到章節', text:'兩百多年分成五章，點章節名稱就會捲到那裡；右邊的箭頭一次捲一段。'},
   {sel:'#view .cr-it', title:'點一件看說明', text:'滑鼠移上去，時間尺上會標出日期。點一下，旁邊會浮出說明與來源，可以用「上一件／下一件」依時間一件一件看；按 Esc、× 或點空白處關掉。'},
-  {sel:'#crListBtn', title:'文字清單', text:'把全部的時間點排成純文字的清單。'}
+  {sel:'#view .cr-b', title:'照片、剪報、訪談', text:'名稱後面有小圖示的事件，點開說明可以看照片、讀剪報、聽訪談的片段。每一張照片都有畫面描述，每一段錄音都有逐字稿。'},
+  {sel:'#crBigBtn', title:'大字', text:'字太小的話，按「大字」放大年表與說明；再按一次回到原來的大小。'},
+  {sel:'#crListBtn', title:'文字清單', text:'把全部的時間點排成純文字的清單，也寫出每件事有哪些照片、剪報與訪談。'}
 ];

@@ -12,6 +12,13 @@ const INTERVIEWS = [
   // {src:'audio/檔名.mp3', title:'標題', who:'受訪者的稱呼', date:'2025 年 3 月', dur:96, summary:'摘要',
   //  segs:[[0,'訪談者','第一段的逐字稿'], [14,'受訪者','第二段的逐字稿']]},
 ];
+// 剪報：掃描圖放在 clips/ 資料夾。text 是打好的內文，一定要寫（看不到圖片、需要放大字的人才讀得到）
+// news 是這篇在剪報資料裡的日期與標題，用來對回剪報清單（例：news:'1985-02-13 家長陳情'）
+const CLIPS = [
+  // {src:'clips/檔名.jpg', paper:'聯合報', date:'1985-02-13', title:'報紙上的標題', text:'打好的內文', credit:'來源', ev:'n1985'},
+];
+/* 掛到年表上：PHOTOS、CLIPS 的一筆寫 ev:'年表事件的 id'（id 寫在 75-chron.js，事件樹的事件是 't-' 加上它的代號，例如 't-l2'），
+   就會出現在年表那一件事的說明裡。訪談可以寫 ev（整段訪談），或 evSegs:{'sel84':[1,2]}（逐字稿的第幾段，從 0 算起）。 */
 
 /* ---------- 版面示意：上面的清單是空的時候才會用到，不是真實資料 ---------- */
 function mockPhoto(i,w,h){
@@ -23,21 +30,35 @@ function mockPhoto(i,w,h){
   return 'data:image/svg+xml;charset=utf-8,'+encodeURIComponent(g);
 }
 if(!PHOTOS.length) [[1964,4,3],[1968,3,4],[1973,1,1],[1975,4,3],[1979,3,2],[1984,3,4],[1986,4,3],[1988,1,1],[1991,3,2],[1995,4,3],[1998,3,4],[2003,4,3],[2006,16,9],[2012,1,1],[2015,4,3],[2019,3,4],[2022,3,2]].forEach((p,i)=>PHOTOS.push({
-  src:mockPhoto(i,p[1]*120,p[2]*120), year:p[0], sample:true,
+  src:mockPhoto(i,p[1]*120,p[2]*120), year:p[0], sample:true, ev:({0:'zs',1:'zs',5:'sel84',6:'sel84',7:'syinlu',9:'ccb95',10:'ccb95',14:'crpd14',16:'sel23'})[i],
   title:'示意照片 '+(i+1), alt:'示意圖：灰色色塊與山形輪廓，沒有實際內容',
   caption:'這裡放圖說：照片的時間、地點，以及畫面裡正在發生的事。', credit:'來源或拍攝者'}));
 if(!INTERVIEWS.length) INTERVIEWS.push(
-  {title:'示意訪談一', who:'受訪者 A', date:'2025 年 3 月', dur:96, sample:true,
+  {title:'示意訪談一', who:'受訪者 A', date:'2025 年 3 月', dur:96, sample:true, evSegs:{sel84:[1,2,3]},
    summary:'這裡放訪談摘要：受訪者的身分背景，以及這段訪談談到的主題。',
    segs:[[0,'訪談者','說明訪談目的，確認受訪者同意錄音與公開。'],[14,'受訪者','這裡放受訪者的回答。逐字稿依時間分段，點左邊的時間可以跳到那一段。'],[38,'訪談者','第二個問題。'],[46,'受訪者','播放的時候，正在播放的段落會標示出來，方便邊聽邊讀。'],[74,'訪談者','結尾與致謝。']]},
-  {title:'示意訪談二', who:'受訪者 B', date:'2025 年 5 月', dur:132, sample:true,
+  {title:'示意訪談二', who:'受訪者 B', date:'2025 年 5 月', dur:132, sample:true, evSegs:{syinlu:[1,2], pac92:[3,4]},
    summary:'這裡放訪談摘要。',
    segs:[[0,'訪談者','開場。'],[20,'受訪者','第一段回答。'],[58,'訪談者','追問。'],[66,'受訪者','第二段回答。'],[110,'訪談者','結尾。']]},
-  {title:'示意訪談三', who:'受訪者 C', date:'2025 年 6 月', dur:78, sample:true,
+  {title:'示意訪談三', who:'受訪者 C', date:'2025 年 6 月', dur:78, sample:true, evSegs:{crpd14:[1,2]},
    summary:'這裡放訪談摘要。',
    segs:[[0,'訪談者','開場。'],[12,'受訪者','第一段回答。'],[44,'受訪者','第二段回答。'],[66,'訪談者','結尾。']]}
 );
 INTERVIEWS.forEach(a=>{ a.dur = +a.dur||0; a.segs = a.segs||[]; });
+// 示意剪報：報別、日期、標題取自剪報資料裡真實的那一篇；內文與掃描圖是示意
+function mockClip(i){
+  const w = 300, h = 380, g = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${w} ${h}"><rect width="${w}" height="${h}" fill="#EFECE4"/><rect x="24" y="28" width="252" height="30" fill="#BCB2A0"/>`+
+    [0,1,2,3,4,5,6,7,8,9].map(k=>`<rect x="24" y="${80+k*22}" width="118" height="8" fill="#D0C8B6"/><rect x="158" y="${80+k*22}" width="118" height="8" fill="#D0C8B6"/>`).join('')+
+    `<rect x="24" y="310" width="252" height="8" fill="#D0C8B6"/><rect x="24" y="330" width="160" height="8" fill="#D0C8B6"/>`+
+    `<text x="${w/2}" y="${h-14}" text-anchor="middle" font-family="sans-serif" font-size="15" fill="#1F2A2E" opacity=".75">示意剪報 ${i+1}</text></svg>`;
+  return 'data:image/svg+xml;charset=utf-8,'+encodeURIComponent(g);
+}
+// 只掛在內容對得上的事件：用日期與標題找剪報資料裡的那一篇，找不到就不掛
+if(!CLIPS.length) [['n1964','1964-07-15','設班'],['zs','1965-01-10','設班'],['n1967','1967-01-04','溪洲命案 媽媽觀點'],['n1985','1985-02-13','家長陳情'],['n1985','1985-02-14','家長陳情']].forEach(([ev,d,t],i)=>{
+  const a = NEWS.find(x=>x.d===d && x.t.includes(t)); if(!a) return;
+  CLIPS.push({sample:true, ev, src:mockClip(i), paper:a.o, date:a.d, title:a.t, news:a.d+' '+a.t, credit:'本站剪報資料',
+    text:'［這裡放打好的報紙內文。這段內文與掃描圖是示意；報別、日期與標題取自本站剪報資料的真實紀錄（標題取自整理時的檔名）。］'});
+});
 const mmss = t => { t = +t||0; return Math.floor(t/60)+':'+String(Math.floor(t%60)).padStart(2,'0'); };
 // 聲音波形的示意：沒有真實錄音時，用固定的亂數產生長短不一的直條
 function wavePeaks(seed,n){ let s = seed*9301+49297; const out = []; for(let i=0;i<n;i++){ s = (s*9301+49297)%233280; const r = s/233280; out.push(.25+.75*Math.abs(Math.sin(i*.35+seed))*r+.1*r); } return out.map(v=>Math.min(1,v)); }
@@ -139,7 +160,8 @@ function plPaint(){
     $$('.segs li',el).forEach((li,k)=>li.classList.toggle('now', k===cur && (PL.playing || t>0)));
   }
   // 下方的播放列
-  const show = page==='audio' && (PL.playing || t>0);
+  const show = (page==='audio' || page==='chron') && (PL.playing || t>0);
+  if(typeof crPaintTalk==='function') crPaintTalk(i, t, cur);          // 年表說明卡片裡的訪談片段
   if(show){
     $('#dockTitle').textContent = a.title; $('#dockTime').textContent = mmss(t)+' / '+mmss(dur);
     $('#dockSeg').textContent = cur>=0 ? a.segs[cur][1]+'：'+a.segs[cur][2] : '';
@@ -201,6 +223,7 @@ view.addEventListener('input', e=>{ const d = e.target.dataset; if(d && d.seek!=
 dock.addEventListener('click', e=>{
   if(e.target.closest('#dockPlay')) return plToggle(PL.i);
   if(e.target.closest('#dockClose')) return plClose();
+  if(e.target.closest('#dockGo') && page==='chron'){ const el = $('.cr-talk[data-iv="'+PL.i+'"]'); if(el){ el.scrollIntoView({block:'nearest'}); const b = $('button',el); if(b) b.focus(); } return; }
   if(e.target.closest('#dockGo')){ const el = $('.iv[data-iv="'+PL.i+'"] .segs li.now') || $('.iv[data-iv="'+PL.i+'"]'); if(el) el.scrollIntoView({block:'center', behavior:calm()?'auto':'smooth'}); }
 });
 LEAVE.push(()=>{ shStop(); plStop(); dock.hidden = true; setDock(false); });
