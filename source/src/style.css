@@ -233,11 +233,11 @@ body[data-only] .foot a{display:none}
 .cr-lane .ico{width:13px;height:13px}
 .cr-lane small{font-size:.7rem;color:var(--muted)}
 /* 一件事：形狀標在它的日期上，右邊是年份與名稱 */
-.cr-it{position:absolute;display:grid;grid-template-columns:14px minmax(0,1fr);column-gap:5px;align-items:center;padding:3px 6px 3px 1px;border:0;border-radius:8px;background:none;text-align:left;line-height:1.35;color:var(--ink)}
+.cr-it{position:absolute;display:grid;grid-template-columns:14px auto minmax(0,1fr);column-gap:6px;align-items:center;padding:3px 6px 3px 1px;border:0;border-radius:8px;background:none;text-align:left;line-height:1.35;color:var(--ink)}
 .cr-it .ico{align-self:center}
 .cr-it .cr-y{font-size:.78rem;color:var(--muted);font-variant-numeric:tabular-nums}
 .cr-it .cr-y{line-height:1.25}
-.cr-it .cr-t{grid-column:2;font-size:.92rem;font-weight:500;line-height:1.4;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.cr-it .cr-t{font-size:.92rem;font-weight:500;line-height:1.4;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .cr-it.data .cr-t{font-weight:400;color:var(--ink2)}
 .cr-it:hover{background:var(--trk2)}
 .cr-it[aria-pressed="true"]{background:var(--ink);color:var(--paper)}
@@ -248,13 +248,21 @@ body[data-only] .foot a{display:none}
 .cr-flag{position:absolute;top:36px;transform:translateX(-50%);padding:1px 7px;border-radius:999px;background:var(--ink);color:var(--paper);font-size:.74rem;font-variant-numeric:tabular-nums;white-space:nowrap;pointer-events:none;z-index:2}
 .cr-note{margin-top:10px;font-size:.84rem;color:var(--muted)}
 /* 浮在事件旁邊的說明卡片 */
-.cr-pop{position:fixed;z-index:45;width:min(380px,calc(100vw - 24px));max-height:min(560px,calc(100vh - var(--mast) - 40px));overflow:auto;padding:20px 22px 20px;background:var(--paper);border:1px solid var(--line2);border-radius:var(--r);box-shadow:0 12px 40px rgba(0,0,0,.18),0 2px 6px rgba(0,0,0,.08)}
-.cr-pop h2{font-family:var(--serif);font-weight:700;font-size:1.32rem;line-height:1.35;margin-top:2px;padding-right:28px}
-.cr-pop h2:focus{outline:none}
-.cr-pop .pn-desc{font-size:.94rem}
-.cr-x{position:absolute;right:10px;top:10px;width:36px;height:36px;border:0;border-radius:50%;background:none;font-size:1.4rem;line-height:1;color:var(--muted)}
+/* 時間軸下方的說明區：左邊文字，右邊照片、剪報、訪談，下面上一件／下一件 */
+.plate.cr-detail{position:relative;margin:14px 0 0;padding:22px 26px 18px;display:grid;grid-template-columns:minmax(0,1fr);gap:0 32px}
+.cr-detail.has-media{grid-template-columns:minmax(0,1fr) minmax(0,1.05fr)}
+.cr-detail .cr-d-foot{grid-column:1/-1}
+.cr-detail .cr-d-side > .cr-media > .cr-ms:first-child{margin-top:0;padding-top:0;border-top:0}
+.cr-detail h2{font-family:var(--serif);font-weight:700;font-size:1.4rem;line-height:1.35;margin-top:2px;padding-right:40px}
+.cr-detail h2:focus{outline:none}
+.cr-detail .cr-d-main{max-width:44em}
+@media (max-width:899px){
+  .plate.cr-detail{padding:18px 16px 14px}
+  .cr-detail.has-media{grid-template-columns:minmax(0,1fr)}
+  .cr-detail .cr-d-side{margin-top:14px;padding-top:12px;border-top:1px solid var(--line)}
+}
+.cr-x{position:absolute;right:12px;top:12px;width:36px;height:36px;border:0;border-radius:50%;background:none;font-size:1.4rem;line-height:1;color:var(--muted)}
 .cr-x:hover{background:var(--trk2);color:var(--ink)}
-.cr-pop.wide{width:min(460px,calc(100vw - 24px))}
 /* 年表上的小標記：這件事有照片、剪報或訪談 */
 .cr-it .cr-t{display:flex;align-items:center;gap:6px;min-width:0}
 .cr-it .cr-tt{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
@@ -339,11 +347,11 @@ html.cr-big .cr-lane b{font-size:1.2rem}
 html.cr-big .cr-lane small{font-size:.82rem}
 html.cr-big .cr-era span{font-size:.92rem}
 html.cr-big .cr-nav > button{font-size:1.08rem}
-html.cr-big .cr-pop{width:min(580px,calc(100vw - 24px));font-size:1.15rem}
-html.cr-big .cr-pop h2,html.cr-big .sheet-body h2{font-size:1.75rem}
-html.cr-big :is(.cr-pop,.sheet-body) :is(.pn-desc,.pn-date,.pn-kind,.cr-src,.cr-ct,.cr-talk li p,.cr-full p){font-size:1.1rem}
-html.cr-big :is(.cr-pop,.sheet-body) .cr-easy p{font-size:1.32rem}
-html.cr-big :is(.cr-pop,.sheet-body) :is(.btn,.cr-more > summary,.cr-full > summary){min-height:52px;font-size:1.05rem}
+html.cr-big .cr-detail{font-size:1.15rem}
+html.cr-big .cr-detail h2,html.cr-big .sheet-body h2{font-size:1.75rem}
+html.cr-big :is(.cr-detail,.sheet-body) :is(.pn-desc,.pn-date,.pn-kind,.cr-src,.cr-ct,.cr-talk li p,.cr-full p){font-size:1.1rem}
+html.cr-big :is(.cr-detail,.sheet-body) .cr-easy p{font-size:1.32rem}
+html.cr-big :is(.cr-detail,.sheet-body) :is(.btn,.cr-more > summary,.cr-full > summary){min-height:52px;font-size:1.05rem}
 html.cr-big .cr-thumbs{grid-template-columns:repeat(2,minmax(0,1fr))}
 html.cr-big .cr-th{font-size:1rem}
 html.cr-big .tlist{font-size:1.15rem}
