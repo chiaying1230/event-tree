@@ -1,24 +1,43 @@
 /* ============ 年表：臺灣的大事，加上本站資料（剪報、研究、人數）的轉折點，排在同一把時間尺上 ============
-   兩道：政府、民間；形狀表示種類（大事、剪報、研究、人數）。上方的時間尺照年份比例畫；1980 年以前事件少，尺比較緊。
+   怎麼分道有五個版本可以切換（CR_VERS）；形狀一律表示種類（大事、剪報、研究、人數）。上方的時間尺照年份比例畫；1980 年以前事件少，尺比較緊。
    事件裡寫 tree:'q1' 的，名稱、日期、說明直接取自事件樹（00-data.js 的 TREE），這裡不重複寫。
    要加事件：照下面的格式加一筆。d 寫成 1984、1984-12 或 1984-12-17；lane 是 intl、tw、news、lit、people；
    cat（只有大事要寫）是 law 法規與政策、assess 定義與鑑定、edu 教育與普查、rights 權利與社會。
    剪報、研究、人數三道的數字由 source/data.json 算出，資料更新時請重算。 */
-// 只看臺灣，分成兩道：政府、民間。顏色寫在 style.css 的 --k-gov、--k-civ（藍、橘，用色盲模擬檢查過）。
-// 同一道裡，實心圓是大事；空心的是由本站資料算出的轉折點：方形剪報、三角形研究、六角形人數
-const CR_LANES = [
-  {k:'gov', name:'政府', sub:'法規・教育・統計'},
-  {k:'civ', name:'民間', sub:'家長・學界・報紙'}
-];
-CR_LANES.forEach(l=>{ l.color = 'var(--k-'+l.k+')'; });
+// 只看臺灣。怎麼分道有幾個版本可以切換比較（CR_VERS），預設是 A 政府／民間。
+// 顏色寫在 style.css 的 --k-gov、--k-civ 與 --p-*（用色盲模擬檢查過）；形狀一律表示種類：實心圓是大事，空心方形剪報、三角形研究、六角形人數
+let CR_LANES = [], CR_LANE = {}, CR_V = null;
 const CR_KINDS = {
   ev:{name:'大事', shape:'circle'},
   news:{name:'剪報', shape:'square', data:true, go:'news'},
   lit:{name:'研究', shape:'triangle', data:true, go:'research'},
   people:{name:'人數', shape:'hexagon', data:true, go:'people'}
 };
-// 臺灣的大事屬於哪一道：這幾件是民間（家長團體、學者編的評量工具），其餘是政府。剪報、研究算民間；人數是政府的統計
-const CR_CIV = new Set(['t-q1','t-b3','t-b4','t-q5','syinlu','pac92','ccb95']);
+// 分道的版本。of(e) 回傳這件事放在哪一道；byKind 的版本，顏色跟著種類走（大事、剪報、研究、人數各一色）
+const crSet = a => new Set(a);
+const CR_GROUPS = crSet(['syinlu','pac92','ccb95']);          // 家長與團體
+const CR_TOOLS = crSet(['t-q1','t-b3','t-b4','t-q5']);          // 學者編修的評量工具
+const CR_T_NAME = crSet(['t-q1','t-l1','t-b3','t-l2','t-l3','t-l5','t-l6','t-b4','t-l7','icf12','t-q5','t-l8','n1962','n1964','n1978','n1988','n1996','n1998','n2000','r1988']);
+const CR_T_EDU = crSet(['zs','tj70','census76','sel84','t-l4','sel23','r1971','r1985','r2000','p2007','p2009','p2010','p2013','p2022','p2024']);
+const CR_P = c => 'var(--p-'+c+')';
+const CR_KCOL = {ev:CR_P('blue'), news:CR_P('ochre'), lit:CR_P('purple'), people:CR_P('pink')};
+const CR_VERS = [
+  {k:'gc', tag:'A', name:'政府／民間', desc:'分成政府與民間兩道。家長團體、學者編的評量工具、剪報與研究放在民間；法規與學生人數放在政府。',
+   lanes:[{k:'gov', name:'政府', sub:'法規・教育・統計', color:'var(--k-gov)'}, {k:'civ', name:'民間', sub:'家長・學界・報紙', color:'var(--k-civ)'}],
+   of:e=> e.kind==='ev' ? (CR_GROUPS.has(e.id)||CR_TOOLS.has(e.id) ? 'civ' : 'gov') : e.kind==='people' ? 'gov' : 'civ'},
+  {k:'theme', tag:'B', name:'三個主題', desc:'依主題分成三道：名稱與鑑定（用詞、定義、評量工具）、教育（學校、特教法、學生人數）、生活與權利（福利法、團體、公約、社會的看法）。',
+   lanes:[{k:'name', name:'名稱', sub:'用詞・定義・鑑定', color:CR_P('purple')}, {k:'edu', name:'教育', sub:'學校・特教・學生', color:CR_P('blue')}, {k:'life', name:'生活', sub:'福利・團體・權利', color:CR_P('green')}],
+   of:e=> CR_T_NAME.has(e.id) ? 'name' : CR_T_EDU.has(e.id) ? 'edu' : 'life'},
+  {k:'data', tag:'C', name:'大事／資料', desc:'上面是發生的大事，下面是本站資料（剪報、研究、人數）看到的變化。顏色與形狀都表示種類。', byKind:true,
+   lanes:[{k:'ev', name:'大事', sub:'法規・團體・評量', color:CR_KCOL.ev}, {k:'data', name:'資料', sub:'剪報・研究・人數', color:'var(--ink2)'}],
+   of:e=> e.kind==='ev' ? 'ev' : 'data'},
+  {k:'one', tag:'D', name:'不分道', desc:'全部放在同一道，只照時間排。顏色與形狀表示種類：大事、剪報、研究、人數。', byKind:true,
+   lanes:[{k:'all', name:'全部', sub:'依時間', color:'var(--ink2)'}],
+   of:()=>'all'},
+  {k:'voice', tag:'E', name:'誰的聲音', desc:'依「是誰做的、誰說的」分成四道：政府、家長與團體、報紙、學界。',
+   lanes:[{k:'gov', name:'政府', sub:'法規・統計', color:CR_P('blue')}, {k:'parent', name:'家長', sub:'家長與團體', color:CR_P('green')}, {k:'press', name:'報紙', sub:'剪報', color:CR_P('ochre')}, {k:'acad', name:'學界', sub:'研究・評量', color:CR_P('purple')}],
+   of:e=> e.kind==='news' ? 'press' : e.kind==='lit' || CR_TOOLS.has(e.id) ? 'acad' : CR_GROUPS.has(e.id) ? 'parent' : 'gov'}
+];
 const CR_CATS = {law:'法規與政策', assess:'定義與鑑定', edu:'教育與普查', rights:'權利與社會'};
 const CR_ERAS = [
   {from:1960, name:'啟智教育開始'},
@@ -208,7 +227,6 @@ const CR_RAW = [
   {id:"p2024", d:"2024", lane:"people", t:"智能障礙學生 16,800 人",
    x:"2024 年，全國的智能障礙學生 16,800 人，比 2010 年的高峰少了 36%。\n占全部特教學生的比例，從 2008 年的 31% 降到 13%。同一時期，衛福部統計的智能障礙者總人數沒有減少，維持在十萬人上下。"}
 ];
-const CR_LANE = Object.fromEntries(CR_LANES.map(l=>[l.k,l]));
 // 國際的事件（lane:'intl'）先保留在上面的清單裡，目前不畫
 const CR = CR_RAW.filter(r=>r.lane!=='intl').map(r=>{
   const e = Object.assign({}, r);
@@ -217,16 +235,25 @@ const CR = CR_RAW.filter(r=>r.lane!=='intl').map(r=>{
   Object.assign(e, {y, mo, dd, k: y+((mo?mo-1:6)+((dd||15)-1)/31)/12});          // 只寫年份的排在年中
   e.era = CR_ERAS.reduce((a,r,i)=>e.y>=r.from ? i : a, 0);
   e.kind = CR_KINDS[r.lane] ? r.lane : 'ev';
-  e.lane = e.kind==='ev' ? (CR_CIV.has(e.id) ? 'civ' : 'gov') : e.kind==='people' ? 'gov' : 'civ';
   if(CR_KINDS[e.kind].data) e.src = '本站資料：'+CR_KINDS[e.kind].name+'（由 source/data.json 計算）';
   return e;
 }).sort((a,b)=>a.k-b.k);
 const crById = Object.fromEntries(CR.map(e=>[e.id,e]));
-const crIcon = e => icon(CR_KINDS[e.kind].shape, CR_LANE[e.lane].color, !!CR_KINDS[e.kind].data);
+// 換版本：重新決定每件事在哪一道。選擇記在瀏覽器裡（記不住也沒關係）
+function crSetVer(k, save){
+  CR_V = CR_VERS.find(v=>v.k===k) || CR_VERS[0];
+  CR_LANES = CR_V.lanes; CR_LANE = Object.fromEntries(CR_LANES.map(l=>[l.k,l]));
+  CR.forEach(e=>{ e.lane = CR_V.of(e); });
+  if(save){ try{ localStorage.setItem('idtree.crver', CR_V.k); }catch(err){} }
+}
+try{ crSetVer(localStorage.getItem('idtree.crver')); }catch(err){ crSetVer(); }
+const crColor = e => CR_V.byKind ? CR_KCOL[e.kind] : CR_LANE[e.lane].color;
+const crLaneName = e => CR_LANES.length>1 ? CR_LANE[e.lane].name : '';          // 不分道的版本不寫道名
+const crIcon = e => icon(CR_KINDS[e.kind].shape, crColor(e), !!CR_KINDS[e.kind].data);
 const crYear = e => e.when && /年代/.test(e.when) ? e.when : String(e.y);          // 卡片上只寫年份；「1970年代」這種照寫
 const crDate = e => e.when || (e.dd ? `${e.y} 年 ${e.mo} 月 ${e.dd} 日` : e.mo ? `${e.y} 年 ${e.mo} 月` : `${e.y} 年`);
 
-/* 易讀版：每件大事一段，短句、常用詞、一句一個意思（一行一句）。
+/* 易讀版：每件大事、每個剪報、研究、人數的轉折點各一段，短句、常用詞、一句一個意思（一行一句）。
    這是草稿，請特教專業人員或自我倡議者審閱；審閱過後把 CR_EASY_DRAFT 改成 false，卡片上就不再寫「草稿」 */
 const CR_EASY_DRAFT = true;
 const CR_EASY = {
@@ -279,7 +306,36 @@ const CR_EASY = {
   review17:'2017 年，國際專家來臺灣檢查：\n政府有沒有做到公約的要求，並給建議。',
   't-q5':'2018 年，新的兒童智力測驗中文版出版。',
   sel23:'2023 年，特殊教育法大幅修改。\n更重視讓身心障礙學生和大家一起學習。',
-  't-l8':'2024 年，判斷學生是不是智能障礙的辦法又修改了。\n要看想事情的能力、生活能力和學習表現。'
+  't-l8':'2024 年，判斷學生是不是智能障礙的辦法又修改了。\n要看想事情的能力、生活能力和學習表現。',
+  // 剪報
+  n1962:'1962 年，是本站最早的一篇剪報。\n那時候的報紙，常用「白痴」、「低能」這種不好的詞。',
+  n1964:'1964 年，報紙第一次用「智能不足」這個詞。\n那篇報導在說：學校要開特別的班級。',
+  n1967:'1967 年，報紙連續三天報導一件命案。\n醫生、媽媽、老師和記者，都說了自己的看法。',
+  n1978:'1978 年，報紙第一次用「智能障礙」這個詞。\n可是之後好幾年，報紙還是比較常用「智能不足」。',
+  n1985:'1985 年，家長一起向政府陳情。\n報紙連續兩天報導家長的要求。\n1980 年代，是報紙最常幫忙爭取權利的時候。',
+  n1988:'1988 年，報紙第一次用「智障」這個簡短的說法。\n那篇報導說：家長不希望孩子被貼上標籤。\n後來「智障」變得很常見。',
+  n1990s:'1990 年代，報紙上的報導變得很多。\n最多的是社會新聞，和政府的新政策。',
+  n1996:'1990 年代，有些家長怕孩子被貼上標籤。\n所以不想讓孩子去做鑑定，或去讀啟智班。',
+  n1998:'1998 年，報紙第一次用「喜憨兒」這個說法。',
+  n1999:'1999 年，是報導最多的一年，有 43 篇。\n很多報導在介紹智能障礙者的表演、比賽和課程。',
+  n2000:'2000 年以後，報紙大多改用「智能障礙」這個詞。\n2015 年以後，幾乎每一篇都這樣寫。',
+  n2010:'2010 年以後，報紙最常把智能障礙者寫得很可憐、很辛苦。\n第二多的是：稱讚智能障礙者的能力和成就。',
+  // 研究
+  r1971:'1971 年，臺灣有了第一篇關於智能障礙的研究。\n1970 年代的研究很少，只有 7 篇。',
+  r1985:'1985 年，第一次有研究去訪問人，聽他們說自己的故事。\n2000 年以後，這種研究才變多。',
+  r1986:'1986 年，第一次有研究談智能障礙者的權利。\n也是第一次有研究談「性」。',
+  r1988:'1988 年，研究第一次用「智能障礙」這個詞。\n研究改用新的詞，比報紙早。',
+  r2000:'2000 年以後，關於智能障礙的研究變得很多。\n2000 年代有 143 篇，2010 年代有 201 篇。',
+  r2005:'2005 年，第一次有研究談「自我倡議」。\n意思是：智能障礙者自己說出想要什麼，自己做決定。',
+  // 人數
+  p1999:'1999 年，臺灣有 68,044 位智能障礙者。\n之後人數慢慢變多。',
+  p2007:'2007 年，在臺北市的學校裡，\n學習障礙的學生，第一次比智能障礙的學生多。',
+  p2009:'2009 年，在臺北市的學校裡，\n自閉症的學生，也比智能障礙的學生多了。',
+  p2010:'2010 年，全國學校裡的智能障礙學生最多，有 26,059 人。\n之後每年慢慢變少。',
+  p2013:'2013 年，在全國的學校裡，\n學習障礙的學生，第一次比智能障礙的學生多。',
+  p2014:'2014 年，臺灣的智能障礙者超過十萬人。',
+  p2022:'2022 年，在全國的學校裡，\n自閉症的學生，第一次比智能障礙的學生多。',
+  p2024:'2024 年，全國學校裡的智能障礙學生有 16,800 人，\n比 2010 年少了很多。\n可是全臺灣的智能障礙者，還是有十萬人左右。'
 };
 CR.forEach(e=>{ e.easy = CR_EASY[e.id]||''; });
 
@@ -341,7 +397,7 @@ function crLayout(width, availH){
       let r = rows.findIndex(end=>end+10<=l0); if(r<0){ r = rows.length; rows.push(0); }
       const w = wOf(e); rows[r] = l0+w; pos[e.id] = {x, w, row:r, lane:l.k};
     });
-    lanes.push({...l, n:Math.max(1,rows.length)});
+    lanes.push({...l, n:Math.max(CR_LANES.length>1 ? 2 : 1, rows.length)});          // 至少兩排高，道名與色條才放得下
   });
   // 畫面固定的版面：一排的高度縮到剛好放進框裡（最矮 24px），放不下才在框裡上下捲
   const nRows = lanes.reduce((a,l)=>a+l.n, 0), full = Math.round(32*k);
@@ -379,9 +435,9 @@ function crRulerHtml(L){
   return `<div class="cr-ruler" style="width:${L.W}px;height:${L.RULER}px"><svg width="${L.W}" height="${L.RULER}" aria-hidden="true" focusable="false">${g}</svg>${eras}<span class="cr-flag" id="crFlag" style="top:${L.RULER-22}px" hidden></span><div class="cr-corner" style="width:${L.labW}px;height:${L.RULER}px"></div></div>`;
 }
 function crFigHtml(L){
-  const items = CR.filter(e=>L.pos[e.id]).map(e=>{ const p = L.pos[e.id], ln = CR_LANE[e.lane], kd = CR_KINDS[e.kind];
-    return `<button class="cr-it${kd.data?' data':''}" data-cr="${e.id}" aria-pressed="${crSel===e.id}" style="left:${(p.x-8).toFixed(0)}px;top:${p.y}px;width:${p.w}px" title="${esc(e.t)}">${crIcon(e)}<span class="cr-y">${esc(crYear(e))}</span><span class="cr-t"><span class="cr-tt">${esc(e.t)}</span>${crBadges(e.m)}</span><span class="vh">，${ln.name}${kd.data?'・'+kd.name+'（本站資料）':''}${e.m.n?'，有'+crMediaText(e.m):''}</span></button>`; }).join('');
-  const labels = L.lanes.map(l=>`<div class="cr-lane" style="top:${l.top-L.RULER}px;height:${l.h}px;--c:${l.color}"><i class="cr-sw" aria-hidden="true"></i><b>${l.name}</b></div>`).join('');
+  const items = CR.filter(e=>L.pos[e.id]).map(e=>{ const p = L.pos[e.id], kd = CR_KINDS[e.kind];
+    return `<button class="cr-it${kd.data?' data':''}" data-cr="${e.id}" aria-pressed="${crSel===e.id}" style="left:${(p.x-8).toFixed(0)}px;top:${p.y}px;width:${p.w}px" title="${esc(e.t)}">${crIcon(e)}<span class="cr-y">${esc(crYear(e))}</span><span class="cr-t"><span class="cr-tt">${esc(e.t)}</span>${crBadges(e.m)}</span><span class="vh">${[crLaneName(e), kd.data && kd.name+'（本站資料）'].filter(Boolean).map(x=>'，'+x).join('')}${e.m.n?'，有'+crMediaText(e.m):''}</span></button>`; }).join('');
+  const labels = L.lanes.map(l=>`<div class="cr-lane" style="top:${l.top-L.RULER}px;height:${l.h}px;--c:${l.color}">${CR_V.byKind?'':'<i class="cr-sw" aria-hidden="true"></i>'}<b>${l.name}</b></div>`).join('');
   return `<div class="cr-scroll" id="crScroll" tabindex="0" aria-label="年表，可以左右捲動">
       <div class="cr-track" style="width:${L.W}px;height:${L.H}px">${crRulerHtml(L)}<div class="cr-lanecol" aria-hidden="true" style="width:${L.labW}px;height:${L.H-L.RULER}px">${labels}</div>${crSvgBg(L)}<i class="cr-guide" id="crGuide" hidden></i>${items}</div>
     </div>`;
@@ -393,14 +449,14 @@ function crGuide(id){
   if(!p){ g.hidden = fl.hidden = true; return; }
   g.hidden = fl.hidden = false;
   g.style.cssText = `left:${p.x.toFixed(0)}px;top:${CRL.RULER}px;height:${p.y+CRL.rowH/2-CRL.RULER}px`;
-  g.style.setProperty('--c', CR_LANE[e.lane].color);
+  g.style.setProperty('--c', crColor(e));
   fl.textContent = (e.when && /年代/.test(e.when)) ? e.when : (e.mo ? e.y+'.'+e.mo+(e.dd?'.'+e.dd:'') : e.y);
   fl.style.left = p.x.toFixed(0)+'px';
 }
 function crListHtml(){
   return `<div class="tlist plate">${CR_ERAS.map((r,i)=>{ const ev = crShown().filter(e=>e.era===i); if(!ev.length) return '';
-    return `<h2>${esc(r.name)}（${ev[0].y}–${ev[ev.length-1].y}）</h2><ol>${ev.map(e=>{ const ln = CR_LANE[e.lane], kd = CR_KINDS[e.kind];
-      return `<li><button class="litem" data-cr="${e.id}" aria-pressed="${crSel===e.id}" style="--c:${ln.color}"><span class="ld">${esc(crDate(e))}</span><b>${esc(e.t)}${e.m.n?`<small class="cr-lmm">${crMediaText(e.m)}</small>`:''}</b><span class="lm">${crIcon(e)}${ln.name}${kd.data?'・'+kd.name:''}</span></button></li>`; }).join('')}</ol>`; }).join('')}</div>`;
+    return `<h2>${esc(r.name)}（${ev[0].y}–${ev[ev.length-1].y}）</h2><ol>${ev.map(e=>{ const kd = CR_KINDS[e.kind];
+      return `<li><button class="litem" data-cr="${e.id}" aria-pressed="${crSel===e.id}" style="--c:${crColor(e)}"><span class="ld">${esc(crDate(e))}</span><b>${esc(e.t)}${e.m.n?`<small class="cr-lmm">${crMediaText(e.m)}</small>`:''}</b><span class="lm">${crIcon(e)}${[crLaneName(e), kd.data && kd.name].filter(Boolean).join('・')}</span></button></li>`; }).join('')}</ol>`; }).join('')}</div>`;
 }
 // 卡片裡的素材：順序固定（照片、剪報、訪談），沒有就不出現
 function crMediaHtml(e){
@@ -485,11 +541,11 @@ function crPanelHtml(){
   if(!crSel || !crById[crSel]){          // 手機的說明紙只在選了一件時出現，這段留給清單模式用
     const n = k => CR.filter(e=>e.lane===k).length, ev = CR.filter(e=>e.kind==='ev').length;
     return `<h2 tabindex="-1">大事年表</h2>
-      <div class="pn-desc"><p>臺灣的 ${ev} 件大事，加上本站剪報、研究與學生人數裡看到的 ${CR.length-ev} 個轉折點，放在同一把時間尺上。</p><p>分成政府與民間兩道。點任何一件，這裡會顯示日期、說明與來源。</p></div>
+      <div class="pn-desc"><p>臺灣的 ${ev} 件大事，加上本站剪報、研究與學生人數裡看到的 ${CR.length-ev} 個轉折點，放在同一把時間尺上。</p><p>目前的分道：${CR_V.tag} ${CR_V.name}。點任何一件，這裡會顯示日期、說明與來源。</p></div>
       <dl class="pn-sum">${CR_LANES.map(l=>`<div><dt>${l.name}</dt><dd>${n(l.k)} 件</dd></div>`).join('')}</dl>
       <p class="pn-start"><button class="btn solid" data-act="cr-first">從最早的開始看</button></p>`;
   }
-  const e = crById[crSel], ln = CR_LANE[e.lane], kd = CR_KINDS[e.kind], i = sh.indexOf(e), prev = sh[i-1], next = sh[i+1];
+  const e = crById[crSel], kd = CR_KINDS[e.kind], i = sh.indexOf(e), prev = sh[i-1], next = sh[i+1];
   const lines = e.x.split('\n'), k = lines.findIndex(s=>s.startsWith('備註：'));
   const main = (k<0?lines:lines.slice(0,k)).map(s=>`<p>${esc(s)}</p>`).join('');
   const memo = k<0 ? '' : `<div class="memo"><h3>備註</h3>${lines.slice(k).map((s,j)=>`<p>${esc(j?s:s.replace(/^備註：/,''))}</p>`).join('')}</div>`;
@@ -498,7 +554,7 @@ function crPanelHtml(){
   const easy = e.easy ? `<div class="cr-easy"><p class="cr-easy-h">易讀版${CR_EASY_DRAFT?'<span>草稿，待審閱</span>':''}</p>${e.easy.split('\n').map(t=>`<p>${esc(t)}</p>`).join('')}</div>` : '';
   const full = e.easy ? `<details class="cr-more"><summary>看完整說明</summary><div class="pn-desc">${main}${memo}</div></details>` : `<div class="pn-desc">${main}${memo}</div>`;
   const media = crMediaHtml(e);
-  return `<div class="cr-d-main"><p class="pn-kind">${crIcon(e)}${ln.name}・${kd.data?kd.name+'（本站資料）':esc(CR_CATS[e.cat])}・${esc(CR_ERAS[e.era].name)}</p>
+  return `<div class="cr-d-main"><p class="pn-kind">${crIcon(e)}${[crLaneName(e), kd.data?kd.name+'（本站資料）':esc(CR_CATS[e.cat]), esc(CR_ERAS[e.era].name)].filter(Boolean).join('・')}</p>
     <h2 tabindex="-1">${esc(e.t)}</h2>
     <p class="pn-date">${esc(crDate(e))}</p>
     ${easy}${full}
@@ -526,11 +582,12 @@ function crDrawPanel(){
 function crIntroHtml(){
   const n = (lane,kind) => CR.filter(e=>e.lane===lane && e.kind===kind).length, sw = l => `<i class="cr-sw" style="--c:${l.color}" aria-hidden="true"></i>`;
   return `<div class="cr-d-main"><h2 tabindex="-1">大事年表</h2>
-    <p class="cr-hint">臺灣智能障礙的大事，分成政府與民間兩道。點時間軸上的任何一件，這裡會顯示它的說明、照片、剪報與訪談；也可以從最早的一件開始，一件一件往下看。</p>
+    <p class="cr-hint"><b>版本 ${CR_V.tag}・${CR_V.name}</b>：${CR_V.desc}</p>
+    <p class="cr-hint">點時間軸上的任何一件，這裡會顯示它的說明、照片、剪報與訪談；也可以從最早的一件開始，一件一件往下看。</p>
     <p class="pn-start"><button class="btn solid" data-act="cr-first">從最早的開始看</button></p></div>
-    <div class="cr-d-side"><table class="cr-key"><caption class="vh">兩道各有幾件</caption>
-      <thead><tr><th scope="col"><span class="vh">種類</span></th>${CR_LANES.map(l=>`<th scope="col">${sw(l)}${l.name}<small>${l.sub}</small></th>`).join('')}</tr></thead>
-      <tbody>${Object.entries(CR_KINDS).map(([k,kd])=>`<tr><th scope="row">${icon(kd.shape,'var(--ink2)',!!kd.data)}${kd.name}${kd.data?'<small>本站資料</small>':''}</th>${CR_LANES.map(l=>`<td>${n(l.k,k)||'—'}</td>`).join('')}</tr>`).join('')}</tbody></table></div>`;
+    <div class="cr-d-side"><table class="cr-key"><caption class="vh">每一道各有幾件</caption>
+      <thead><tr><th scope="col"><span class="vh">種類</span></th>${CR_LANES.map(l=>`<th scope="col">${CR_V.byKind?'':sw(l)}${l.name}<small>${l.sub}</small></th>`).join('')}</tr></thead>
+      <tbody>${Object.entries(CR_KINDS).map(([k,kd])=>`<tr><th scope="row">${icon(kd.shape,CR_V.byKind?CR_KCOL[k]:'var(--ink2)',!!kd.data)}${kd.name}${kd.data?'<small>本站資料</small>':''}</th>${CR_LANES.map(l=>`<td>${n(l.k,k)||'—'}</td>`).join('')}</tr>`).join('')}</tbody></table></div>`;
 }
 // 讓時間軸與說明的開頭同時在畫面裡：時間軸盡量貼齊頁首下緣，說明的開頭也露出來，選到的那一件也留在畫面裡
 function crShowDetail(){
@@ -576,17 +633,20 @@ DRAW.chron = function(){
   view.innerHTML = `<div class="wrap cr-app">${pageHead('chron',{tools:`<button class="btn solid" data-act="cr-first">從最早的開始看</button><button class="btn" id="crBigBtn" data-act="cr-big" aria-pressed="${crBig}"><span class="big-a" aria-hidden="true">大</span>大字</button><button class="btn" id="crListBtn" data-act="cr-list" aria-pressed="${crList}">文字清單</button>`})}
     <div class="tl">
       <div class="tl-main">
+        <div class="cr-vers" id="crVers" role="group" aria-labelledby="crVersL"><span id="crVersL">分道的版本</span>${CR_VERS.map(v=>`<button data-cr-ver="${v.k}" aria-pressed="${v===CR_V}"><b>${v.tag}</b>${esc(v.name)}</button>`).join('')}</div>
         <div class="cr-bar">
         ${crList ? '' : `<div class="cr-nav" id="crEras" role="group" aria-label="跳到章節">${CR_ERAS.map((r,i)=>`<button data-cr-era="${i}">${esc(r.name)}</button>`).join('')}
             <span class="cr-arrows"><button class="btn rd" id="crPrev" data-act="cr-page" data-dir="-1" aria-label="往前（較早）">‹</button><button class="btn rd" id="crNext" data-act="cr-page" data-dir="1" aria-label="往後（較晚）">›</button></span></div>`}
         </div>
         ${crList ? crListHtml() : `<div class="plate cr-fig" id="crFig"></div>
           <section class="plate cr-detail" id="crDetail" aria-label="說明"></section>
-          <p class="cr-note">時間尺照年份比例畫，1980 年以前事件較少，尺比較緊。實心圓是大事，空心的是由本站資料算出的轉折點（方形剪報、三角形研究、六角形人數）。名稱後面的小圖示，表示這件事有照片、剪報或訪談。${[...PHOTOS,...CLIPS,...INTERVIEWS].some(x=>x.sample && (x.ev||x.evSegs)) ? '目前的照片、剪報內文與訪談是版面示意。' : ''}</p>`}
+          <p class="cr-note">時間尺照年份比例畫，1980 年以前事件較少，尺比較緊。上方的「分道的版本」可以換不同的分道方式。實心圓是大事，空心的是由本站資料算出的轉折點（方形剪報、三角形研究、六角形人數）。名稱後面的小圖示，表示這件事有照片、剪報或訪談。${[...PHOTOS,...CLIPS,...INTERVIEWS].some(x=>x.sample && (x.ev||x.evSegs)) ? '目前的照片、剪報內文與訪談是版面示意。' : ''}</p>`}
       </div>
     </div>${fixed ? '' : routeHtml()}</div>`;
   if(!crList) crDrawFig();
   crDrawPanel();
+  const vb = $('#crVers'), vp = vb && $('[aria-pressed="true"]', vb);          // 手機上版本按鈕放不下時，把選到的那個捲進來
+  if(vp && (vp.offsetLeft+vp.offsetWidth > vb.scrollLeft+vb.clientWidth || vp.offsetLeft < vb.scrollLeft)) vb.scrollLeft = vp.offsetLeft-vb.clientWidth/2+vp.offsetWidth/2;
 };
 LEAVE.push(()=>document.documentElement.classList.remove('cr-fixed'));
 function crDrawFig(){
@@ -659,12 +719,14 @@ function chronClick(e){
   if((el = t.closest('[data-cr-play]'))){ const [i,s0] = el.dataset.crPlay.split(':').map(Number); return PL.i===i ? plToggle(i) : plSeek(i, s0, true); }
   if((el = t.closest('[data-cr-ts]'))){ const [i,s0] = el.dataset.crTs.split(':').map(Number); return plSeek(i, s0, true); }
   if((el = t.closest('[data-cr-era]'))) return crToEra(+el.dataset.crEra);
+  if((el = t.closest('[data-cr-ver]'))){ crSetVer(el.dataset.crVer, true); crY = 0; render(); const b = $('#view [data-cr-ver="'+CR_V.k+'"]'); if(b) b.focus(); if(crSel) crReveal(crSel, 'auto'); return; }
   if((el = t.closest('[data-cr]'))){ if(crDragged) return; const id = el.dataset.cr; return crPick(crSel===id && el.closest('#crFig') ? null : id); }
 }
 view.addEventListener('click', chronClick);
 sheet.addEventListener('click', chronClick);
 TOURS.chron = () => [
-  {sel:crList?'.tlist':'#crFig', title:'年表', text:crList ? '全部的時間點依章節排成清單。' : '由左往右是由早到晚，上方是時間尺。上面一道是政府（法規、教育、統計，藍色），下面一道是民間（家長、學界、報紙，橘色）。實心圓形是大事；空心的方形、三角形、六角形是剪報、研究、人數裡看到的轉折點。可以左右捲動、拖曳，或用滾輪。'},
+  {sel:crList?'.tlist':'#crFig', title:'年表', text:crList ? '全部的時間點依章節排成清單。' : '由左往右是由早到晚，上方是時間尺。實心圓形是大事；空心的方形、三角形、六角形是剪報、研究、人數裡看到的轉折點。可以左右捲動、拖曳，或用滾輪。'},
+  {sel:'#crVers', title:'分道的版本', text:'同樣的事件，可以用五種方式分道：A 政府／民間、B 三個主題、C 大事／資料、D 不分道、E 誰的聲音。點一下就換，選到的那一件會留著，方便比較。'},
   {sel:'#crEras', title:'跳到章節', text:'1962 到 2024 年分成三章，點章節名稱就會捲到那裡；右邊的箭頭一次捲一段。'},
   {sel:'#view .cr-it', title:'點一件看說明', text:'滑鼠移上去，時間尺上會標出日期。點一下，時間軸下方會出現說明與來源，點別件就換成那一件；可以用「上一件／下一件」依時間一件一件看，按 Esc 或 × 關掉。'},
   {sel:'#view .cr-b', title:'照片、剪報、訪談', text:'名稱後面有小圖示的事件，點開說明可以看照片、讀剪報、聽訪談的片段。每一張照片都有畫面描述，每一段錄音都有逐字稿。'},

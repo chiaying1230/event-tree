@@ -6,6 +6,7 @@
   --c-iq:#2F6187; --c-ab:#247B62; --c-law:#8C6013;
   /* 年表兩道的顏色：政府藍、民間橘，用色盲模擬檢查過（ΔE 26，對背景至少 3:1） */
   --k-gov:#2A78D6; --k-civ:#C4501E;
+  --p-blue:#1995EA; --p-green:#0B6817; --p-ochre:#AE8A0D; --p-purple:#682DAC; --p-pink:#D4407C;
   --g1:#EFECE4; --g2:#E1DBCE; --g3:#D0C8B6; --g4:#BCB2A0;
   --d1:#376fb0; --d2:#c26a3d; --d3:#17998a; --d4:#a8841a; --d5:#b0668f; --d6:#5f8f3a; --rose:#2F6187; --link:#2F6187; --ctl:#79847E;
   --trk:rgba(31,42,46,.045); --trk2:rgba(31,42,46,.11); --band:.04;
@@ -20,6 +21,7 @@
   --bg:#171B1C; --paper:#20272A; --stage:#14181A; --ink:#E6EAE5; --ink2:#C7CFCB; --muted:#9BA6A8; --line:#384344; --line2:#4E5A5B;
   --c-iq:#82ABCB; --c-ab:#86C9B0; --c-law:#DDB35F;
   --k-gov:#3987E5; --k-civ:#D95926;
+  --p-blue:#1479B0; --p-green:#2CAB36; --p-ochre:#906B0A; --p-purple:#AC69E9; --p-pink:#D4407C;
   --g1:#282C2A; --g2:#333733; --g3:#41453D; --g4:#4F5348;
   --d1:#5289d4; --d2:#c9703f; --d3:#24a08e; --d4:#b08720; --d5:#bd689b; --d6:#6ea040; --rose:#82ABCB; --link:#82ABCB; --ctl:#7E8A8B;
   --trk:rgba(230,234,229,.07); --trk2:rgba(230,234,229,.15); --band:.065;
@@ -29,6 +31,7 @@
   --bg:#171B1C; --paper:#20272A; --stage:#14181A; --ink:#E6EAE5; --ink2:#C7CFCB; --muted:#9BA6A8; --line:#384344; --line2:#4E5A5B;
   --c-iq:#82ABCB; --c-ab:#86C9B0; --c-law:#DDB35F;
   --k-gov:#3987E5; --k-civ:#D95926;
+  --p-blue:#1479B0; --p-green:#2CAB36; --p-ochre:#906B0A; --p-purple:#AC69E9; --p-pink:#D4407C;
   --g1:#282C2A; --g2:#333733; --g3:#41453D; --g4:#4F5348;
   --d1:#5289d4; --d2:#c9703f; --d3:#24a08e; --d4:#b08720; --d5:#bd689b; --d6:#6ea040; --rose:#82ABCB; --link:#82ABCB; --ctl:#7E8A8B;
   --trk:rgba(230,234,229,.07); --trk2:rgba(230,234,229,.15); --band:.065;
@@ -275,6 +278,15 @@ body[data-only] .foot a{display:none}
 .cr-key tbody th{text-align:left;font-weight:400;display:flex;align-items:center;gap:7px}
 .cr-key tbody th small{color:var(--muted);font-size:.78rem}
 /* 顯示與章節排在同一行 */
+.cr-vers{position:relative;display:flex;align-items:center;gap:6px;margin-bottom:8px;overflow-x:auto;scrollbar-width:thin;padding-bottom:2px}
+.cr-vers > span{flex:none;font-size:.82rem;color:var(--muted);margin-right:4px}
+.cr-vers > button{flex:none;display:inline-flex;align-items:center;gap:6px;min-height:36px;padding:3px 12px 3px 4px;border:1.5px solid var(--line2);border-radius:999px;background:var(--paper);font:inherit;font-size:.88rem;color:var(--ink)}
+.cr-vers > button b{display:inline-grid;place-items:center;width:26px;height:26px;border-radius:50%;background:var(--trk2);font-size:.8rem}
+.cr-vers > button:hover{border-color:var(--ink2)}
+.cr-vers > button[aria-pressed="true"]{background:var(--ink);border-color:var(--ink);color:var(--paper);font-weight:700}
+.cr-vers > button[aria-pressed="true"] b{background:var(--paper);color:var(--ink)}
+html.cr-fixed .cr-vers{flex:none}
+html.cr-big .cr-vers > button{font-size:1.05rem;min-height:44px}
 .cr-bar{display:flex;flex-wrap:wrap;align-items:center;gap:6px 18px;margin-bottom:10px}
 .cr-bar .tl-filter,.cr-bar .cr-nav{margin-bottom:0}
 .cr-bar .cr-nav{flex:1 1 auto}
