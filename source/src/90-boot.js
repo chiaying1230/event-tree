@@ -44,7 +44,7 @@ window.addEventListener('resize', ()=>{ clearTimeout(rT); rT = setTimeout(()=>{
   const w = vw(), h = window.innerHeight; if(w===rW && h===rH) return; const wChanged = w!==rW; rW = w; rH = h;
   if(page==='tree'){ if(wChanged || (TL && TL.mode==='tree' && !tList)) render(); }
   else if(page==='photos') fitShow();
-  else if(page==='chron'){ if(wChanged) render(); }
+  else if(page==='chron'){ if(wChanged || crFixedOK()!==document.documentElement.classList.contains('cr-fixed')) render(); else { crSetTop(); if(CRL) crDrawFig(); } }          // 年表：高度改變時，固定或一般的版面可能要換
   else if(wChanged){ if(page==='news') render(); else fillCharts(); }
   syncMast();
 }, 140); });

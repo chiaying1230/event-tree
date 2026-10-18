@@ -219,16 +219,20 @@ body[data-only] .foot a{display:none}
 .cr-arrows{display:flex;gap:6px;margin-left:auto}
 .btn.rd{width:40px;min-height:40px;padding:0;font-size:1.25rem;line-height:1}
 .plate.cr-fig{position:relative;padding:0;overflow:hidden;margin-bottom:0}
-.cr-scroll{position:absolute;inset:0;overflow-x:auto;overflow-y:hidden;overscroll-behavior-x:contain;scrollbar-width:thin;cursor:grab}
+.cr-scroll{position:absolute;inset:0;overflow:auto;overscroll-behavior:contain;scrollbar-width:thin;cursor:grab}
 .cr-scroll.drag{cursor:grabbing;user-select:none}
 .cr-scroll:focus-visible{outline-offset:-4px}
 .cr-track{position:relative}
 .cr-bg{position:absolute;left:0;top:0}
-.cr-era{position:absolute;top:0;height:30px;pointer-events:none}
+.cr-era{position:absolute;top:0;z-index:1;height:30px;pointer-events:none}
 .cr-era span{position:sticky;left:76px;display:inline-block;padding:9px 0 0 10px;font-size:.78rem;font-weight:700;letter-spacing:.12em;color:var(--ink2);white-space:nowrap}
-.cr-labels{position:absolute;left:0;top:0;bottom:0;pointer-events:none}
-.cr-corner{position:absolute;left:0;top:0;background:var(--paper);border-right:1px solid var(--line)}
-.cr-lane{position:absolute;left:0;display:flex;flex-direction:column;justify-content:center;align-items:center;gap:2px;background:var(--paper);border-right:1px solid var(--line);border-top:1px solid var(--line);text-align:center;line-height:1.3}
+/* 時間尺黏在框的最上面、道名黏在左邊；年表比框高時只在框裡上下捲 */
+.cr-ruler{position:sticky;top:0;z-index:5;background:var(--paper)}
+.cr-ruler > svg{position:absolute;left:0;top:0}
+.cr-corner{position:sticky;left:0;z-index:2;background:var(--paper);border-right:1px solid var(--line)}
+.cr-lanecol{position:sticky;left:0;z-index:4;background:var(--paper);border-right:1px solid var(--line);pointer-events:none}
+.cr-bg{z-index:0}
+.cr-lane{position:absolute;left:0;right:0;display:flex;flex-direction:column;justify-content:center;align-items:center;gap:2px;background:var(--paper);border-top:1px solid var(--line);text-align:center;line-height:1.3}
 .cr-lane b{font-family:var(--serif);font-size:1rem}
 .cr-lane .ico{width:13px;height:13px}
 .cr-lane small{font-size:.7rem;color:var(--muted)}
@@ -245,7 +249,7 @@ body[data-only] .foot a{display:none}
 .cr-it[aria-pressed="true"] .ico *{stroke:var(--paper);stroke-width:1.5}
 .cr-it:focus-visible{outline-offset:1px}
 .cr-guide{position:absolute;width:0;border-left:2px solid var(--c,var(--ink));opacity:.7;pointer-events:none}
-.cr-flag{position:absolute;top:36px;transform:translateX(-50%);padding:1px 7px;border-radius:999px;background:var(--ink);color:var(--paper);font-size:.74rem;font-variant-numeric:tabular-nums;white-space:nowrap;pointer-events:none;z-index:2}
+.cr-flag{position:absolute;z-index:3;top:36px;transform:translateX(-50%);padding:1px 7px;border-radius:999px;background:var(--ink);color:var(--paper);font-size:.74rem;font-variant-numeric:tabular-nums;white-space:nowrap;pointer-events:none;z-index:2}
 .cr-note{margin-top:10px;font-size:.84rem;color:var(--muted)}
 /* 浮在事件旁邊的說明卡片 */
 /* 時間軸下方的說明區：左邊文字，右邊照片、剪報、訪談，下面上一件／下一件 */
@@ -256,6 +260,44 @@ body[data-only] .foot a{display:none}
 .cr-detail h2{font-family:var(--serif);font-weight:700;font-size:1.4rem;line-height:1.35;margin-top:2px;padding-right:40px}
 .cr-detail h2:focus{outline:none}
 .cr-detail .cr-d-main{max-width:44em}
+.cr-detail.intro{grid-template-columns:minmax(0,1fr) minmax(0,1fr)}
+.cr-detail.intro .pn-sum{margin-top:0}
+.cr-hint{margin-top:6px;color:var(--ink2);line-height:1.8}
+/* 顯示與章節排在同一行 */
+.cr-bar{display:flex;flex-wrap:wrap;align-items:center;gap:6px 18px;margin-bottom:10px}
+.cr-bar .tl-filter,.cr-bar .cr-nav{margin-bottom:0}
+.cr-bar .cr-nav{flex:1 1 auto}
+/* 畫面固定的版面：整頁剛好一個畫面高，頁面不捲；時間軸與說明區各自在框裡捲 */
+html.cr-fixed{overflow:hidden}
+html.cr-fixed .foot{display:none}
+html.cr-fixed #view{min-height:0}
+html.cr-fixed #view > .wrap.cr-app{height:calc(100vh - var(--cr-top,62px));height:calc(100dvh - var(--cr-top,62px));display:flex;flex-direction:column;padding-bottom:12px;overflow:hidden}
+html.cr-fixed.has-dock #view > .wrap.cr-app{height:calc(100vh - var(--cr-top,62px) - 76px);height:calc(100dvh - var(--cr-top,62px) - 76px)}
+html.cr-fixed .cr-app .ph{flex:none;padding:10px 0 8px}
+html.cr-fixed .cr-app .ph-over,html.cr-fixed .cr-app .ph-lead{display:none}
+html.cr-fixed .cr-app .ph h1{font-size:1.45rem}
+html.cr-fixed .cr-app .tl{flex:1 1 auto;min-height:0;display:flex;flex-direction:column}
+html.cr-fixed .cr-app .tl-main{flex:1 1 auto;min-height:0;display:flex;flex-direction:column}
+html.cr-fixed .cr-bar{flex:none;flex-wrap:nowrap;overflow-x:auto;scrollbar-width:thin;padding-bottom:2px}
+html.cr-fixed .cr-bar > *,html.cr-fixed .cr-bar .tl-filter{flex:none;flex-wrap:nowrap}
+html.cr-fixed .cr-bar .cr-nav{flex:1 0 auto;flex-wrap:nowrap}
+html.cr-fixed .cr-fig{flex:1 1 0;min-height:140px}
+html.cr-fixed .cr-detail{flex:0 0 40%;min-height:0;overflow:auto;margin-top:10px;overscroll-behavior:contain}
+@media (max-height:820px){ html.cr-fixed .cr-detail{flex-basis:33%} }
+@media (max-height:760px){ html.cr-fixed .cr-detail{flex-basis:28%} }
+/* 一排變矮時，字與上下的留白也小一點 */
+.cr-fig.compact .cr-it{padding-top:1px;padding-bottom:1px}
+.cr-fig.compact .cr-it .cr-t{font-size:.88rem}
+.cr-fig.compact .cr-era span{padding-top:5px}
+html.cr-fixed .cr-note{display:none}
+@media (max-width:719px){
+  html.cr-fixed .cr-detail{flex-basis:46%}
+  html.cr-fixed .cr-app .ph-row{flex-wrap:nowrap}
+  html.cr-fixed .cr-app .ph-tools{flex-wrap:nowrap;overflow-x:auto;scrollbar-width:none}
+  html.cr-fixed .cr-app .ph-tools .btn{flex:none}
+  html.cr-fixed .cr-app .ph h1{font-size:1.2rem;flex:none}
+  .cr-detail.intro{grid-template-columns:minmax(0,1fr)}
+}
 @media (max-width:899px){
   .plate.cr-detail{padding:18px 16px 14px}
   .cr-detail.has-media{grid-template-columns:minmax(0,1fr)}
