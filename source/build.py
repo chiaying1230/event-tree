@@ -91,6 +91,29 @@ wr(os.path.join(out, '.nojekyll'), '')          # 告訴 GitHub Pages 不用另�
 print('網站：%s（%d KB，%d 行）%s' % (os.path.join(out, 'index.html'), len(doc.encode('utf-8')) // 1024, doc.count('\n'),
                                '' if site else '　※ 沒有給 --site，分享預覽圖用的是相對網址'))
 
+# ---------- 時間軸版本比較頁（原型） ----------
+# 同一份 50 件事件，用不同的時間軸畫法呈現。沿用網站的資料、照片與訪談清單、顏色與字型；程式在 src-tl/。
+# 50 件事件裡，從剪報、研究、學生人數挑出的那些寫在 events.json（由 pick_events.py 產生）。
+EVENTS = json.loads(rd('events.json'))
+media = rd('src/60-media.js')
+media = media[:media.index('// 聲音波形的示意')]          # 只要最上面的照片與訪談清單
+tl_src = ''.join(rd(os.path.relpath(f, HERE)) for f in sorted(glob.glob(os.path.join(HERE, 'src-tl', '[0-9]*.js'))))
+assert tl_src.count('/*__EVENTS__*/') == 1
+tl_js = rd('src/00-data.js').replace('/*__DATA__*/', data) + media + tl_src.replace('/*__EVENTS__*/', dump(EVENTS).replace('</', '<\\/'))
+assert '</script' not in tl_js.lower()
+TL_TITLE = '時間軸版本比較｜' + TITLE
+tl_doc = ('<!DOCTYPE html>\n<html lang="zh-Hant-TW">\n<head>\n<meta charset="utf-8">\n'
+          '<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">\n'
+          '<title>' + TL_TITLE + '</title>\n'
+          '<meta name="description" content="同一份 %d 件智能障礙相關事件，用不同的時間軸畫法呈現，方便比較。">\n' % (len(EVENTS) + 18) +
+          '<meta name="color-scheme" content="light dark">\n<meta name="robots" content="noindex">\n'
+          '<link rel="icon" type="image/png" href="icon.png">\n'
+          + FONTS + '<style>' + css + rd('src-tl/style.css') + '</style>\n</head>\n<body>\n'
+          '<noscript><p style="margin:0;padding:24px;font:16px/1.8 sans-serif">這個頁面需要開啟瀏覽器的 JavaScript 才能顯示內容。</p></noscript>\n'
+          + rd('src-tl/body.html') + '\n<script>\n' + tl_js + '</script>\n</body>\n</html>\n')
+wr(os.path.join(out, 'timelines.html'), tl_doc)
+print('版本比較頁：%s（%d KB）' % (os.path.join(out, 'timelines.html'), len(tl_doc.encode('utf-8')) // 1024))
+
 # ---------- Google Apps Script（選用） ----------
 if args.gas:
     gdoc = ('<!DOCTYPE html>\n<html lang="zh-Hant-TW">\n<head>\n<base target="_top">\n<meta charset="utf-8">\n'

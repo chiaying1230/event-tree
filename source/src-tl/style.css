@@ -1,0 +1,126 @@
+/* ============ 時間軸版本比較頁：正式網站的 style.css 之外另外需要的樣式 ============ */
+:root{--c-news:var(--d2); --c-lit:var(--d5); --c-people:var(--d6)}
+.mast-sub{font-size:.92rem;color:var(--muted)}
+#main{padding-bottom:32px}
+html.calm *,html.calm *::before,html.calm *::after{animation-duration:.01ms!important;transition-duration:.01ms!important;scroll-behavior:auto!important}
+html{scroll-padding-top:calc(var(--mast) + 16px)}          /* 用 Tab 移動時，焦點不會被固定的頁首蓋住（2.4.11） */
+.tag{display:inline-block;margin:0 6px 0 0;padding:0 7px;border-radius:999px;background:var(--ink);color:var(--paper);font-size:.74rem;font-weight:700;letter-spacing:.06em;vertical-align:1px}
+
+/* 版本分頁列 */
+.vtabs{display:flex;gap:8px;overflow-x:auto;padding:4px 2px 10px;margin-bottom:6px;scrollbar-width:thin}
+.vtabs [role="tab"]{flex:none;display:flex;flex-direction:column;align-items:flex-start;gap:0;min-height:52px;padding:6px 16px;border:1.5px solid var(--ctl);border-radius:12px;background:var(--paper);color:var(--ink);text-align:left;line-height:1.35}
+.vtabs [role="tab"] small{font-size:.74rem;letter-spacing:.08em;color:var(--muted)}
+.vtabs [role="tab"] b{font-size:.96rem}
+.vtabs [role="tab"]:hover{border-color:var(--ink)}
+.vtabs [role="tab"][aria-selected="true"]{background:var(--ink);border-color:var(--ink);color:var(--paper)}
+.vtabs [role="tab"][aria-selected="true"] small{color:var(--paper);opacity:.85}
+.vinfo h2{font-family:var(--serif);font-size:1.2rem;margin-bottom:6px}
+.vinfo dl > div{display:grid;grid-template-columns:5.5em minmax(0,1fr);gap:12px;padding:5px 0;border-top:1px solid var(--line);font-size:.94rem}
+.vinfo dt{color:var(--muted)}
+.vkeys{margin-top:8px;font-size:.88rem;color:var(--ink2)}
+.tools{margin-bottom:6px}
+.jumpf{display:inline-flex;align-items:center;gap:8px;flex-wrap:wrap}
+.jumpf label{font-size:.88rem;color:var(--muted)}
+.jumpf input{width:7.5em;min-height:42px;padding:4px 12px;border:1.5px solid var(--ctl);border-radius:10px;background:var(--paper);color:var(--ink);font:inherit}
+.btn.sm{min-height:36px;padding:3px 13px;font-size:.88rem}
+
+/* 說明欄裡的媒材 */
+.pn-photo{margin-top:14px}
+.pn-photo img{display:block;width:100%;height:auto;border-radius:8px;border:1px solid var(--line)}
+.pn-photo figcaption{margin-top:6px;font-size:.86rem;line-height:1.6;color:var(--ink2)}
+.pn-photo figcaption small{display:block;color:var(--muted)}
+.evclips{list-style:none;padding:0}
+.evclips .clip{display:flex;flex-direction:column;gap:1px;margin-top:6px;padding:8px 12px;border:1px solid var(--line);border-left:3px solid var(--c-news);border-radius:8px;font-size:.9rem}
+.evclips .clip > span{color:var(--ink2);font-size:.84rem}
+.lm{color:var(--muted);font-size:.86rem}
+.pn-iv blockquote{margin:6px 0 0;padding:8px 12px;border-left:3px solid var(--line2);background:var(--bg);border-radius:0 8px 8px 0;font-size:.9rem;line-height:1.7}
+.pn-iv blockquote p+p{margin-top:4px}
+.pn-meta{margin-top:16px;font-size:.86rem}
+.pn-meta > div{display:grid;grid-template-columns:6.5em minmax(0,1fr);gap:10px;padding:5px 0;border-top:1px solid var(--line)}
+.pn-meta dt{color:var(--muted)}
+
+/* 版本 1：文字年表 */
+.vtext-lead{color:var(--muted);font-size:.92rem}
+.vtext h2{display:flex;align-items:baseline;gap:10px;font-family:var(--serif);font-size:1.2rem;margin-top:22px;padding-bottom:4px;border-bottom:1px solid var(--line2)}
+.vtext h2 small{font-family:var(--sans);font-size:.84rem;font-weight:400;color:var(--muted)}
+.tline{list-style:none;padding:0;margin:0}
+.tline > li{position:relative;padding:14px 0 14px 34px;border-bottom:1px solid var(--line)}
+.tline > li::before{content:"";position:absolute;left:9px;top:0;bottom:0;width:2px;background:var(--line2)}
+.tline > li.on{background:linear-gradient(90deg,color-mix(in srgb,var(--c) 10%,transparent),transparent 60%)}
+.tl-mk{position:absolute;left:2px;top:20px;display:grid;place-items:center;width:16px;height:16px;background:var(--paper)}
+.tline h3{display:flex;flex-wrap:wrap;align-items:baseline;gap:2px 12px;font-size:1.04rem;line-height:1.5}
+.tline h3 time{font-family:var(--serif);font-weight:600;color:var(--ink2);font-variant-numeric:tabular-nums;font-size:.95rem}
+.tline .sum{margin:4px 0 8px;font-size:.95rem}
+.xdetail{margin-top:10px;padding:12px 16px;border:1px solid var(--line);border-radius:10px;background:var(--paper)}
+
+/* 版本 2：表格年表 */
+.vtable{padding:6px 10px 12px}
+.tscroll{overflow-x:auto}
+.tbl.evt th,.tbl.evt td{text-align:left;vertical-align:top;white-space:normal}
+.tbl.evt td:first-child{white-space:nowrap;font-variant-numeric:tabular-nums}
+.tbl.evt tbody th{color:var(--ink);font-weight:500;white-space:normal;min-width:12em}
+.tbl.evt tr.on{background:var(--bg)}
+.sortb{min-height:36px;padding:2px 4px;border:0;background:none;font:inherit;font-weight:700;color:var(--ink2);text-align:left;white-space:nowrap}
+.sortb:hover{text-decoration:underline}
+.rowb{display:inline-flex;align-items:flex-start;gap:8px;min-height:32px;padding:3px 0;border:0;background:none;font:inherit;color:var(--link);text-align:left;text-decoration:underline;text-underline-offset:3px}
+.rowb .ico{margin-top:.35em;flex:none}
+.rowb[aria-pressed="true"]{font-weight:700;color:var(--ink)}
+
+/* 版本 6：多軌道 */
+.tsvg .hit{fill:transparent}
+.tsvg .ev:hover .mk,.tsvg .ev:focus-visible .mk{fill:var(--c)}
+.tsvg .ev:focus-visible .hit{stroke:var(--ink);stroke-width:2.5px}
+.tsvg .ev.on .lt{fill:var(--ink);font-weight:700}
+.tsvg.swim .ev .lt,.tsvg.zoom .card .lt{font-weight:500}
+.tsvg .lnm text,.tsvg text.lnm{font-weight:700;fill:var(--ink)}
+.tsvg .lnm .cnt{font-weight:400;fill:var(--muted)}
+.tsvg .yr,.tsvg .yr2{fill:var(--ink2);font-variant-numeric:tabular-nums}
+.tsvg .ev.on .yr2{fill:var(--ink)}
+.seg-lanes{margin-bottom:10px}
+.seg-lanes .bchip{min-height:40px}
+
+/* 版本 7：概覽＋細節 */
+.zbox{padding:16px 18px 18px}
+.zctl{display:flex;flex-wrap:wrap;align-items:center;gap:8px}
+.zctl .btn{min-width:46px}
+.zsel{display:inline-flex;align-items:center;gap:6px}
+.zsel select{min-height:42px;padding:4px 10px;border:1.5px solid var(--ctl);border-radius:10px;background:var(--paper);color:var(--ink);font:inherit;font-size:.92rem}
+.zrange{margin:10px 0 8px;font-size:.92rem;color:var(--ink2)}
+.zovw{margin-bottom:10px}
+.zovw .lbl{display:block;font-size:.8rem;margin-bottom:2px}
+.zov{display:block;cursor:pointer}
+.zov text{font-family:var(--sans)}
+.zov .zwin{fill:var(--ink);fill-opacity:.06;stroke:var(--ink);stroke-width:2px}
+.tsvg.zoom .card .lb{fill:var(--paper);fill-opacity:1;stroke:var(--line2)}
+.tsvg.zoom .card:hover .lb{stroke:var(--c)}
+.tsvg.zoom .card.on .lb{fill:var(--paper);stroke:var(--ink);stroke-width:2.5px}
+.tsvg.zoom .card.on .lt{fill:var(--ink)}
+.tsvg.zoom .card:focus-visible .lb{stroke:var(--ink);stroke-width:3px}
+.tsvg .clu{cursor:pointer;outline:none}
+.tsvg .clu .hit{fill:transparent;stroke:transparent;stroke-width:2.5px}
+.tsvg .clu .cb{fill:var(--paper);stroke:var(--ink2);stroke-width:1.5px}
+.tsvg .clu:hover .cb{stroke:var(--ink);stroke-width:2.5px}
+.tsvg .clu:focus-visible .hit{stroke:var(--ink)}
+
+/* 對照：原本的事件樹 */
+.vtree{padding:0;overflow:hidden}
+.vtree iframe{display:block;width:100%;height:min(1100px,calc(100vh - 160px));min-height:560px;border:0}
+.vtree p{padding:8px 16px 12px}
+
+@media (max-width:719px){
+  .mast-sub{padding-left:10px}
+  .vinfo dl > div{grid-template-columns:minmax(0,1fr);gap:0}
+  .zbox{padding:12px}
+  .tline > li{padding-left:30px}
+}
+@media (pointer:coarse){ .btn.sm,.sortb{min-height:44px} .rowb{min-height:44px} }
+.swlg .tchip.sm{cursor:default}
+.swnote{margin-top:8px}
+.vinfo summary{display:flex;flex-wrap:wrap;align-items:baseline;gap:4px 12px;min-height:44px;cursor:pointer;list-style-position:outside}
+.vinfo summary h2{display:inline;margin:0}
+.vinfo details[open] summary{margin-bottom:6px}
+@media (min-width:720px){ .vinfo summary .lm{display:none} }
+@media (max-width:719px){ .vinfo{padding:12px 16px} }
+.vinfo summary::-webkit-details-marker{display:none}
+.vinfo summary::before{content:"";align-self:center;width:0;height:0;border-left:7px solid var(--ink2);border-top:5px solid transparent;border-bottom:5px solid transparent;transition:transform .15s}
+.vinfo details[open] summary::before{transform:rotate(90deg)}
