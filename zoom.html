@@ -3001,7 +3001,7 @@ function zMain(W, o){
   const rows = Array.from({length:MAXR}, ()=>[]), card = {}, loose = [];
   ev.slice().sort((p,q)=>(q.id===S.e)-(p.id===S.e) || q.importance-p.importance || p.t-q.t).forEach(e=>{
     if(e.importance<need && e.id!==S.e){ loose.push(e); return; }
-    const w = Math.min(Math.max(textW(e.title,FS), textW(whenShort(e),FD))+24, big ? 260 : 210), x = Math.min(Math.max(X(e.t)-w/2, 2), W-w-2);
+    const w = Math.min(Math.max(textW(e.title,FS), textW(whenShort(e),FD)+15)+24, big ? 260 : 210), x = Math.min(Math.max(X(e.t)-w/2, 2), W-w-2);
     const r = rows.findIndex(R=>R.every(([p,q])=>x+w+6<p || x>q+6));
     if(r<0){ loose.push(e); return; } rows[r].push([x,x+w]); card[e.id] = {x, w, r};
   });
@@ -3011,9 +3011,9 @@ function zMain(W, o){
     const title = textW(e.title,FS)>c.w-22 ? [...e.title].slice(0, lim-1).join('')+'…' : e.title;
     const fade = o.prev && !o.prev.has(e.id) ? ` opacity="${(o.p||0).toFixed(2)}"` : '';
     items.push({x, html:`<g class="ev card${on?' on':''}" data-id="${e.id}" data-x="${f1(x)}" role="button" tabindex="-1" aria-pressed="${on}" aria-label="${esc(evLabel(e))}" style="--c:${colorOf(e.track)}"${fade}>
-      <line x1="${f1(x)}" x2="${f1(x)}" y1="${AXY}" y2="${y}" stroke="${colorOf(e.track)}" stroke-opacity=".7"/>${mark(TRACKS[e.track].shape, x, AXY, 5, 'class="mk"')}
+      ${on ? `<line x1="${f1(x)}" x2="${f1(x)}" y1="${AXY}" y2="${y}" stroke="${colorOf(e.track)}" stroke-width="1.6"/>${mark(TRACKS[e.track].shape, x, AXY, 5.5, 'class="mk"')}` : ''}
       <rect class="lb" x="${f1(c.x)}" y="${y}" width="${f1(c.w)}" height="${CH}" rx="7"/><rect x="${f1(c.x)}" y="${y}" width="4" height="${CH}" rx="2" fill="${colorOf(e.track)}"/>
-      <text class="yr" x="${f1(c.x+12)}" y="${y+(big?20:17)}" font-size="${FD}">${esc(whenShort(e))}</text><text class="lt" x="${f1(c.x+12)}" y="${y+(big?45:36)}" font-size="${FS}">${esc(title)}</text></g>`}); });
+      ${mark(TRACKS[e.track].shape, c.x+17, y+(big?15.5:12.5), big?4.6:4, `fill="${colorOf(e.track)}"`)}<text class="yr" x="${f1(c.x+27)}" y="${y+(big?20:17)}" font-size="${FD}">${esc(whenShort(e))}</text><text class="lt" x="${f1(c.x+12)}" y="${y+(big?45:36)}" font-size="${FS}">${esc(title)}</text></g>`}); });
   // 沒寫名稱的：靠得很近的合併成「＋N」，按了放大到那一段
   const L = loose.sort((p,q)=>p.t-q.t), groups = [];
   L.forEach(e=>{ const g0 = groups[groups.length-1]; if(g0 && X(e.t)-X(g0[g0.length-1].t)<30) g0.push(e); else groups.push([e]); });
@@ -3139,12 +3139,13 @@ document.addEventListener('change', e=>{
 
 /* ---------- 滑鼠與觸控板：Ctrl＋滾輪縮放、拖曳平移、雙擊放大 ---------- */
 const zYearAt = (clientX, svg, pad) => { const r = svg.getBoundingClientRect(); return Z.a+(Z.b-Z.a)*(clientX-r.left-pad)/(r.width-pad*2); };
-let zWheelT = null, zHintT = null;
+let zWheelT = null, zHintT = null, zHintSeen = (()=>{ try{ return localStorage.getItem('idtree.zoom.hint')==='1'; }catch(e){ return false; } })();
 document.addEventListener('wheel', e=>{
   const fig = e.target.closest && e.target.closest('#zFig, #zOvFig'); if(!fig) return;
   if(!(e.ctrlKey || e.metaKey)){
     // 沒按 Ctrl：照常捲動頁面，只提示怎麼縮放
-    const h = $('#zHint'); if(h){ h.hidden = false; clearTimeout(zHintT); zHintT = setTimeout(()=>{ h.hidden = true; }, 1600); }
+    // 只在第一次提示，之後不再跳出（記在瀏覽器裡；記不住時這次瀏覽也只出現一次）
+    const h = $('#zHint'); if(h && !zHintSeen){ zHintSeen = true; try{ localStorage.setItem('idtree.zoom.hint','1'); }catch(err){} h.hidden = false; clearTimeout(zHintT); zHintT = setTimeout(()=>{ h.hidden = true; }, 2600); }
     return; }
   e.preventDefault();
   zStop();
