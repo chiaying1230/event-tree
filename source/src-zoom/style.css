@@ -83,3 +83,5 @@ html.big .emeta{font-size:1rem}
 .cr-more summary::-webkit-details-marker{display:none}
 .cr-more summary::before{content:"";width:0;height:0;border-left:7px solid currentColor;border-top:5px solid transparent;border-bottom:5px solid transparent;transition:transform .15s}
 .cr-more[open] summary::before{transform:rotate(90deg)}
+.tsvg .clu.on .cb{fill:var(--ink);stroke:var(--ink)}
+.tsvg .clu.on text{fill:var(--paper)}

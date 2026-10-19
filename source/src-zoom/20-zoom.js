@@ -44,8 +44,9 @@ function zMain(W, o){
   g += `<line x1="0" x2="${W}" y1="${AXY}" y2="${AXY}" stroke="var(--ink)" stroke-opacity=".5" pointer-events="none"/>`;
   // 寫出名稱的卡片：重要的先排，最多 5 列；排不下的併到下方的記號或「＋N」
   const rows = Array.from({length:MAXR}, ()=>[]), card = {}, loose = [];
-  ev.slice().sort((p,q)=>(q.id===S.e)-(p.id===S.e) || q.importance-p.importance || p.t-q.t).forEach(e=>{
-    if(e.importance<need && e.id!==S.e){ loose.push(e); return; }
+  // 排法和選了哪一件無關：點了事件，卡片不會換位置
+  ev.slice().sort((p,q)=>q.importance-p.importance || p.t-q.t).forEach(e=>{
+    if(e.importance<need){ loose.push(e); return; }
     const w = Math.min(Math.max(textW(e.title,FS), textW(whenShort(e),FD)+15)+24, big ? 260 : 210), x = Math.min(Math.max(X(e.t)-w/2, 2), W-w-2);
     const r = rows.findIndex(R=>R.every(([p,q])=>x+w+6<p || x>q+6));
     if(r<0){ loose.push(e); return; } rows[r].push([x,x+w]); card[e.id] = {x, w, r};
@@ -66,7 +67,8 @@ function zMain(W, o){
     if(G.length===1){ const e = G[0], on = S.e===e.id;
       items.push({x, html:`<g class="ev dot${on?' on':''}" data-id="${e.id}" data-x="${f1(x)}" role="button" tabindex="-1" aria-pressed="${on}" aria-label="${esc(evLabel(e))}" data-tip="${esc(e.title+'\n'+whenLong(e))}" style="--c:${colorOf(e.track)}"><rect class="hit" x="${f1(x-13)}" y="${LY-13}" width="26" height="26" rx="6"/>${mark(TRACKS[e.track].shape, x, LY, 6, 'class="mk"')}</g>`}); return; }
     const t0 = G[0].t, t1 = G[G.length-1].t, ya = Math.floor(t0), yb = Math.floor(t1);
-    items.push({x, html:`<g class="clu" data-cluster="${f1(t0)}_${f1(t1)}" data-x="${f1(x)}" role="button" tabindex="-1" aria-label="${G.length} 件事件，${ya===yb ? ya+' 年' : ya+' 到 '+yb+' 年'}，按一下放大" data-tip="${esc(G.length+' 件事件（'+(ya===yb?ya:ya+'–'+yb)+'）\n'+G.slice(0,4).map(e=>e.title).join('\n')+(G.length>4?'\n…':'')+'\n按一下放大')}">
+    const has = G.some(e=>e.id===S.e);          // 選到的那件在這個「＋N」裡：只把它標出來，不拆開，位置才不會變
+    items.push({x, html:`<g class="clu${has?' on':''}" data-cluster="${f1(t0)}_${f1(t1)}" data-x="${f1(x)}" role="button" tabindex="-1" aria-label="${G.length} 件事件${has?'（包含選到的「'+esc(byId[S.e].title)+'」）':''}，${ya===yb ? ya+' 年' : ya+' 到 '+yb+' 年'}，按一下放大" data-tip="${esc(G.length+' 件事件（'+(ya===yb?ya:ya+'–'+yb)+'）\n'+G.slice(0,4).map(e=>e.title).join('\n')+(G.length>4?'\n…':'')+'\n按一下放大')}">
       <circle class="hit" cx="${f1(x)}" cy="${LY}" r="15"/><circle cx="${f1(x)}" cy="${LY}" r="13" class="cb"/><text x="${f1(x)}" y="${LY+4.5}" text-anchor="middle" font-size="12" font-weight="700">+${G.length}</text></g>`}); });
   // 跨度 12 年以下：加一條剪報的刻痕，看出那幾年的報導多寡
   let NY = LY;

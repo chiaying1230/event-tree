@@ -51,7 +51,7 @@ function focusKey(){
 function restoreFocus(k){ if(!k) return; let el; try{ el = $$(k).find(x=>x.matches('a,button,input,select,summary,[tabindex]')); }catch(e){} if(el && el!==document.activeElement){ try{ el.focus({preventScroll:true}); }catch(e){} } }
 function render(o){
   o = o||{};
-  const fk = o.focus===false ? null : focusKey(), area = $('#zArea');
+  const fk = o.focus===false ? null : focusKey(), area = $('#zArea'), sy = window.scrollY;
   document.documentElement.classList.toggle('big', big);
   document.documentElement.classList.toggle('calm', calm());
   $('#tools').innerHTML = toolsHtml();
@@ -61,6 +61,8 @@ function render(o){
   area.style.minHeight = '';
   $('#card').innerHTML = cardHtml();
   restoreFocus(fk);
+  // 重畫的過程中頁面可能短暫變短，瀏覽器會把捲動位置往上拉；畫完放回原處，時間軸才不會跑掉
+  if(window.scrollY!==sy) window.scrollTo(0, sy);
 }
 const say = t => { const s = $('#status'); s.textContent = ''; setTimeout(()=>{ s.textContent = t; }, 60); };
 // 把元素捲到看得到的地方，不被固定的頁首遮住（2.4.11）
@@ -68,14 +70,13 @@ function reveal(el, where){
   const r = el.getBoundingClientRect(), top = mastBottom()+12, bot = window.innerHeight-12;
   if(r.top<top || r.bottom>bot) window.scrollTo({top:Math.max(0, window.scrollY+r.top-top-(where==='top' ? 0 : Math.max(0,(bot-top-r.height)/2))), behavior:calm()?'auto':'smooth'});
 }
-// 選一件事。o.key：用鍵盤選的，焦點移到介紹卡的標題；用滑鼠選的，只把介紹卡捲到看得見
+// 選一件事。o.key：用鍵盤選的，焦點移到介紹卡的標題；用滑鼠選的，畫面不捲動，時間軸留在原處
 function select(id, o){
   o = o||{};
   S.e = id||null; writeUrl(); render();
   if(!S.e) return;
   const c = $('#card .ecard'); if(!c) return;
   if(o.key){ const h = $('#card h2'); if(h){ try{ h.focus({preventScroll:true}); }catch(e){} } reveal(c, 'top'); }
-  else { const r = c.getBoundingClientRect(); if(r.top>window.innerHeight-120) reveal(c, 'top'); }
 }
 function unselect(){ const id = S.e; select(null); const el = id && $('#zFig [data-id="'+id+'"]'); if(el){ $$('#zFig [data-x]').forEach(x=>x.setAttribute('tabindex', x===el?'0':'-1')); try{ el.focus({preventScroll:true}); }catch(e){} } }
 
