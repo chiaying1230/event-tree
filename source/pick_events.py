@@ -94,7 +94,8 @@ def cnt_event(k, y, title, why, summary, src, imp=1):
 fmt = lambda n: '{:,}'.format(n)
 M = CNT['mohw']; my = sorted(M, key=int)
 add(cnt_event('pm0', my[0], '衛福部統計起點', '衛福部數據的第一年', '%s 年底，全台領有身心障礙證明的智能障礙者 %s 人。' % (my[0], fmt(M[my[0]])), '衛福部全台數據'))
-add(cnt_event('pm1', my[-1], '智能障礙總人數破十萬', '衛福部數據的最後一年', '%s 年底 %s 人，比 %s 年增加 %d%%。' % (my[-1], fmt(M[my[-1]]), my[0], round((M[my[-1]] - M[my[0]]) / M[my[0]] * 100)), '衛福部全台數據', 2))
+y10 = next(y for y in my if M[y] >= 100000)          # 第一次超過十萬人的那一年
+add(cnt_event('pm1', y10, '智能障礙總人數破十萬', '衛福部數據第一次超過十萬人', '%s 年底 %s 人，第一次超過十萬人。到 %s 年底是 %s 人。' % (y10, fmt(M[y10]), my[-1], fmt(M[my[-1]])), '衛福部全台數據', 2))
 N = CNT['nation']; ny = sorted(N['ID'], key=int)
 add(cnt_event('pn0', ny[0], '通報網學生人數起點', '通報網數據的第一年', '%s 年，全台特教通報網的智能障礙學生 %s 人。' % (ny[0], fmt(N['ID'][ny[0]])), '通報網全台數據'))
 pk = max(ny, key=lambda y: N['ID'][y])

@@ -80,7 +80,7 @@ python3 source/build.py
 - **50 件事件**：重大事件表的 18 件（`source/src/00-data.js`），加上從剪報、研究、學生人數挑出的 32 件里程碑（`source/events.json`）。
 - **挑選事件**：執行 `python3 source/pick_events.py`，會重新產生 `events.json`，並印出每一件的挑選理由。想加入或拿掉某一件，改檔案開頭的 `ADD_NEWS` 或 `SKIP`。
 - **照片與訪談**：沿用 `source/src/60-media.js` 的清單。現在是示意資料，放入真實資料後，比較頁也會跟著換。訪談可以加上 `event:'事件 id'`，指定要掛在哪一件事上。
-- **可縮放時間軸** `zoom.html`：版本 7 單獨一頁，畫面比較大。按住 Ctrl（Mac 為 ⌘）滾動滾輪，或用觸控板兩指縮放；拖曳可以左右移動；雙擊可以放大。這些操作也都有按鈕、滑桿可以做到。網址會記住目前的範圍（例如 `zoom.html?from=1985&to=1995`）。
+- **可縮放時間軸** `zoom.html`：獨立的一頁，不連到其他頁面，也不需要另外的圖檔，單獨拿去任何地方都能打開。時間軸占滿畫面，點一件事，下方會出現它的介紹；介紹最上面是易讀版（草稿，待審閱，文字在 `source/src-zoom/10-easy.js`，審閱後把 `EASY_DRAFT` 改成 `false`）。有「易讀版」「大字」「減少動態」開關。按住 Ctrl（Mac 為 ⌘）滾動滾輪或觸控板兩指縮放、拖曳移動、雙擊放大，也都有按鈕和滑桿可以做到。網址會記住範圍與選到的事件（例如 `zoom.html?e=l3&from=1985&to=1995`）。程式在 `source/src-zoom/`。
 - **程式**：在 `source/src-tl/`，一個版本一個檔案。執行 `python3 source/build.py` 會同時產生 `index.html`、`timelines.html` 和 `zoom.html`。
 
 ## 公開之前請確認

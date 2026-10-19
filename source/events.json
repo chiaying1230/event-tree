@@ -365,6 +365,19 @@
   "source": "通報網全台數據"
  },
  {
+  "id": "pm1",
+  "type": "people",
+  "track": "people",
+  "date": "2014",
+  "precision": "year",
+  "certainty": "sure",
+  "title": "智能障礙總人數破十萬",
+  "importance": 2,
+  "why": "衛福部數據第一次超過十萬人",
+  "summary": "2014 年底 100,588 人，第一次超過十萬人。到 2024 年底是 102,556 人。",
+  "source": "衛福部全台數據"
+ },
+ {
   "id": "pxa",
   "type": "people",
   "track": "people",
@@ -403,19 +416,6 @@
   "why": "台北市特教學校數據的頭尾",
   "summary": "台北市四所特教學校的智能障礙學生，從 2003 年 259 人減為 2023 年 83 人。",
   "source": "台北市年報"
- },
- {
-  "id": "pm1",
-  "type": "people",
-  "track": "people",
-  "date": "2024",
-  "precision": "year",
-  "certainty": "sure",
-  "title": "智能障礙總人數破十萬",
-  "importance": 2,
-  "why": "衛福部數據的最後一年",
-  "summary": "2024 年底 102,556 人，比 1999 年增加 51%。",
-  "source": "衛福部全台數據"
  },
  {
   "id": "pn1",

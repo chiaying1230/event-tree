@@ -121,7 +121,7 @@ function zZoomAt(t, factor, o){ const s = Math.min(Math.max(zSpan()*factor, ZMIN
 const zCenter = () => (Z.a+Z.b)/2;
 const zFocusFig = () => { const t = $('#zFig [tabindex="0"]'); if(t) t.focus({preventScroll:true}); };
 
-VERS.push({id:'zoom', no:'版本 7', name:'概覽＋細節＋語意縮放', solo:'zoom.html',
+VERS.push({id:'zoom', no:'版本 7', name:'概覽＋細節＋語意縮放',
   basis:'Shneiderman「先概覽、縮放與篩選、再按需求看細節」；第一部分 3.2 概覽＋細節、3.3 語意縮放、3.5 群集與重要度分級；第三部分 4.5 的 2.5.7 拖曳替代。',
   fit:'200 件以上、以探索為主；這裡加上 738 篇剪報的密度，示範資料量大時的做法。',
   tradeoff:'一次只看一段時間，要靠概覽列維持方位感；操作比其他版本多一層。',

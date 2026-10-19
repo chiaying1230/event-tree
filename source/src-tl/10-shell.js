@@ -12,7 +12,7 @@ const mastBottom = () => Math.round(mastEl.getBoundingClientRect().bottom);
 /* ---------- 網址：?v=版本&e=事件&tracks=軌道 ---------- */
 function readUrl(){
   const q = new URLSearchParams(location.search);
-  S.v = SOLO || (VERS.some(x=>x.id===q.get('v')) ? q.get('v') : VERS[0].id);
+  S.v = VERS.some(x=>x.id===q.get('v')) ? q.get('v') : VERS[0].id;
   if(ver().urlIn) ver().urlIn(q);
   S.e = byId[q.get('e')] ? q.get('e') : null;
   const t = (q.get('tracks')||'').split(',').filter(k=>TRACKS[k]);
@@ -21,7 +21,7 @@ function readUrl(){
 }
 function writeUrl(push){
   const q = new URLSearchParams();
-  if(!SOLO) q.set('v', S.v); if(S.e) q.set('e', S.e);
+  q.set('v', S.v); if(S.e) q.set('e', S.e);
   if(ver().urlOut) Object.entries(ver().urlOut()).forEach(([k,v])=>q.set(k,v)); if(!allTracks()) q.set('tracks', TK.filter(k=>S.tracks.has(k)).join(','));
   const url = location.pathname+'?'+q.toString()+location.hash;
   try{ window.history[push?'pushState':'replaceState'](null, '', url); }catch(e){}
@@ -29,19 +29,16 @@ function writeUrl(push){
 
 /* ---------- 版本分頁列（左右鍵換分頁，Home／End 到頭尾） ---------- */
 function tabsHtml(){
-  if(SOLO) return '';
   return VERS.map((x,i)=>`<button role="tab" id="tab-${x.id}" data-v="${x.id}" aria-selected="${x.id===S.v}" aria-controls="vpanel" tabindex="${x.id===S.v?0:-1}"><small>${x.no||''}</small><b>${esc(x.name)}</b></button>`).join('');
 }
 // 版本說明：手機上預設收起來，時間軸才不會被推到很下面；打開後換版本也保持打開
 const VI = {open:false};
 function infoHtml(){
   const x = ver();
-  if(SOLO) return `<details${VI.open ? ' open' : ''}><summary><h2>關於這個時間軸</h2><span class="lm">研究依據、怎麼操作</span></summary><dl>
-    <div><dt>研究依據</dt><dd>${esc(x.basis)}</dd></div><div><dt>取捨</dt><dd>${esc(x.tradeoff)}</dd></div></dl><p class="vkeys"><b>操作：</b>${esc(x.keys)}</p><p class="vkeys"><a href="timelines.html?v=${x.id}">和其他時間軸版本比較</a></p></details>`;
   return `<details${vw()>=720 || VI.open ? ' open' : ''}><summary><h2>${esc(x.name)}</h2><span class="lm">研究依據、適合的情境與取捨</span></summary><dl>
     <div><dt>研究依據</dt><dd>${esc(x.basis)}</dd></div>
     <div><dt>適合</dt><dd>${esc(x.fit)}</dd></div>
-    <div><dt>取捨</dt><dd>${esc(x.tradeoff)}</dd></div></dl>${x.keys ? `<p class="vkeys"><b>操作：</b>${esc(x.keys)}</p>` : ''}${x.solo ? `<p class="vkeys"><a href="${x.solo}">單獨開啟這個版本（畫面更大）</a></p>` : ''}</details>`;
+    <div><dt>取捨</dt><dd>${esc(x.tradeoff)}</dd></div></dl>${x.keys ? `<p class="vkeys"><b>操作：</b>${esc(x.keys)}</p>` : ''}</details>`;
 }
 /* ---------- 工具列：軌道篩選、跳到某一年、減少動態 ---------- */
 function toolsHtml(){
@@ -127,14 +124,14 @@ function render(o){
   wrapEl.classList.toggle('wide', wide);
   const old = $('#panel'); if(old && !wide) old.remove();
   if(wide && !$('#panel')) wrapEl.insertAdjacentHTML('beforeend', '<aside class="panel plate" id="panel" aria-label="事件說明"></aside>');
-  if(SOLO){ view.removeAttribute('role'); view.setAttribute('aria-label', '可縮放時間軸'); } else view.setAttribute('aria-labelledby', 'tab-'+x.id);
+  view.setAttribute('aria-labelledby', 'tab-'+x.id);
   view.className = 'tl-main v-'+x.id;
   // 重畫時先撐住原本的高度，頁面才不會在內容清空的一瞬間變短、把捲動位置拉回上面
   view.style.minHeight = view.offsetHeight+'px';
   x.draw(view);
   view.style.minHeight = '';
   drawPanel();
-  document.title = SOLO ? '可縮放時間軸｜智能障礙事件樹' : x.name+'｜時間軸版本比較｜智能障礙事件樹';
+  document.title = x.name+'｜時間軸版本比較｜智能障礙事件樹';
   restoreFocus(fk);
 }
 const say = t => { const s = $('#status'); s.textContent = ''; setTimeout(()=>{ s.textContent = t; }, 60); };
@@ -223,7 +220,7 @@ document.addEventListener('focusout', hideTip);
 document.addEventListener('keydown', e=>{ if(e.key==='Escape') hideTip(); }, true);
 window.addEventListener('scroll', hideTip, true);
 
-document.addEventListener('toggle', e=>{ if(e.target.closest && e.target.closest('#vinfo') && (SOLO || vw()<720)) VI.open = e.target.open; }, true);
+document.addEventListener('toggle', e=>{ if(e.target.closest && e.target.closest('#vinfo') && vw()<720) VI.open = e.target.open; }, true);
 window.addEventListener('popstate', ()=>{ readUrl(); render({focus:false}); });
 let rT, rW = vw();
 window.addEventListener('resize', ()=>{ clearTimeout(rT); rT = setTimeout(()=>{ if(vw()!==rW){ rW = vw(); render(); } }, 140); });

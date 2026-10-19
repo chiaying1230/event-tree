@@ -99,26 +99,34 @@ media = rd('src/60-media.js')
 media = media[:media.index('// 聲音波形的示意')]          # 只要最上面的照片與訪談清單
 tl_src = ''.join(rd(os.path.relpath(f, HERE)) for f in sorted(glob.glob(os.path.join(HERE, 'src-tl', '[0-9]*.js'))))
 assert tl_src.count('/*__EVENTS__*/') == 1
-tl_base = rd('src/00-data.js').replace('/*__DATA__*/', data) + media
-def tl_page(fname, solo, title, desc):
-    # solo：只放一個版本（例如 'zoom'），不畫版本分頁
-    js = tl_base + 'const SOLO = %s;\n' % (dump(solo) if solo else 'null') + tl_src.replace('/*__EVENTS__*/', dump(EVENTS).replace('</', '<\\/'))
+tl_data = rd('src/00-data.js').replace('/*__DATA__*/', data)
+tl_events = rd('src-tl/00-base.js').replace('/*__EVENTS__*/', dump(EVENTS).replace('</', '<\\/'))
+def tl_page(fname, js, body, extra_css, title, desc, icon):
     assert '</script' not in js.lower()
     doc = ('<!DOCTYPE html>\n<html lang="zh-Hant-TW">\n<head>\n<meta charset="utf-8">\n'
            '<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">\n'
            '<title>' + title + '</title>\n'
            '<meta name="description" content="' + att(desc) + '">\n'
            '<meta name="color-scheme" content="light dark">\n<meta name="robots" content="noindex">\n'
-           '<link rel="icon" type="image/png" href="icon.png">\n'
-           + FONTS + '<style>' + css + rd('src-tl/style.css') + '</style>\n</head>\n<body>\n'
+           '<link rel="icon" ' + icon + '>\n'
+           + FONTS + '<style>' + css + extra_css + '</style>\n</head>\n<body>\n'
            '<noscript><p style="margin:0;padding:24px;font:16px/1.8 sans-serif">這個頁面需要開啟瀏覽器的 JavaScript 才能顯示內容。</p></noscript>\n'
-           + rd('src-tl/body.html') + '\n<script>\n' + js + '</script>\n</body>\n</html>\n')
+           + body + '\n<script>\n' + js + '</script>\n</body>\n</html>\n')
     wr(os.path.join(out, fname), doc)
     print('%s：%s（%d KB）' % (title.split('｜')[0], os.path.join(out, fname), len(doc.encode('utf-8')) // 1024))
 NEV = len(EVENTS) + 18
-tl_page('timelines.html', None, '時間軸版本比較｜' + TITLE, '同一份 %d 件智能障礙相關事件，用不同的時間軸畫法呈現，方便比較。' % NEV)
-# 版本 7 單獨一頁：可縮放的時間軸
-tl_page('zoom.html', 'zoom', '可縮放時間軸｜' + TITLE, '%d 件智能障礙相關事件畫在同一條可縮放的時間軸上，放大會寫出更多事件。' % NEV)
+tl_page('timelines.html', tl_data + media + tl_src.replace('/*__EVENTS__*/', dump(EVENTS).replace('</', '<\\/')),
+        rd('src-tl/body.html'), rd('src-tl/style.css'),
+        '時間軸版本比較｜' + TITLE, '同一份 %d 件智能障礙相關事件，用不同的時間軸畫法呈現，方便比較。' % NEV, 'type="image/png" href="icon.png"')
+
+# ---------- 可縮放時間軸（獨立的一頁） ----------
+# 不連到其他頁面、不另外讀圖檔，這一個檔案拿到哪裡都能打開。照片與訪談不放在這一頁。
+# 程式在 src-zoom/；事件資料與畫記號的工具和比較頁共用（src-tl/00-base.js）。
+zoom_js = (tl_data + 'const PHOTOS = [], INTERVIEWS = [];\n' + tl_events
+           + ''.join(rd(os.path.relpath(f, HERE)) for f in sorted(glob.glob(os.path.join(HERE, 'src-zoom', '[0-9]*.js')))))
+tl_page('zoom.html', zoom_js, rd('src-zoom/body.html'), rd('src-zoom/style.css'),
+        '可縮放時間軸｜' + TITLE, '%d 件智能障礙相關事件畫在同一條可縮放的時間軸上，放大會寫出更多事件；每件事都有易讀版。' % NEV,
+        'type="image/svg+xml" href="' + icon_uri + '"')
 
 # ---------- Google Apps Script（選用） ----------
 if args.gas:

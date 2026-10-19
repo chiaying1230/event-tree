@@ -4,10 +4,10 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>可縮放時間軸｜智能障礙事件樹</title>
-<meta name="description" content="50 件智能障礙相關事件畫在同一條可縮放的時間軸上，放大會寫出更多事件。">
+<meta name="description" content="50 件智能障礙相關事件畫在同一條可縮放的時間軸上，放大會寫出更多事件；每件事都有易讀版。">
 <meta name="color-scheme" content="light dark">
 <meta name="robots" content="noindex">
-<link rel="icon" type="image/png" href="icon.png">
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg%20xmlns=%22http://www.w3.org/2000/svg%22%20viewBox=%220%200%2064%2064%22%3E%3Crect%20width=%2264%22%20height=%2264%22%20rx=%2214%22%20fill=%22%2317262D%22/%3E%3Cpath%20d=%22M32%2051C32%2039%2019%2041%2019%2025%22%20fill=%22none%22%20stroke=%22%238FB6D4%22%20stroke-width=%224.5%22%20stroke-linecap=%22round%22/%3E%3Cpath%20d=%22M32%2051C32%2041%2045%2043%2045%2031%22%20fill=%22none%22%20stroke=%22%23DDB565%22%20stroke-width=%224.5%22%20stroke-linecap=%22round%22/%3E%3Ccircle%20cx=%2219%22%20cy=%2219%22%20r=%225.5%22%20fill=%22%2317262D%22%20stroke=%22%238FB6D4%22%20stroke-width=%223.5%22/%3E%3Cpath%20d=%22M45%2017.500l7%207-7%207-7-7z%22%20fill=%22%2317262D%22%20stroke=%22%23DDB565%22%20stroke-width=%223.5%22%20stroke-linejoin=%22round%22/%3E%3Ccircle%20cx=%2232%22%20cy=%2251%22%20r=%224.5%22%20fill=%22%23EEF1EB%22/%3E%3C/svg%3E">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@600;700&family=Noto+Sans+TC:wght@400;500;700&family=LXGW+WenKai+TC:wght@400;700&display=swap" rel="stylesheet">
@@ -629,103 +629,50 @@ html.has-dock{scroll-padding-bottom:88px}
   .hero .grow{stroke-dashoffset:0;animation:none}
   .hero .pop{opacity:1;animation:none}
 }
-/* ============ 時間軸版本比較頁：正式網站的 style.css 之外另外需要的樣式 ============ */
+/* ============ 可縮放時間軸：正式網站的 style.css 之外另外需要的樣式 ============ */
 :root{--c-news:var(--d2); --c-lit:var(--d5); --c-people:var(--d6)}
+html{scroll-padding-top:calc(var(--mast) + 16px)}          /* 用 Tab 移動時，焦點不會被固定的頁首蓋住（2.4.11） */
+html.calm *,html.calm *::before,html.calm *::after{animation-duration:.01ms!important;transition-duration:.01ms!important;scroll-behavior:auto!important}
 .mast-sub{font-size:.92rem;color:var(--muted)}
 #main{padding-bottom:32px}
-html.calm *,html.calm *::before,html.calm *::after{animation-duration:.01ms!important;transition-duration:.01ms!important;scroll-behavior:auto!important}
-html{scroll-padding-top:calc(var(--mast) + 16px)}          /* 用 Tab 移動時，焦點不會被固定的頁首蓋住（2.4.11） */
-.tag{display:inline-block;margin:0 6px 0 0;padding:0 7px;border-radius:999px;background:var(--ink);color:var(--paper);font-size:.74rem;font-weight:700;letter-spacing:.06em;vertical-align:1px}
-
-/* 版本分頁列 */
-.vtabs{display:flex;gap:8px;overflow-x:auto;padding:4px 2px 10px;margin-bottom:6px;scrollbar-width:thin}
-.vtabs [role="tab"]{flex:none;display:flex;flex-direction:column;align-items:flex-start;gap:0;min-height:52px;padding:6px 16px;border:1.5px solid var(--ctl);border-radius:12px;background:var(--paper);color:var(--ink);text-align:left;line-height:1.35}
-.vtabs [role="tab"] small{font-size:.74rem;letter-spacing:.08em;color:var(--muted)}
-.vtabs [role="tab"] b{font-size:.96rem}
-.vtabs [role="tab"]:hover{border-color:var(--ink)}
-.vtabs [role="tab"][aria-selected="true"]{background:var(--ink);border-color:var(--ink);color:var(--paper)}
-.vtabs [role="tab"][aria-selected="true"] small{color:var(--paper);opacity:.85}
-.vinfo h2{font-family:var(--serif);font-size:1.2rem;margin-bottom:6px}
-.vinfo dl > div{display:grid;grid-template-columns:5.5em minmax(0,1fr);gap:12px;padding:5px 0;border-top:1px solid var(--line);font-size:.94rem}
-.vinfo dt{color:var(--muted)}
-.vkeys{margin-top:8px;font-size:.88rem;color:var(--ink2)}
-.tools{margin-bottom:6px}
+#zArea:focus{outline:none}
+.ph{padding:20px 0 12px}
+.tools{margin-bottom:4px}
+.tools .sep{width:1px;align-self:stretch;margin:4px 2px;background:var(--line2)}
 .jumpf{display:inline-flex;align-items:center;gap:8px;flex-wrap:wrap}
 .jumpf label{font-size:.88rem;color:var(--muted)}
 .jumpf input{width:7.5em;min-height:42px;padding:4px 12px;border:1.5px solid var(--ctl);border-radius:10px;background:var(--paper);color:var(--ink);font:inherit}
+.big-a{font-family:var(--serif);font-weight:700;font-size:1.05em}
 .btn.sm{min-height:36px;padding:3px 13px;font-size:.88rem}
 
-/* 說明欄裡的媒材 */
-.pn-photo{margin-top:14px}
-.pn-photo img{display:block;width:100%;height:auto;border-radius:8px;border:1px solid var(--line)}
-.pn-photo figcaption{margin-top:6px;font-size:.86rem;line-height:1.6;color:var(--ink2)}
-.pn-photo figcaption small{display:block;color:var(--muted)}
-.evclips{list-style:none;padding:0}
-.evclips .clip{display:flex;flex-direction:column;gap:1px;margin-top:6px;padding:8px 12px;border:1px solid var(--line);border-left:3px solid var(--c-news);border-radius:8px;font-size:.9rem}
-.evclips .clip > span{color:var(--ink2);font-size:.84rem}
-.lm{color:var(--muted);font-size:.86rem}
-.pn-iv blockquote{margin:6px 0 0;padding:8px 12px;border-left:3px solid var(--line2);background:var(--bg);border-radius:0 8px 8px 0;font-size:.9rem;line-height:1.7}
-.pn-iv blockquote p+p{margin-top:4px}
-.pn-meta{margin-top:16px;font-size:.86rem}
-.pn-meta > div{display:grid;grid-template-columns:6.5em minmax(0,1fr);gap:10px;padding:5px 0;border-top:1px solid var(--line)}
-.pn-meta dt{color:var(--muted)}
-
-/* 版本 1：文字年表 */
-.vtext-lead{color:var(--muted);font-size:.92rem}
-.vtext h2{display:flex;align-items:baseline;gap:10px;font-family:var(--serif);font-size:1.2rem;margin-top:22px;padding-bottom:4px;border-bottom:1px solid var(--line2)}
-.vtext h2 small{font-family:var(--sans);font-size:.84rem;font-weight:400;color:var(--muted)}
-.tline{list-style:none;padding:0;margin:0}
-.tline > li{position:relative;padding:14px 0 14px 34px;border-bottom:1px solid var(--line)}
-.tline > li::before{content:"";position:absolute;left:9px;top:0;bottom:0;width:2px;background:var(--line2)}
-.tline > li.on{background:linear-gradient(90deg,color-mix(in srgb,var(--c) 10%,transparent),transparent 60%)}
-.tl-mk{position:absolute;left:2px;top:20px;display:grid;place-items:center;width:16px;height:16px;background:var(--paper)}
-.tline h3{display:flex;flex-wrap:wrap;align-items:baseline;gap:2px 12px;font-size:1.04rem;line-height:1.5}
-.tline h3 time{font-family:var(--serif);font-weight:600;color:var(--ink2);font-variant-numeric:tabular-nums;font-size:.95rem}
-.tline .sum{margin:4px 0 8px;font-size:.95rem}
-.xdetail{margin-top:10px;padding:12px 16px;border:1px solid var(--line);border-radius:10px;background:var(--paper)}
-
-/* 版本 2：表格年表 */
-.vtable{padding:6px 10px 12px}
-.tscroll{overflow-x:auto}
-.tbl.evt th,.tbl.evt td{text-align:left;vertical-align:top;white-space:normal}
-.tbl.evt td:first-child{white-space:nowrap;font-variant-numeric:tabular-nums}
-.tbl.evt tbody th{color:var(--ink);font-weight:500;white-space:normal;min-width:12em}
-.tbl.evt tr.on{background:var(--bg)}
-.sortb{min-height:36px;padding:2px 4px;border:0;background:none;font:inherit;font-weight:700;color:var(--ink2);text-align:left;white-space:nowrap}
-.sortb:hover{text-decoration:underline}
-.rowb{display:inline-flex;align-items:flex-start;gap:8px;min-height:32px;padding:3px 0;border:0;background:none;font:inherit;color:var(--link);text-align:left;text-decoration:underline;text-underline-offset:3px}
-.rowb .ico{margin-top:.35em;flex:none}
-.rowb[aria-pressed="true"]{font-weight:700;color:var(--ink)}
-
-/* 版本 6：多軌道 */
-.tsvg .hit{fill:transparent}
-.tsvg .ev:hover .mk,.tsvg .ev:focus-visible .mk{fill:var(--c)}
-.tsvg .ev:focus-visible .hit{stroke:var(--ink);stroke-width:2.5px}
-.tsvg .ev.on .lt{fill:var(--ink);font-weight:700}
-.tsvg.swim .ev .lt,.tsvg.zoom .card .lt{font-weight:500}
-.tsvg .lnm text,.tsvg text.lnm{font-weight:700;fill:var(--ink)}
-.tsvg .lnm .cnt{font-weight:400;fill:var(--muted)}
-.tsvg .yr,.tsvg .yr2{fill:var(--ink2);font-variant-numeric:tabular-nums}
-.tsvg .ev.on .yr2{fill:var(--ink)}
-.seg-lanes{margin-bottom:10px}
-.seg-lanes .bchip{min-height:40px}
-
-/* 版本 7：概覽＋細節 */
-.zbox{padding:16px 18px 18px}
+/* 時間軸 */
+.zbox{padding:16px 18px 18px;margin-bottom:16px}
 .zctl{display:flex;flex-wrap:wrap;align-items:center;gap:8px}
 .zctl .btn{min-width:46px}
 .zsel{display:inline-flex;align-items:center;gap:6px}
 .zsel select{min-height:42px;padding:4px 10px;border:1.5px solid var(--ctl);border-radius:10px;background:var(--paper);color:var(--ink);font:inherit;font-size:.92rem}
+.zslide{display:inline-flex;align-items:center;gap:8px}
+.zslide input{width:clamp(120px,22vw,260px);min-height:44px;accent-color:var(--ink)}
 .zrange{margin:10px 0 8px;font-size:.92rem;color:var(--ink2)}
 .zovw{margin-bottom:10px}
 .zovw .lbl{display:block;font-size:.8rem;margin-bottom:2px}
-.zov{display:block;cursor:pointer}
+.zov{display:block;cursor:pointer;touch-action:pan-y}
 .zov text{font-family:var(--sans)}
 .zov .zwin{fill:var(--ink);fill-opacity:.06;stroke:var(--ink);stroke-width:2px}
+.zfigw{position:relative}
+.zhint{position:absolute;left:50%;top:44px;transform:translateX(-50%);max-width:calc(100% - 24px);padding:8px 14px;border-radius:999px;background:var(--ink);color:var(--paper);font-size:.88rem;text-align:center;pointer-events:none;box-shadow:0 4px 14px rgba(0,0,0,.18)}
+.tsvg .hit{fill:transparent}
+.tsvg .yr{fill:var(--ink2);font-variant-numeric:tabular-nums}
+.tsvg text.lnm{font-weight:700;fill:var(--ink)}
+.tsvg.zoom .zbg{fill:transparent;cursor:grab}
+body.zdragging,body.zdragging .zbg{cursor:grabbing!important;user-select:none}
+.tsvg .ev:hover .mk,.tsvg .ev:focus-visible .mk{fill:var(--c)}
+.tsvg .ev:focus-visible .hit{stroke:var(--ink);stroke-width:2.5px}
+.tsvg.zoom .card .lt{font-weight:500}
 .tsvg.zoom .card .lb{fill:var(--paper);fill-opacity:1;stroke:var(--line2)}
 .tsvg.zoom .card:hover .lb{stroke:var(--c)}
 .tsvg.zoom .card.on .lb{fill:var(--paper);stroke:var(--ink);stroke-width:2.5px}
-.tsvg.zoom .card.on .lt{fill:var(--ink)}
+.tsvg.zoom .card.on .lt{fill:var(--ink);font-weight:700}
 .tsvg.zoom .card:focus-visible .lb{stroke:var(--ink);stroke-width:3px}
 .tsvg .clu{cursor:pointer;outline:none}
 .tsvg .clu .hit{fill:transparent;stroke:transparent;stroke-width:2.5px}
@@ -733,73 +680,67 @@ html{scroll-padding-top:calc(var(--mast) + 16px)}          /* 用 Tab 移動時�
 .tsvg .clu:hover .cb{stroke:var(--ink);stroke-width:2.5px}
 .tsvg .clu:focus-visible .hit{stroke:var(--ink)}
 
-/* 對照：原本的事件樹 */
-.vtree{padding:0;overflow:hidden}
-.vtree iframe{display:block;width:100%;height:min(1100px,calc(100vh - 160px));min-height:560px;border:0}
-.vtree p{padding:8px 16px 12px}
+/* 介紹卡：時間軸下方 */
+.card-empty{padding:22px 24px;border:1.5px dashed var(--line2);border-radius:var(--r);color:var(--muted);text-align:center}
+.ecard{padding:20px 26px 18px;background:var(--paper);border:1px solid var(--line);border-top:5px solid var(--c);border-radius:var(--r)}
+.ecard-top{display:flex;align-items:center;justify-content:space-between;gap:12px}
+.ecard h2{font-family:var(--serif);font-weight:700;font-size:1.5rem;line-height:1.35;margin-top:4px}
+.ecard h2:focus{outline:none}
+.ecard .pn-desc,.ecard .cr-easy,.ecard .cr-more{max-width:46em}
+.cr-easy{margin-top:12px;padding:12px 14px 13px;border-radius:10px;background:var(--stage)}
+.cr-easy p:not(.cr-easy-h){font-size:1.08rem;line-height:1.9}
+.cr-easy .cr-easy-h{display:flex;align-items:center;gap:8px;font-size:.8rem;line-height:1.4;font-weight:700;letter-spacing:.08em;color:var(--ink2);margin-bottom:2px}
+.cr-easy-h span{padding:0 8px;border:1px solid var(--line2);border-radius:999px;font-weight:400;letter-spacing:0;color:var(--muted)}
+.cr-more{margin-top:12px}
+.cr-more summary{display:inline-flex;align-items:center;min-height:44px;cursor:pointer;color:var(--link);text-decoration:underline;text-underline-offset:3px}
+.emeta{display:flex;flex-wrap:wrap;gap:4px 18px;margin-top:16px;padding-top:10px;border-top:1px solid var(--line);font-size:.84rem;color:var(--muted)}
+.emeta b{font-weight:700;margin-right:6px;color:var(--ink2)}
+
+/* 大字 */
+html.big .ecard h2{font-size:1.9rem}
+html.big .ecard .pn-date{font-size:1.2rem}
+html.big .cr-easy p:not(.cr-easy-h){font-size:1.36rem;line-height:1.9}
+html.big .ecard .pn-desc,html.big .ecard .memo{font-size:1.18rem}
+html.big .emeta{font-size:1rem}
 
 @media (max-width:719px){
   .mast-sub{padding-left:10px}
-  .vinfo dl > div{grid-template-columns:minmax(0,1fr);gap:0}
   .zbox{padding:12px}
-  .tline > li{padding-left:30px}
+  .ecard{padding:16px 16px 14px}
+  .tools .sep{display:none}
 }
-@media (pointer:coarse){ .btn.sm,.sortb{min-height:44px} .rowb{min-height:44px} }
-.swlg .tchip.sm{cursor:default}
-.swnote{margin-top:8px}
-.vinfo summary{display:flex;flex-wrap:wrap;align-items:baseline;gap:4px 12px;min-height:44px;cursor:pointer;list-style-position:outside}
-.vinfo summary h2{display:inline;margin:0}
-.vinfo details[open] summary{margin-bottom:6px}
-@media (min-width:720px){ .vinfo summary .lm{display:none} }
-@media (max-width:719px){ .vinfo{padding:12px 16px} }
-.vinfo summary::-webkit-details-marker{display:none}
-.vinfo summary::before{content:"";align-self:center;width:0;height:0;border-left:7px solid var(--ink2);border-top:5px solid transparent;border-bottom:5px solid transparent;transition:transform .15s}
-.vinfo details[open] summary::before{transform:rotate(90deg)}
-
-/* 版本 7：縮放的滑桿、拖曳與滾輪提示 */
-.zslide{display:inline-flex;align-items:center;gap:8px}
-.zslide input{width:clamp(120px,22vw,240px);min-height:44px;accent-color:var(--ink)}
-.zfigw{position:relative}
-.tsvg.zoom .zbg{fill:transparent;cursor:grab}
-body.zdragging,body.zdragging .zbg{cursor:grabbing!important;user-select:none}
-.zov{touch-action:pan-y}
-.zhint{position:absolute;left:50%;top:44px;transform:translateX(-50%);max-width:calc(100% - 24px);padding:8px 14px;border-radius:999px;background:var(--ink);color:var(--paper);font-size:.88rem;text-align:center;pointer-events:none;box-shadow:0 4px 14px rgba(0,0,0,.18)}
+@media (pointer:coarse){ .btn.sm{min-height:44px} }
+.cr-more summary{gap:8px}
+.cr-more summary::-webkit-details-marker{display:none}
+.cr-more summary::before{content:"";width:0;height:0;border-left:7px solid currentColor;border-top:5px solid transparent;border-bottom:5px solid transparent;transition:transform .15s}
+.cr-more[open] summary::before{transform:rotate(90deg)}
 </style>
 </head>
 <body>
 <noscript><p style="margin:0;padding:24px;font:16px/1.8 sans-serif">這個頁面需要開啟瀏覽器的 JavaScript 才能顯示內容。</p></noscript>
 <header class="mast" id="mast">
-  <a href="#vpanel" class="skip" id="skipMain">跳到時間軸</a>
+  <a href="#zArea" class="skip" id="skipMain">跳到時間軸</a>
   <div class="wrap mast-in">
-    <a class="brand" href="index.html">智能障礙事件樹</a>
-    <span class="mast-sub">時間軸版本比較</span>
+    <span class="brand">智能障礙事件樹</span>
+    <span class="mast-sub">可縮放時間軸</span>
   </div>
 </header>
 <main id="main" class="wrap">
   <header class="ph">
-    <p class="ph-over"><span class="ph-no">原型・不是正式網站</span></p>
-    <div class="ph-row"><h1 id="pageTitle" tabindex="-1">時間軸版本比較</h1></div>
+    <h1 id="pageTitle" tabindex="-1">智能障礙事件：可縮放時間軸</h1>
     <p class="ph-lead" id="pageLead"></p>
   </header>
-  <div class="vtabs" id="vtabs" role="tablist" aria-label="時間軸的版本"></div>
-  <section class="vinfo plate" id="vinfo" aria-label="這個版本的說明"></section>
   <div class="tools" id="tools"></div>
   <p class="vh" id="status" role="status" aria-live="polite"></p>
-  <div class="tl" id="tlWrap">
-    <div class="tl-main" role="tabpanel" id="vpanel" tabindex="-1"></div>
-  </div>
+  <section id="zArea" aria-label="可縮放時間軸" tabindex="-1"></section>
+  <section id="card" aria-label="事件介紹"></section>
 </main>
 <footer class="foot">
   <div class="wrap foot-in">
     <b>智能障礙事件樹</b>
-    <span>時間軸版本比較・依「歷史事件時間軸與無障礙網頁設計研究報告（2026 年 10 月版）」設計</span>
-    <a href="index.html#tree">回到正式網站的時間軸</a>
+    <span>可縮放時間軸・易讀版為草稿，待審閱・照片與訪談不在這一頁</span>
   </div>
 </footer>
-<div class="sheet" id="sheet" role="region" aria-label="事件說明" hidden>
-  <div class="sheet-bar"><span class="sheet-grip" aria-hidden="true"></span><button class="sheet-x" id="sheetX">關閉</button></div>
-  <div class="sheet-body" id="sheetBody"></div>
-</div>
 <div class="tip" id="tip" aria-hidden="true" hidden></div>
 
 <script>
@@ -2705,52 +2646,11 @@ const TITLE_LINES={
   l1:['福利法明定','鑑定工具'], l2:['特教法細則','分三類'], l3:['福利法改稱','智能障礙者'], l4:['第二次','特殊學生普查'], l5:['特教法改稱','智能障礙'],
   l6:['鑑定標準訂立'], l7:['鑑定標準修訂'], l8:['鑑定辦法','再修訂']
 };
-
-/* ============ 照片與訪談的清單 ============
-   把檔案放進網站的 photos/ 與 audio/ 資料夾（和 index.html 放在一起），再在下面兩個清單各加一筆資料，就會出現在展區裡。
-   清單裡只要有一筆真實資料，版面示意就不再顯示。
-   每一筆寫在一對 { } 裡，筆與筆之間用逗號分開；文字要用引號包起來。 */
-const PHOTOS = [
-  // 範例：照著這個樣子填，一張照片一筆，依年代先後排。alt 是給看不到圖片的讀者的畫面描述，一定要寫
-  // {src:'photos/檔名.jpg', alt:'（畫面描述：誰、在哪裡、正在做什麼）', title:'標題', year:1985, credit:'來源或拍攝者', caption:'圖說'},
-];
-const INTERVIEWS = [
-  // 範例：dur 是錄音的全長（秒）；segs 是逐字稿，每一段寫 [開始的秒數, '說話的人', '這一段的內容']
-  // {src:'audio/檔名.mp3', title:'標題', who:'受訪者的稱呼', date:'2025 年 3 月', dur:96, summary:'摘要',
-  //  segs:[[0,'訪談者','第一段的逐字稿'], [14,'受訪者','第二段的逐字稿']]},
-];
-
-/* ---------- 版面示意：上面的清單是空的時候才會用到，不是真實資料 ---------- */
-function mockPhoto(i,w,h){
-  const tones = [['#C9CFC8','#8E9A97'],['#D3CBBB','#9A8E76'],['#BFCBD3','#7F93A1'],['#CFC6C9','#978A90']][i%4];
-  const g = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${w} ${h}"><rect width="${w}" height="${h}" fill="${tones[0]}"/>`+
-    `<path d="M0 ${h*.72} L${w*.28} ${h*.46} L${w*.5} ${h*.66} L${w*.74} ${h*.38} L${w} ${h*.62} V${h} H0Z" fill="${tones[1]}" opacity=".55"/>`+
-    `<circle cx="${w*.78}" cy="${h*.24}" r="${Math.min(w,h)*.07}" fill="#F7F8F4" opacity=".7"/>`+
-    `<text x="${w/2}" y="${h*.9}" text-anchor="middle" font-family="sans-serif" font-size="${Math.round(w*.045)}" fill="#1F2A2E" opacity=".75">示意照片 ${i+1}</text></svg>`;
-  return 'data:image/svg+xml;charset=utf-8,'+encodeURIComponent(g);
-}
-if(!PHOTOS.length) [[1964,4,3],[1968,3,4],[1973,1,1],[1975,4,3],[1979,3,2],[1984,3,4],[1986,4,3],[1988,1,1],[1991,3,2],[1995,4,3],[1998,3,4],[2003,4,3],[2006,16,9],[2012,1,1],[2015,4,3],[2019,3,4],[2022,3,2]].forEach((p,i)=>PHOTOS.push({
-  src:mockPhoto(i,p[1]*120,p[2]*120), year:p[0], sample:true,
-  title:'示意照片 '+(i+1), alt:'示意圖：灰色色塊與山形輪廓，沒有實際內容',
-  caption:'這裡放圖說：照片的時間、地點，以及畫面裡正在發生的事。', credit:'來源或拍攝者'}));
-if(!INTERVIEWS.length) INTERVIEWS.push(
-  {title:'示意訪談一', who:'受訪者 A', date:'2025 年 3 月', dur:96, sample:true,
-   summary:'這裡放訪談摘要：受訪者的身分背景，以及這段訪談談到的主題。',
-   segs:[[0,'訪談者','說明訪談目的，確認受訪者同意錄音與公開。'],[14,'受訪者','這裡放受訪者的回答。逐字稿依時間分段，點左邊的時間可以跳到那一段。'],[38,'訪談者','第二個問題。'],[46,'受訪者','播放的時候，正在播放的段落會標示出來，方便邊聽邊讀。'],[74,'訪談者','結尾與致謝。']]},
-  {title:'示意訪談二', who:'受訪者 B', date:'2025 年 5 月', dur:132, sample:true,
-   summary:'這裡放訪談摘要。',
-   segs:[[0,'訪談者','開場。'],[20,'受訪者','第一段回答。'],[58,'訪談者','追問。'],[66,'受訪者','第二段回答。'],[110,'訪談者','結尾。']]},
-  {title:'示意訪談三', who:'受訪者 C', date:'2025 年 6 月', dur:78, sample:true,
-   summary:'這裡放訪談摘要。',
-   segs:[[0,'訪談者','開場。'],[12,'受訪者','第一段回答。'],[44,'受訪者','第二段回答。'],[66,'訪談者','結尾。']]}
-);
-INTERVIEWS.forEach(a=>{ a.dur = +a.dur||0; a.segs = a.segs||[]; });
-const mmss = t => { t = +t||0; return Math.floor(t/60)+':'+String(Math.floor(t%60)).padStart(2,'0'); };
-const SOLO = "zoom";
+const PHOTOS = [], INTERVIEWS = [];
 /* ============ 時間軸版本比較：共用的工具與 50 件事件 ============
    事件 = 重大事件表的 18 件（src/00-data.js 的 TREE）＋ pick_events.py 從剪報、研究、學生人數挑出的事件（events.json）。
    照片與訪談沿用 src/60-media.js 的清單：清單是空的時候是版面示意，放入真實資料後就會換成真的。 */
-const PICK = [{"id":"n0","type":"news","track":"news","date":"1962-01-15","precision":"day","certainty":"sure","title":"幼獅社","importance":2,"why":"資料裡最早的一篇剪報","summary":"中央日報 1962.01.15 的報導。用詞：白痴／低能；主要觀點：期待正常化/健全主義。","source":"中央日報，1962-01-15","news":0},{"id":"n2","type":"news","track":"news","date":"1964-07-15","precision":"day","certainty":"sure","title":"設班 教育局告家長書","importance":2,"why":"「智能不足」這個詞第一次出現在剪報裡","summary":"中央日報 1964.07.15 的報導。用詞：智能不足；主要觀點：無。","source":"中央日報，1964-07-15","news":2},{"id":"n18","type":"news","track":"news","date":"1967-09-25","precision":"day","certainty":"sure","title":"特教法草案","importance":1,"why":"分類為「政策公告及回應—立法」","summary":"中央日報 1967.09.25 的報導。用詞：白痴／低能、智能不足；主要觀點：倡議。","source":"中央日報，1967-09-25","news":18},{"id":"r0","type":"lit","track":"lit","date":"1971","precision":"year","certainty":"sure","title":"第一篇研究","importance":2,"why":"資料裡最早的研究","summary":"426 篇研究文獻裡，最早的一篇發表於 1971 年，研究設計是量化研究。","source":"研究文獻編碼表"},{"id":"n23","type":"news","track":"news","date":"1971-09-21","precision":"day","certainty":"sure","title":"教局呼籲就學 增班","importance":1,"why":"主要觀點「家長拒絕標籤」第一次出現","summary":"聯合報 1971.09.21 的報導。用詞：智能不足；主要觀點：家長拒絕標籤。","source":"聯合報，1971-09-21","news":23},{"id":"n26","type":"news","track":"news","date":"1973-06-09","precision":"day","certainty":"sure","title":"展現學生作品","importance":1,"why":"主要觀點「肯定障礙者」第一次出現","summary":"聯合報 1973.06.09 的報導。用詞：智能不足；主要觀點：肯定障礙者(學習能力、成就)。","source":"聯合報，1973-06-09","news":26},{"id":"n37","type":"news","track":"news","date":"1978-10-02","precision":"day","certainty":"sure","title":"佳音韻療育中心","importance":2,"why":"「智能障礙」這個詞第一次出現在剪報裡","summary":"中央日報 1978.10.02 的報導。用詞：智能障礙；主要觀點：家人/專業人員犧牲奉獻。","source":"中央日報，1978-10-02","news":37},{"id":"rd4","type":"lit","track":"lit","date":"1982","precision":"year","certainty":"sure","title":"第一篇混合研究","importance":1,"why":"研究設計「混合研究」第一次出現","summary":"1982 年出現第一篇混合研究。整份資料共有 17 篇混合研究。","source":"研究文獻編碼表"},{"id":"rd2","type":"lit","track":"lit","date":"1985","precision":"year","certainty":"sure","title":"第一篇質性研究","importance":1,"why":"研究設計「質性研究」第一次出現","summary":"1985 年出現第一篇質性研究。整份資料共有 63 篇質性研究。","source":"研究文獻編碼表"},{"id":"n60","type":"news","track":"news","date":"1985-02-13","precision":"day","certainty":"sure","title":"家長陳情","importance":1,"why":"家長陳情第一次出現在剪報裡","summary":"聯合報 1985.02.13 的報導。用詞：智能不足；主要觀點：倡議。","source":"聯合報，1985-02-13","news":60},{"id":"rt5","type":"lit","track":"lit","date":"1986","precision":"year","certainty":"sure","title":"第一篇權利意識研究","importance":2,"why":"研究主題「權利意識」第一次出現","summary":"1986 年出現第一篇以權利意識（包含性與自我倡議）為主題的研究。","source":"研究文獻編碼表"},{"id":"n87","type":"news","track":"news","date":"1988-04-02","precision":"day","certainty":"sure","title":"歧視","importance":2,"why":"「智障」這個詞第一次出現在剪報裡","summary":"中國時報 1988.04.02 的報導。用詞：智能不足、智障、其他用詞；主要觀點：家長拒絕標籤。","source":"中國時報，1988-04-02","news":87},{"id":"n118","type":"news","track":"news","date":"1991-10-13","precision":"day","certainty":"sure","title":"優生保健法","importance":1,"why":"分類為「政策公告及回應—立法」","summary":"中國時報 1991.10.13 的報導。用詞：智障；主要觀點：優生保健。","source":"中國時報，1991-10-13","news":118},{"id":"pm0","type":"people","track":"people","date":"1999","precision":"year","certainty":"sure","title":"衛福部統計起點","importance":1,"why":"衛福部數據的第一年","summary":"1999 年底，全台領有身心障礙證明的智能障礙者 68,044 人。","source":"衛福部全台數據"},{"id":"n319","type":"news","track":"news","date":"1999-07-07","precision":"day","certainty":"sure","title":"裝傻免役爭議 倡議修兵役法","importance":1,"why":"分類為「政策公告及回應—修法」","summary":"中國時報 1999.07.07 的報導。用詞：智能不足；主要觀點：家長拒絕標籤。","source":"中國時報，1999-07-07","news":319},{"id":"n348","type":"news","track":"news","date":"2001-04-05","precision":"day","certainty":"sure","title":"法扶 公設辯護人（智能障礙者也會受惠）","importance":1,"why":"分類為「政策公告及回應—立法」","summary":"聯合報 2001.04.05 的報導。用詞：智能障礙；主要觀點：無。","source":"聯合報，2001-04-05","news":348},{"id":"rd3","type":"lit","track":"lit","date":"2002","precision":"year","certainty":"sure","title":"第一篇行動研究","importance":1,"why":"研究設計「行動研究」第一次出現","summary":"2002 年出現第一篇行動研究。整份資料共有 18 篇行動研究。","source":"研究文獻編碼表"},{"id":"rr3","type":"lit","track":"lit","date":"2003","precision":"year","certainty":"sure","title":"第一篇性教育介入研究","importance":1,"why":"權利議題「性教育介入」第一次出現","summary":"2003 年出現第一篇性教育介入的研究。","source":"研究文獻編碼表"},{"id":"rd5","type":"lit","track":"lit","date":"2005","precision":"year","certainty":"sure","title":"第一篇文獻回顧","importance":1,"why":"研究設計「文獻回顧」第一次出現","summary":"2005 年出現第一篇文獻回顧。整份資料共有 10 篇文獻回顧。","source":"研究文獻編碼表"},{"id":"rr2","type":"lit","track":"lit","date":"2005","precision":"year","certainty":"sure","title":"第一篇自我倡議研究","importance":1,"why":"權利議題「自我倡議/自我決策」第一次出現","summary":"2005 年出現第一篇談自我倡議或自我決策的研究。","source":"研究文獻編碼表"},{"id":"rpk","type":"lit","track":"lit","date":"2006","precision":"year","certainty":"sure","title":"研究篇數最多的一年","importance":2,"why":"每年篇數的高峰","summary":"2006 年有 28 篇研究，是整份資料裡最多的一年。","source":"研究文獻編碼表"},{"id":"pn0","type":"people","track":"people","date":"2008","precision":"year","certainty":"sure","title":"通報網學生人數起點","importance":1,"why":"通報網數據的第一年","summary":"2008 年，全台特教通報網的智能障礙學生 24,945 人。","source":"通報網全台數據"},{"id":"n524","type":"news","track":"news","date":"2009-05-03","precision":"day","certainty":"sure","title":"禁治產修法","importance":1,"why":"分類為「政策公告及回應—修法」","summary":"聯合晚報 2009.05.03 的報導。用詞：智能不足；主要觀點：倡議。","source":"聯合晚報，2009-05-03","news":524},{"id":"n537","type":"news","track":"news","date":"2009-12-11","precision":"day","certainty":"sure","title":"健保給付牙科治療","importance":1,"why":"分類為「政策公告及回應—修法」","summary":"聯合報 2009.12.11 的報導。用詞：智能障礙；主要觀點：無。","source":"聯合報，2009-12-11","news":537},{"id":"pnk","type":"people","track":"people","date":"2010","precision":"year","certainty":"sure","title":"智能障礙學生人數最多","importance":2,"why":"智能障礙學生人數的高峰","summary":"2010 年 26,059 人，之後逐年減少。","source":"通報網全台數據"},{"id":"n573","type":"news","track":"news","date":"2011-08-29","precision":"day","certainty":"sure","title":"資源班飽和拒收輕度智障","importance":1,"why":"2010 年代第一篇招生、安置的報導","summary":"中國時報 2011.08.29 的報導。用詞：智障、智能障礙；主要觀點：無。","source":"中國時報，2011-08-29","news":573},{"id":"pxl","type":"people","track":"people","date":"2013","precision":"year","certainty":"sure","title":"學習障礙學生人數超過智能障礙","importance":2,"why":"學習障礙與智能障礙的人數交叉","summary":"2013 年起，學習障礙學生（26,797 人）多於智能障礙學生（25,088 人）。","source":"通報網全台數據"},{"id":"pxa","type":"people","track":"people","date":"2022","precision":"year","certainty":"sure","title":"自閉症學生人數超過智能障礙","importance":2,"why":"自閉症與智能障礙的人數交叉","summary":"2022 年起，自閉症學生（18,853 人）多於智能障礙學生（17,608 人）。","source":"通報網全台數據"},{"id":"n737","type":"news","track":"news","date":"2022-08-12","precision":"day","certainty":"sure","title":"智障母誤棄嬰","importance":1,"why":"資料裡最晚的一篇剪報","summary":"聯合報 2022.08.12 的報導。用詞：智能障礙；主要觀點：沈重負擔/同情憐憫。","source":"聯合報，2022-08-12","news":737},{"id":"pt","type":"people","track":"people","date":"2023","precision":"year","certainty":"sure","title":"台北市特教學校智障學生減少","importance":1,"why":"台北市特教學校數據的頭尾","summary":"台北市四所特教學校的智能障礙學生，從 2003 年 259 人減為 2023 年 83 人。","source":"台北市年報"},{"id":"pm1","type":"people","track":"people","date":"2024","precision":"year","certainty":"sure","title":"智能障礙總人數破十萬","importance":2,"why":"衛福部數據的最後一年","summary":"2024 年底 102,556 人，比 1999 年增加 51%。","source":"衛福部全台數據"},{"id":"pn1","type":"people","track":"people","date":"2024","precision":"year","certainty":"sure","title":"智能障礙學生人數","importance":1,"why":"通報網數據的最後一年","summary":"2024 年 16,800 人，比高峰的 2010 年減少 36%。","source":"通報網全台數據"}];
+const PICK = [{"id":"n0","type":"news","track":"news","date":"1962-01-15","precision":"day","certainty":"sure","title":"幼獅社","importance":2,"why":"資料裡最早的一篇剪報","summary":"中央日報 1962.01.15 的報導。用詞：白痴／低能；主要觀點：期待正常化/健全主義。","source":"中央日報，1962-01-15","news":0},{"id":"n2","type":"news","track":"news","date":"1964-07-15","precision":"day","certainty":"sure","title":"設班 教育局告家長書","importance":2,"why":"「智能不足」這個詞第一次出現在剪報裡","summary":"中央日報 1964.07.15 的報導。用詞：智能不足；主要觀點：無。","source":"中央日報，1964-07-15","news":2},{"id":"n18","type":"news","track":"news","date":"1967-09-25","precision":"day","certainty":"sure","title":"特教法草案","importance":1,"why":"分類為「政策公告及回應—立法」","summary":"中央日報 1967.09.25 的報導。用詞：白痴／低能、智能不足；主要觀點：倡議。","source":"中央日報，1967-09-25","news":18},{"id":"r0","type":"lit","track":"lit","date":"1971","precision":"year","certainty":"sure","title":"第一篇研究","importance":2,"why":"資料裡最早的研究","summary":"426 篇研究文獻裡，最早的一篇發表於 1971 年，研究設計是量化研究。","source":"研究文獻編碼表"},{"id":"n23","type":"news","track":"news","date":"1971-09-21","precision":"day","certainty":"sure","title":"教局呼籲就學 增班","importance":1,"why":"主要觀點「家長拒絕標籤」第一次出現","summary":"聯合報 1971.09.21 的報導。用詞：智能不足；主要觀點：家長拒絕標籤。","source":"聯合報，1971-09-21","news":23},{"id":"n26","type":"news","track":"news","date":"1973-06-09","precision":"day","certainty":"sure","title":"展現學生作品","importance":1,"why":"主要觀點「肯定障礙者」第一次出現","summary":"聯合報 1973.06.09 的報導。用詞：智能不足；主要觀點：肯定障礙者(學習能力、成就)。","source":"聯合報，1973-06-09","news":26},{"id":"n37","type":"news","track":"news","date":"1978-10-02","precision":"day","certainty":"sure","title":"佳音韻療育中心","importance":2,"why":"「智能障礙」這個詞第一次出現在剪報裡","summary":"中央日報 1978.10.02 的報導。用詞：智能障礙；主要觀點：家人/專業人員犧牲奉獻。","source":"中央日報，1978-10-02","news":37},{"id":"rd4","type":"lit","track":"lit","date":"1982","precision":"year","certainty":"sure","title":"第一篇混合研究","importance":1,"why":"研究設計「混合研究」第一次出現","summary":"1982 年出現第一篇混合研究。整份資料共有 17 篇混合研究。","source":"研究文獻編碼表"},{"id":"rd2","type":"lit","track":"lit","date":"1985","precision":"year","certainty":"sure","title":"第一篇質性研究","importance":1,"why":"研究設計「質性研究」第一次出現","summary":"1985 年出現第一篇質性研究。整份資料共有 63 篇質性研究。","source":"研究文獻編碼表"},{"id":"n60","type":"news","track":"news","date":"1985-02-13","precision":"day","certainty":"sure","title":"家長陳情","importance":1,"why":"家長陳情第一次出現在剪報裡","summary":"聯合報 1985.02.13 的報導。用詞：智能不足；主要觀點：倡議。","source":"聯合報，1985-02-13","news":60},{"id":"rt5","type":"lit","track":"lit","date":"1986","precision":"year","certainty":"sure","title":"第一篇權利意識研究","importance":2,"why":"研究主題「權利意識」第一次出現","summary":"1986 年出現第一篇以權利意識（包含性與自我倡議）為主題的研究。","source":"研究文獻編碼表"},{"id":"n87","type":"news","track":"news","date":"1988-04-02","precision":"day","certainty":"sure","title":"歧視","importance":2,"why":"「智障」這個詞第一次出現在剪報裡","summary":"中國時報 1988.04.02 的報導。用詞：智能不足、智障、其他用詞；主要觀點：家長拒絕標籤。","source":"中國時報，1988-04-02","news":87},{"id":"n118","type":"news","track":"news","date":"1991-10-13","precision":"day","certainty":"sure","title":"優生保健法","importance":1,"why":"分類為「政策公告及回應—立法」","summary":"中國時報 1991.10.13 的報導。用詞：智障；主要觀點：優生保健。","source":"中國時報，1991-10-13","news":118},{"id":"pm0","type":"people","track":"people","date":"1999","precision":"year","certainty":"sure","title":"衛福部統計起點","importance":1,"why":"衛福部數據的第一年","summary":"1999 年底，全台領有身心障礙證明的智能障礙者 68,044 人。","source":"衛福部全台數據"},{"id":"n319","type":"news","track":"news","date":"1999-07-07","precision":"day","certainty":"sure","title":"裝傻免役爭議 倡議修兵役法","importance":1,"why":"分類為「政策公告及回應—修法」","summary":"中國時報 1999.07.07 的報導。用詞：智能不足；主要觀點：家長拒絕標籤。","source":"中國時報，1999-07-07","news":319},{"id":"n348","type":"news","track":"news","date":"2001-04-05","precision":"day","certainty":"sure","title":"法扶 公設辯護人（智能障礙者也會受惠）","importance":1,"why":"分類為「政策公告及回應—立法」","summary":"聯合報 2001.04.05 的報導。用詞：智能障礙；主要觀點：無。","source":"聯合報，2001-04-05","news":348},{"id":"rd3","type":"lit","track":"lit","date":"2002","precision":"year","certainty":"sure","title":"第一篇行動研究","importance":1,"why":"研究設計「行動研究」第一次出現","summary":"2002 年出現第一篇行動研究。整份資料共有 18 篇行動研究。","source":"研究文獻編碼表"},{"id":"rr3","type":"lit","track":"lit","date":"2003","precision":"year","certainty":"sure","title":"第一篇性教育介入研究","importance":1,"why":"權利議題「性教育介入」第一次出現","summary":"2003 年出現第一篇性教育介入的研究。","source":"研究文獻編碼表"},{"id":"rd5","type":"lit","track":"lit","date":"2005","precision":"year","certainty":"sure","title":"第一篇文獻回顧","importance":1,"why":"研究設計「文獻回顧」第一次出現","summary":"2005 年出現第一篇文獻回顧。整份資料共有 10 篇文獻回顧。","source":"研究文獻編碼表"},{"id":"rr2","type":"lit","track":"lit","date":"2005","precision":"year","certainty":"sure","title":"第一篇自我倡議研究","importance":1,"why":"權利議題「自我倡議/自我決策」第一次出現","summary":"2005 年出現第一篇談自我倡議或自我決策的研究。","source":"研究文獻編碼表"},{"id":"rpk","type":"lit","track":"lit","date":"2006","precision":"year","certainty":"sure","title":"研究篇數最多的一年","importance":2,"why":"每年篇數的高峰","summary":"2006 年有 28 篇研究，是整份資料裡最多的一年。","source":"研究文獻編碼表"},{"id":"pn0","type":"people","track":"people","date":"2008","precision":"year","certainty":"sure","title":"通報網學生人數起點","importance":1,"why":"通報網數據的第一年","summary":"2008 年，全台特教通報網的智能障礙學生 24,945 人。","source":"通報網全台數據"},{"id":"n524","type":"news","track":"news","date":"2009-05-03","precision":"day","certainty":"sure","title":"禁治產修法","importance":1,"why":"分類為「政策公告及回應—修法」","summary":"聯合晚報 2009.05.03 的報導。用詞：智能不足；主要觀點：倡議。","source":"聯合晚報，2009-05-03","news":524},{"id":"n537","type":"news","track":"news","date":"2009-12-11","precision":"day","certainty":"sure","title":"健保給付牙科治療","importance":1,"why":"分類為「政策公告及回應—修法」","summary":"聯合報 2009.12.11 的報導。用詞：智能障礙；主要觀點：無。","source":"聯合報，2009-12-11","news":537},{"id":"pnk","type":"people","track":"people","date":"2010","precision":"year","certainty":"sure","title":"智能障礙學生人數最多","importance":2,"why":"智能障礙學生人數的高峰","summary":"2010 年 26,059 人，之後逐年減少。","source":"通報網全台數據"},{"id":"n573","type":"news","track":"news","date":"2011-08-29","precision":"day","certainty":"sure","title":"資源班飽和拒收輕度智障","importance":1,"why":"2010 年代第一篇招生、安置的報導","summary":"中國時報 2011.08.29 的報導。用詞：智障、智能障礙；主要觀點：無。","source":"中國時報，2011-08-29","news":573},{"id":"pxl","type":"people","track":"people","date":"2013","precision":"year","certainty":"sure","title":"學習障礙學生人數超過智能障礙","importance":2,"why":"學習障礙與智能障礙的人數交叉","summary":"2013 年起，學習障礙學生（26,797 人）多於智能障礙學生（25,088 人）。","source":"通報網全台數據"},{"id":"pm1","type":"people","track":"people","date":"2014","precision":"year","certainty":"sure","title":"智能障礙總人數破十萬","importance":2,"why":"衛福部數據第一次超過十萬人","summary":"2014 年底 100,588 人，第一次超過十萬人。到 2024 年底是 102,556 人。","source":"衛福部全台數據"},{"id":"pxa","type":"people","track":"people","date":"2022","precision":"year","certainty":"sure","title":"自閉症學生人數超過智能障礙","importance":2,"why":"自閉症與智能障礙的人數交叉","summary":"2022 年起，自閉症學生（18,853 人）多於智能障礙學生（17,608 人）。","source":"通報網全台數據"},{"id":"n737","type":"news","track":"news","date":"2022-08-12","precision":"day","certainty":"sure","title":"智障母誤棄嬰","importance":1,"why":"資料裡最晚的一篇剪報","summary":"聯合報 2022.08.12 的報導。用詞：智能障礙；主要觀點：沈重負擔/同情憐憫。","source":"聯合報，2022-08-12","news":737},{"id":"pt","type":"people","track":"people","date":"2023","precision":"year","certainty":"sure","title":"台北市特教學校智障學生減少","importance":1,"why":"台北市特教學校數據的頭尾","summary":"台北市四所特教學校的智能障礙學生，從 2003 年 259 人減為 2023 年 83 人。","source":"台北市年報"},{"id":"pn1","type":"people","track":"people","date":"2024","precision":"year","certainty":"sure","title":"智能障礙學生人數","importance":1,"why":"通報網數據的最後一年","summary":"2024 年 16,800 人，比高峰的 2010 年減少 36%。","source":"通報網全台數據"}];
 const $ = (s,r) => (r||document).querySelector(s);
 const $$ = (s,r) => Array.from((r||document).querySelectorAll(s));
 const esc = s => String(s??'').replace(/[&<>"']/g, c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
@@ -2852,55 +2752,99 @@ function shares(t){
 }
 // 每年的剪報篇數（概覽列的密度）
 const NEWS_BY_Y = {}; NEWS.forEach(a=>{ NEWS_BY_Y[a.y] = (NEWS_BY_Y[a.y]||0)+1; });
-/* ============ 版本切換、篩選、網址、事件說明 ============
-   每個版本用 VERS.push({...}) 登記：id、名稱、研究依據、適合的情境、取捨，以及 draw(root) 把版本畫進 root。
-   panel:false 的版本自己在原處展開細節，不用右邊（手機是下方）的說明。 */
-const VERS = [];
-const S = {v:null, e:null, tracks:new Set(TK)};
-const view = $('#vpanel'), wrapEl = $('#tlWrap'), sheet = $('#sheet'), tipEl = $('#tip'), mastEl = $('#mast');
-const ver = () => VERS.find(x=>x.id===S.v) || VERS[0];
+/* ============ 易讀版 ============
+   每件事一段：短句、常用詞，一句一個意思（一行一句）。
+   有 25 段沿用「年表」展區的易讀版（分支 claude/horizontal-timeline-design-gsfov2 的 75-chron.js），其餘是這次補寫的。
+   剪報只知道報別、日期、整理時的標題與編碼，補寫時只寫這些看得出來的事，沒有猜報導內文。
+   這是草稿，請特教專業人員或自我倡議者審閱；審閱過後把 EASY_DRAFT 改成 false，卡片上就不再寫「草稿」 */
+const EASY_DRAFT = true;
+const EASY = {
+  // 重大事件：智力測驗
+  q1:'1979 年，臺灣完成兒童智力測驗的修訂版。\n學校用它來了解學生。',
+  q2:'1991 年，兒童智力測驗出了第三版。',
+  q3:'2003 年，兒童智力測驗的英文第四版出版。',
+  q4:'2014 年，兒童智力測驗的英文第五版出版。',
+  q5:'2018 年，新的兒童智力測驗中文版出版。',
+  // 重大事件：適應行為量表
+  b1:'1970 年代，臺灣開始用一份美國的評量。\n它看孩子在生活中會做哪些事。\n可是那時候，還沒有用臺灣孩子的資料來比較。',
+  b2:'1984 年，這份評量擴充成新的版本。\n它看一個人在生活上會不會做事，叫做「適應行為」。',
+  b3:'1986 年，臺灣開始用一份新的評量。\n它看學生在生活中會做哪些事。',
+  b4:'2003 年，臺灣有了自己做的生活能力評量。',
+  b5:'2004 年，1984 年那份生活能力評量，出了中文翻譯版。',
+  // 重大事件：法規與鑑定
+  l1:'1981 年，法律寫清楚：\n要用智力測驗或生活能力的評量，判斷是不是智能障礙。',
+  l2:'1987 年，法律依照智力測驗的分數，\n把智能障礙分成輕度、中度、重度三種。',
+  l3:'1990 年，法律把舊的稱呼「智能不足」，\n改成「智能障礙者」。',
+  l4:'1990 年，教育部第二次調查：\n有多少需要特殊教育的學生。',
+  l5:'1997 年，特殊教育法也改用「智能障礙」這個名稱。',
+  l6:'2002 年，政府寫下新的標準，用來判斷學生是不是智能障礙。\n要同時看智力，和學習、生活上的困難。',
+  l7:'2012 年，判斷學生是不是智能障礙的標準修改了。\n要看的生活能力項目，寫得更清楚。',
+  l8:'2024 年，判斷學生是不是智能障礙的辦法又修改了。\n要看想事情的能力、生活能力和學習表現。',
+  // 剪報
+  n0:'1962 年，是本站最早的一篇剪報。\n那時候的報紙，常用「白痴」、「低能」這種不好的詞。',
+  n2:'1964 年，報紙第一次用「智能不足」這個詞。\n那篇報導在說：學校要開特別的班級。',
+  n18:'1967 年，報紙報導特殊教育法的草案。\n草案就是還沒有通過的法律。\n這篇報導在幫忙爭取孩子受教育的權利。',
+  n23:'1971 年，教育局請家長讓孩子來上學，也增加班級。\n可是有些家長怕孩子被貼上標籤，不想讓孩子去。',
+  n26:'1973 年，報紙報導學生的作品展覽。\n這是報紙第一次稱讚智能障礙學生的能力。',
+  n37:'1978 年，報紙第一次用「智能障礙」這個詞。\n可是之後好幾年，報紙還是比較常用「智能不足」。',
+  n60:'1985 年，家長一起向政府陳情。\n報紙連續兩天報導家長的要求。\n1980 年代，是報紙最常幫忙爭取權利的時候。',
+  n87:'1988 年，報紙第一次用「智障」這個簡短的說法。\n那篇報導說：家長不希望孩子被貼上標籤。\n後來「智障」變得很常見。',
+  n118:'1991 年，報紙報導《優生保健法》。\n這篇報導從「不要生出障礙的孩子」的角度來寫。',
+  n319:'1999 年，有人被說假裝智能障礙，不用當兵。\n報紙報導這件爭議，也有人要求修改兵役的法律。',
+  n348:'2001 年，報紙報導：法院會幫沒有律師的人找辯護的人。\n報導說，智能障礙者也會因此得到幫忙。',
+  n524:'2009 年，報紙報導「禁治產」的法律要修改。\n這個法律和誰可以替別人做決定有關。',
+  n537:'2009 年，報紙報導：健保要給付身心障礙者看牙齒的費用。',
+  n573:'2011 年，報紙報導：資源班的學生太多，\n有些輕度智能障礙的學生沒辦法進去。',
+  n737:'2022 年，是本站最晚的一篇剪報。\n報導一位智能障礙的媽媽和她的嬰兒。\n報紙把這件事寫得很沉重、很可憐。',
+  // 研究
+  r0:'1971 年，臺灣有了第一篇關於智能障礙的研究。\n1970 年代的研究很少，只有 7 篇。',
+  rd4:'1982 年，第一次有研究同時用數字和訪問來找答案。\n這種研究叫做「混合研究」，一共有 17 篇。',
+  rd2:'1985 年，第一次有研究去訪問人，聽他們說自己的故事。\n2000 年以後，這種研究才變多。',
+  rt5:'1986 年，第一次有研究談智能障礙者的權利。\n也是第一次有研究談「性」。',
+  rd3:'2002 年，第一次有老師在自己的教室裡做研究，\n一邊教、一邊改進。\n這種研究叫做「行動研究」。',
+  rr3:'2003 年，第一次有研究去教智能障礙者認識「性」，\n再看看教得好不好。',
+  rd5:'2005 年，第一次有研究整理很多別人的研究。\n這種研究叫做「文獻回顧」。',
+  rr2:'2005 年，第一次有研究談「自我倡議」。\n意思是：智能障礙者自己說出想要什麼，自己做決定。',
+  rpk:'2006 年，是研究最多的一年，有 28 篇。',
+  // 學生人數與總人數
+  pm0:'1999 年，臺灣有 68,044 位智能障礙者。\n之後人數慢慢變多。',
+  pn0:'2008 年，全國學校裡有 24,945 位智能障礙學生。\n這是本站學生人數資料的第一年。',
+  pnk:'2010 年，全國學校裡的智能障礙學生最多，有 26,059 人。\n之後每年慢慢變少。',
+  pxl:'2013 年，在全國的學校裡，\n學習障礙的學生，第一次比智能障礙的學生多。',
+  pm1:'2014 年，臺灣的智能障礙者超過十萬人。',
+  pxa:'2022 年，在全國的學校裡，\n自閉症的學生，第一次比智能障礙的學生多。',
+  pt:'臺北市有四所特殊教育學校。\n裡面的智能障礙學生，2003 年有 259 人，2023 年只剩 83 人。',
+  pn1:'2024 年，全國學校裡的智能障礙學生有 16,800 人，\n比 2010 年少了很多。\n可是全臺灣的智能障礙者，還是有十萬人左右。'
+};
+/* ============ 頁面：狀態、網址、工具列、重畫 ============
+   這一頁只有一條可縮放的時間軸，下方是選到的那件事的介紹卡。不連到其他頁面。
+   網址：?e=事件&tracks=軌道&from=年&to=年，可以分享；設定（易讀版、大字、減少動態）記在瀏覽器裡。 */
+const S = {e:null, tracks:new Set(TK)};
 const shown = () => EV.filter(e=>S.tracks.has(e.track));
 const allTracks = () => S.tracks.size===TK.length;
+const mastEl = $('#mast'), tipEl = $('#tip');
 const mastBottom = () => Math.round(mastEl.getBoundingClientRect().bottom);
+// 設定：記不住也沒關係，照預設值顯示
+const pref = (k,d) => { try{ const v = localStorage.getItem('idtree.zoom.'+k); return v==null ? d : v==='1'; }catch(e){ return d; } };
+const setPref = (k,v) => { try{ localStorage.setItem('idtree.zoom.'+k, v?'1':'0'); }catch(e){} };
+let easyOn = pref('easy', true), big = pref('big', false);
 
-/* ---------- 網址：?v=版本&e=事件&tracks=軌道 ---------- */
 function readUrl(){
   const q = new URLSearchParams(location.search);
-  S.v = SOLO || (VERS.some(x=>x.id===q.get('v')) ? q.get('v') : VERS[0].id);
-  if(ver().urlIn) ver().urlIn(q);
   S.e = byId[q.get('e')] ? q.get('e') : null;
   const t = (q.get('tracks')||'').split(',').filter(k=>TRACKS[k]);
   S.tracks = new Set(t.length ? t : TK);
   if(S.e && !S.tracks.has(byId[S.e].track)) S.tracks.add(byId[S.e].track);
+  zUrlIn(q);
 }
-function writeUrl(push){
+function writeUrl(){
   const q = new URLSearchParams();
-  if(!SOLO) q.set('v', S.v); if(S.e) q.set('e', S.e);
-  if(ver().urlOut) Object.entries(ver().urlOut()).forEach(([k,v])=>q.set(k,v)); if(!allTracks()) q.set('tracks', TK.filter(k=>S.tracks.has(k)).join(','));
-  const url = location.pathname+'?'+q.toString()+location.hash;
-  try{ window.history[push?'pushState':'replaceState'](null, '', url); }catch(e){}
+  if(S.e) q.set('e', S.e); if(!allTracks()) q.set('tracks', TK.filter(k=>S.tracks.has(k)).join(','));
+  Object.entries(zUrlOut()).forEach(([k,v])=>q.set(k,v));
+  const qs = q.toString();
+  try{ window.history.replaceState(null, '', location.pathname+(qs?'?'+qs:'')); }catch(e){}
 }
-
-/* ---------- 版本分頁列（左右鍵換分頁，Home／End 到頭尾） ---------- */
-function tabsHtml(){
-  if(SOLO) return '';
-  return VERS.map((x,i)=>`<button role="tab" id="tab-${x.id}" data-v="${x.id}" aria-selected="${x.id===S.v}" aria-controls="vpanel" tabindex="${x.id===S.v?0:-1}"><small>${x.no||''}</small><b>${esc(x.name)}</b></button>`).join('');
-}
-// 版本說明：手機上預設收起來，時間軸才不會被推到很下面；打開後換版本也保持打開
-const VI = {open:false};
-function infoHtml(){
-  const x = ver();
-  if(SOLO) return `<details${VI.open ? ' open' : ''}><summary><h2>關於這個時間軸</h2><span class="lm">研究依據、怎麼操作</span></summary><dl>
-    <div><dt>研究依據</dt><dd>${esc(x.basis)}</dd></div><div><dt>取捨</dt><dd>${esc(x.tradeoff)}</dd></div></dl><p class="vkeys"><b>操作：</b>${esc(x.keys)}</p><p class="vkeys"><a href="timelines.html?v=${x.id}">和其他時間軸版本比較</a></p></details>`;
-  return `<details${vw()>=720 || VI.open ? ' open' : ''}><summary><h2>${esc(x.name)}</h2><span class="lm">研究依據、適合的情境與取捨</span></summary><dl>
-    <div><dt>研究依據</dt><dd>${esc(x.basis)}</dd></div>
-    <div><dt>適合</dt><dd>${esc(x.fit)}</dd></div>
-    <div><dt>取捨</dt><dd>${esc(x.tradeoff)}</dd></div></dl>${x.keys ? `<p class="vkeys"><b>操作：</b>${esc(x.keys)}</p>` : ''}${x.solo ? `<p class="vkeys"><a href="${x.solo}">單獨開啟這個版本（畫面更大）</a></p>` : ''}</details>`;
-}
-/* ---------- 工具列：軌道篩選、跳到某一年、減少動態 ---------- */
 function toolsHtml(){
-  const x = ver();
-  if(x.noTools) return '';
   return `<div class="tl-filter" role="group" aria-label="要看哪幾條軌道">
       <span class="lbl" aria-hidden="true">軌道</span>
       ${TK.map(k=>`<button class="bchip" data-track="${k}" aria-pressed="${S.tracks.has(k)}" style="--c:${colorOf(k)}">${icon(k,!S.tracks.has(k))}${esc(TRACKS[k].name)}</button>`).join('')}
@@ -2908,131 +2852,70 @@ function toolsHtml(){
     </div>
     <div class="tl-filter">
       <form class="jumpf" id="jumpF"><label for="jumpY">跳到年份</label><input id="jumpY" type="number" inputmode="numeric" min="${AX0}" max="${AX1-1}" placeholder="例如 1990" autocomplete="off"><button class="btn" type="submit">跳到</button></form>
+      <span class="sep" aria-hidden="true"></span>
+      <button class="btn" data-act="easy" aria-pressed="${easyOn}">易讀版</button>
+      <button class="btn" data-act="big" aria-pressed="${big}"><span class="big-a" aria-hidden="true">大</span>大字</button>
       <button class="btn" data-act="calm" aria-pressed="${calm()}">減少動態</button>
-      <button class="btn" data-act="clear"${S.e?'':' hidden'}>清除選取</button>
     </div>`;
 }
-
-/* ---------- 事件說明 ---------- */
-const clipHtml = i => { const a = NEWS[i]; return `<li class="clip"><b>${esc(a.t)}</b><span>${esc(a.o)}・<time datetime="${a.d}">${esc(a.d.replace(/-/g,'.'))}</time></span><span class="lm">用詞：${esc(a.wg.join('、')||'沒有編碼')}｜觀點：${esc(RAW.viewShort[a.v]||a.v||'沒有編碼')}</span></li>`; };
-function mediaHtml(e){
-  let h = '';
-  const own = e.media.filter(m=>m.kind==='clip' && !m.rel), rel = e.media.filter(m=>m.kind==='clip' && m.rel);
-  e.media.filter(m=>m.kind==='photo').forEach(m=>{ const p = m.ph;
-    h += `<figure class="pn-photo"><img src="${esc(p.src)}" alt="${esc(p.alt)}" loading="lazy"><figcaption>${p.sample?'<span class="tag">示意</span>':''}${esc(p.title)}（${esc(p.year)}）。${esc(p.caption||'')}<small>${esc(p.credit||'')}</small></figcaption></figure>`; });
-  if(own.length) h += `<div class="pn-rel"><h3>剪報</h3><ul class="evclips">${own.map(m=>clipHtml(m.i)).join('')}</ul></div>`;
-  e.media.filter(m=>m.kind==='audio').forEach(m=>{ const a = m.iv;
-    h += `<div class="pn-rel pn-iv"><h3>訪談節選${a.sample?'<span class="tag">示意</span>':''}</h3><p class="lm">${esc(a.title)}・${esc(a.who)}・${esc(a.date)}</p>
-      <blockquote>${a.segs.slice(0,2).map(s=>`<p><b>${esc(s[1])}：</b>${esc(s[2])}</p>`).join('')}</blockquote></div>`; });
-  if(rel.length) h += `<div class="pn-rel"><h3>同一年的政策類剪報</h3><ul class="evclips">${rel.map(m=>clipHtml(m.i)).join('')}</ul></div>`;
-  return h;
-}
-function detailHtml(e, o){
-  o = o||{};
-  const VO = shown(), i = VO.indexOf(e), prev = VO[i-1], next = VO[i+1];
-  const causes = e.parents.map(p=>byId[p]), effects = kidsOf(e);
-  const jb = x => `<button class="jump" data-id="${x.id}" style="--c:${colorOf(x.track)}">${icon(x.track)}<span>${esc(x.title)}</span><small>${esc(whenShort(x))}</small></button>`;
-  const H = o.h||'h2';
-  return `<p class="pn-kind">${icon(e.track)}${esc(kindLabel(e))}</p>
-    ${o.inline ? '' : `<${H} tabindex="-1">${esc(e.title)}</${H}><p class="pn-date">${timeTag(e)}</p>`}
-    <div class="pn-desc">${e.summary.split('\n').map(s=>`<p>${esc(s)}</p>`).join('')}</div>
-    ${e.memo ? `<div class="memo"><h3>備註</h3>${e.memo.split('\n').map(s=>`<p>${esc(s)}</p>`).join('')}</div>` : ''}
-    ${mediaHtml(e)}
-    ${causes.length ? `<div class="pn-rel"><h3>往前看</h3>${causes.map(jb).join('')}</div>` : ''}
-    ${effects.length ? `<div class="pn-rel"><h3>往後看</h3>${effects.map(jb).join('')}</div>` : ''}
-    <dl class="pn-meta"><div><dt>日期精確度</dt><dd>${PREC[e.precision]}${e.certainty==='approx'?'（約略）':''}</dd></div><div><dt>出處</dt><dd>${esc(e.source)}</dd></div>${e.why ? `<div><dt>挑選理由</dt><dd>${esc(e.why)}</dd></div>` : ''}</dl>
-    ${o.inline ? '' : `<div class="pager"><button class="btn" data-id="${prev?prev.id:''}"${prev?'':' disabled'}>‹ 上一件</button><span>${i+1} / ${VO.length}</span><button class="btn" data-id="${next?next.id:''}"${next?'':' disabled'}>下一件 ›</button></div>`}`;
-}
-function introHtml(){
-  const n = t => EV.filter(e=>e.type===t).length;
-  return `<h2 tabindex="-1">50 件事件</h2><div class="pn-desc"><p>重大事件表的 ${n('event')} 件，加上從剪報（${n('news')} 件）、研究（${n('lit')} 件）與學生人數（${n('people')} 件）挑出的里程碑。每一件都寫了出處與挑選理由。</p><p>點任何一件事，這裡會顯示說明、剪報、照片與訪談節選。</p></div>
-    <p class="pn-start"><button class="btn solid" data-id="${shown()[0] ? shown()[0].id : ''}">從最早的事件開始看</button></p>`;
-}
-const usesPanel = () => ver().panel!==false;
-const widePanel = () => usesPanel() && vw()>=1040;
-function drawPanel(){
-  const p = $('#panel');
-  if(p){ p.innerHTML = S.e ? detailHtml(byId[S.e]) : introHtml(); p.scrollTop = 0; closeSheet(true); return; }
-  if(usesPanel() && S.e) openSheet(detailHtml(byId[S.e]));
-  else closeSheet(true);
-}
-function openSheet(html){
-  $('#sheetBody').innerHTML = html; $('#sheetBody').scrollTop = 0;
-  if(sheet.hidden){ sheet.hidden = false; void sheet.offsetWidth; sheet.classList.add('open'); document.body.classList.add('has-sheet'); }
-}
-function closeSheet(){ if(sheet.hidden) return; sheet.classList.remove('open'); sheet.hidden = true; document.body.classList.remove('has-sheet'); }
-
 /* ---------- 重畫：畫完把鍵盤焦點放回原本的元素 ---------- */
 function focusKey(){
   const a = document.activeElement; if(!a || a===document.body) return null;
-  if(a.id) return {sel:'#'+a.id};
-  for(const at of ['data-id','data-track','data-v','data-act','data-sort','data-lane','data-zoom','data-cluster']){ const el = a.closest('['+at+']'); if(el){ const zone = ['#panel','#sheet','#vpanel','#tools','#vtabs'].find(z=>el.closest(z));
-    return {sel:(zone ? zone+' ' : '')+'['+at+'="'+String(el.getAttribute(at)).replace(/["\\]/g,'\\$&')+'"]'}; } }
+  if(a.id) return '#'+a.id;
+  for(const at of ['data-id','data-track','data-act','data-zoom','data-cluster']){ const el = a.closest('['+at+']');
+    if(el) return (el.closest('#card') ? '#card ' : el.closest('#zArea') ? '#zArea ' : '#tools ')+'['+at+'="'+String(el.getAttribute(at)).replace(/["\\]/g,'\\$&')+'"]'; }
   return null;
 }
-function restoreFocus(k){ if(!k) return; let el; try{ el = $$(k.sel).find(x=>x.matches('a,button,input,select,summary,[tabindex]')); }catch(e){} if(el && el!==document.activeElement){ try{ el.focus({preventScroll:true}); }catch(e){} } }
+function restoreFocus(k){ if(!k) return; let el; try{ el = $$(k).find(x=>x.matches('a,button,input,select,summary,[tabindex]')); }catch(e){} if(el && el!==document.activeElement){ try{ el.focus({preventScroll:true}); }catch(e){} } }
 function render(o){
   o = o||{};
-  const fk = o.focus===false ? null : focusKey(), x = ver();
-  $('#vtabs').innerHTML = tabsHtml();
-  $('#vinfo').innerHTML = infoHtml();
+  const fk = o.focus===false ? null : focusKey(), area = $('#zArea');
+  document.documentElement.classList.toggle('big', big);
+  document.documentElement.classList.toggle('calm', calm());
   $('#tools').innerHTML = toolsHtml();
-  const wide = widePanel();
-  wrapEl.classList.toggle('wide', wide);
-  const old = $('#panel'); if(old && !wide) old.remove();
-  if(wide && !$('#panel')) wrapEl.insertAdjacentHTML('beforeend', '<aside class="panel plate" id="panel" aria-label="事件說明"></aside>');
-  if(SOLO){ view.removeAttribute('role'); view.setAttribute('aria-label', '可縮放時間軸'); } else view.setAttribute('aria-labelledby', 'tab-'+x.id);
-  view.className = 'tl-main v-'+x.id;
   // 重畫時先撐住原本的高度，頁面才不會在內容清空的一瞬間變短、把捲動位置拉回上面
-  view.style.minHeight = view.offsetHeight+'px';
-  x.draw(view);
-  view.style.minHeight = '';
-  drawPanel();
-  document.title = SOLO ? '可縮放時間軸｜智能障礙事件樹' : x.name+'｜時間軸版本比較｜智能障礙事件樹';
+  area.style.minHeight = area.offsetHeight+'px';
+  zDraw(area);
+  area.style.minHeight = '';
+  $('#card').innerHTML = cardHtml();
   restoreFocus(fk);
 }
 const say = t => { const s = $('#status'); s.textContent = ''; setTimeout(()=>{ s.textContent = t; }, 60); };
-// 選一件事。from：按的是哪個元素，關掉說明後焦點回到它
+// 把元素捲到看得到的地方，不被固定的頁首遮住（2.4.11）
+function reveal(el, where){
+  const r = el.getBoundingClientRect(), top = mastBottom()+12, bot = window.innerHeight-12;
+  if(r.top<top || r.bottom>bot) window.scrollTo({top:Math.max(0, window.scrollY+r.top-top-(where==='top' ? 0 : Math.max(0,(bot-top-r.height)/2))), behavior:calm()?'auto':'smooth'});
+}
+// 選一件事。o.key：用鍵盤選的，焦點移到介紹卡的標題；用滑鼠選的，只把介紹卡捲到看得見
 function select(id, o){
   o = o||{};
-  S.e = id||null; writeUrl(false); render();
+  S.e = id||null; writeUrl(); render();
   if(!S.e) return;
-  const el = $('#vpanel [data-id="'+id+'"]');
-  if(el && o.reveal!==false) reveal(el);
-  if(o.focusPanel){ const h = $('#panel h2')||$('#sheetBody h2'); if(h){ try{ h.focus({preventScroll:true}); }catch(e){} } }
+  const c = $('#card .ecard'); if(!c) return;
+  if(o.key){ const h = $('#card h2'); if(h){ try{ h.focus({preventScroll:true}); }catch(e){} } reveal(c, 'top'); }
+  else { const r = c.getBoundingClientRect(); if(r.top>window.innerHeight-120) reveal(c, 'top'); }
 }
-// 把元素捲到看得到的地方：不被固定的頁首、下方的說明遮住（2.4.11）
-function reveal(el){
-  const r = el.getBoundingClientRect(), top = mastBottom()+12, bot = window.innerHeight-(sheet.hidden?0:sheet.offsetHeight)-12;
-  if(r.top<top || r.bottom>bot) window.scrollTo({top:Math.max(0, window.scrollY+r.top-top-Math.max(0,(bot-top-r.height)/2)), behavior:calm()?'auto':'smooth'});
-}
-function setVersion(id, focusTab){
-  if(id===S.v) return;
-  S.v = id; writeUrl(true); render({focus:false});
-  if(focusTab){ const t = $('#tab-'+id); if(t) t.focus(); }
-}
+function unselect(){ const id = S.e; select(null); const el = id && $('#zFig [data-id="'+id+'"]'); if(el){ $$('#zFig [data-x]').forEach(x=>x.setAttribute('tabindex', x===el?'0':'-1')); try{ el.focus({preventScroll:true}); }catch(e){} } }
 
 /* ---------- 事件處理 ---------- */
 document.addEventListener('click', e=>{
   const t = e.target; let el;
-  if((el = t.closest('[data-v]'))) return setVersion(el.dataset.v, true);
   if((el = t.closest('[data-track]'))){ const k = el.dataset.track;
     if(k==='all') S.tracks = new Set(allTracks() ? [] : TK);
     else { S.tracks.has(k) ? S.tracks.delete(k) : S.tracks.add(k); }
     if(!S.tracks.size) S.tracks = new Set(TK);
     if(S.e && !S.tracks.has(byId[S.e].track)) S.e = null;
-    writeUrl(false); render(); say('顯示 '+shown().length+' 件事件'); return; }
+    writeUrl(); render(); say('顯示 '+shown().length+' 件事件'); return; }
   if((el = t.closest('[data-act]'))){ const a = el.dataset.act;
-    if(a==='calm'){ calmPick = !calm(); try{ localStorage.setItem('idtree.tl.calm', calmPick?'1':'0'); }catch(err){} document.documentElement.classList.toggle('calm', calm()); render(); return; }
-    if(a==='clear'){ const id = S.e; select(null); const b = id && $('#vpanel [data-id="'+id+'"]'); if(b) b.focus({preventScroll:true}); return; }
-  }
-  if(t.closest('#sheetX')){ const id = S.e; closeSheet(); S.e = null; writeUrl(false); render(); const b = id && $('#vpanel [data-id="'+id+'"]'); if(b) b.focus({preventScroll:true}); return; }
-  if((el = t.closest('[data-id]')) && el.dataset.id){
-    if(el.closest('#vpanel') && ver().onPick && ver().onPick(el.dataset.id, el)===false) return;
-    const inPanel = !!el.closest('#panel,#sheet');
-    // 在圖上再點一次同一件：取消選取
-    if(!inPanel && S.e===el.dataset.id && usesPanel()) return select(null);
-    return select(el.dataset.id, {focusPanel:!inPanel && !widePanel()});
+    if(a==='easy'){ easyOn = !easyOn; setPref('easy', easyOn); render(); say(easyOn ? '介紹卡先顯示易讀版' : '介紹卡直接顯示完整說明'); return; }
+    if(a==='big'){ big = !big; setPref('big', big); render(); say(big ? '大字' : '一般字級'); return; }
+    if(a==='calm'){ calmPick = !calm(); try{ localStorage.setItem('idtree.tl.calm', calmPick?'1':'0'); }catch(err){} render(); return; }
+    if(a==='close') return unselect();
+    return; }
+  if((el = t.closest('#zFig [data-id]'))){
+    // 再點一次同一件：收起介紹
+    if(S.e===el.dataset.id) return unselect();
+    return select(el.dataset.id, {key:e.detail===0});          // 鍵盤（Enter、空白鍵）觸發的 click，detail 是 0
   }
 });
 document.addEventListener('submit', e=>{
@@ -3041,26 +2924,19 @@ document.addEventListener('submit', e=>{
   if(!(y>=AX0 && y<AX1)){ say('請輸入 '+AX0+' 到 '+(AX1-1)+' 之間的年份'); return; }
   const target = shown().find(x=>x.y>=y) || shown()[shown().length-1];
   if(!target) return;
-  if(ver().onJump) ver().onJump(y, target);
-  select(target.id);
+  zJump(y); select(target.id);
   say(y+' 年起的第一件事：'+whenLong(target)+'，'+target.title);
-  const el = $('#vpanel [data-id="'+target.id+'"]'); if(el){ try{ el.focus({preventScroll:true}); }catch(err){} }
+  const el = $('#zFig [data-id="'+target.id+'"]'); if(el){ $$('#zFig [data-x]').forEach(x=>x.setAttribute('tabindex', x===el?'0':'-1')); try{ el.focus({preventScroll:true}); }catch(err){} }
 });
 document.addEventListener('keydown', e=>{
   const t = e.target;
-  // 版本分頁列：左右鍵換分頁
-  if(t.closest && t.closest('#vtabs') && ['ArrowLeft','ArrowRight','Home','End'].includes(e.key)){
-    e.preventDefault(); const i = VERS.findIndex(x=>x.id===S.v), n = VERS.length;
-    const j = e.key==='Home' ? 0 : e.key==='End' ? n-1 : (i+(e.key==='ArrowRight'?1:-1)+n)%n; return setVersion(VERS[j].id, true); }
   // 圖裡的按鈕：Enter 或空白鍵等於點一下
   if((e.key==='Enter' || e.key===' ') && t instanceof SVGElement && t.getAttribute('role')==='button'){ e.preventDefault(); t.dispatchEvent(new MouseEvent('click',{bubbles:true,cancelable:true})); return; }
-  if(ver().onKey && t.closest && t.closest('#vpanel') && ver().onKey(e)===true){ e.preventDefault(); return; }
-  if(e.key==='Escape' && S.e && usesPanel()){ const id = S.e; select(null); const b = $('#vpanel [data-id="'+id+'"]'); if(b) b.focus({preventScroll:true}); }
+  if(t.closest && t.closest('#zFig') && zKey(e)===true){ e.preventDefault(); return; }
+  if(e.key==='Escape' && S.e){ e.preventDefault(); hideTip(); unselect(); }
 });
-// 一組事件裡用方向鍵移動（roving tabindex：整組只有一個 Tab 停點）
-function roveTo(el){ if(!el) return; const g = el.closest('[data-rove]'); if(g) $$('[data-id]', g).forEach(x=>x.setAttribute('tabindex', x===el?'0':'-1')); el.focus(); reveal(el); }
 
-/* ---------- 提示框：滑鼠移上去或鍵盤聚焦時顯示（也可以按 Esc 關掉） ---------- */
+/* ---------- 提示框：滑鼠移上去或鍵盤聚焦時顯示 ---------- */
 function tipAt(text,x,y){
   const lines = String(text).split('\n'); tipEl.replaceChildren();
   const b = document.createElement('b'); b.textContent = lines[0]; tipEl.appendChild(b);
@@ -3071,167 +2947,13 @@ function tipAt(text,x,y){
   tipEl.style.left = left+'px'; tipEl.style.top = top+'px';
 }
 const hideTip = () => { tipEl.hidden = true; };
-document.addEventListener('pointermove', e=>{ const el = e.target.closest && e.target.closest('[data-tip]'); el ? tipAt(el.getAttribute('data-tip'), e.clientX, e.clientY) : hideTip(); });
+document.addEventListener('pointermove', e=>{ const el = e.target.closest && e.target.closest('[data-tip]'); el && !zDrag ? tipAt(el.getAttribute('data-tip'), e.clientX, e.clientY) : hideTip(); });
 document.addEventListener('focusin', e=>{ const el = e.target.closest && e.target.closest('[data-tip]'); if(el){ const r = el.getBoundingClientRect(); tipAt(el.getAttribute('data-tip'), r.left+r.width/2, r.bottom); } else hideTip(); });
 document.addEventListener('focusout', hideTip);
-document.addEventListener('keydown', e=>{ if(e.key==='Escape') hideTip(); }, true);
 window.addEventListener('scroll', hideTip, true);
-
-document.addEventListener('toggle', e=>{ if(e.target.closest && e.target.closest('#vinfo') && (SOLO || vw()<720)) VI.open = e.target.open; }, true);
-window.addEventListener('popstate', ()=>{ readUrl(); render({focus:false}); });
 let rT, rW = vw();
 window.addEventListener('resize', ()=>{ clearTimeout(rT); rT = setTimeout(()=>{ if(vw()!==rW){ rW = vw(); render(); } }, 140); });
-/* ============ 版本 1：文字年表 ============
-   所有版本的基準：ol／li、time、年代與事件的標題層級，DOM 的順序就是閱讀順序。細節在原處展開，不用另外的說明欄。 */
-const TX = {open:new Set()};
-VERS.push({id:'text', no:'版本 1', name:'文字年表', panel:false,
-  basis:'第三部分 4.1、4.2：等價的文字年表要最優先；縱向單線是所有樣式的無障礙退化目標。',
-  fit:'任何數量的事件；螢幕報讀軟體使用者可以按 H 鍵在年代與事件之間跳讀。',
-  tradeoff:'看不出時間的比例與同時性，但最穩定、最好讀。其他版本的內容都和這一版相同。',
-  keys:'Tab 到「看細節」按鈕，Enter 展開或收起；細節裡的「往前看／往後看」會跳到那一件。',
-  draw(root){
-    if(S.e) TX.open.add(S.e);
-    const VO = shown();
-    root.innerHTML = `<div class="plate vtext"><p class="vtext-lead">${VO.length} 件事件，依時間先後排列。</p>${DECADES.map(d=>{ const ev = VO.filter(e=>e.dec===d); if(!ev.length) return '';
-      return `<section aria-labelledby="dec-${d}"><h2 id="dec-${d}">${d}年代<small>${ev.length} 件</small></h2><ol class="tline">${ev.map(e=>{ const on = TX.open.has(e.id);
-        return `<li style="--c:${colorOf(e.track)}"${S.e===e.id?' class="on"':''}>
-          <span class="tl-mk" aria-hidden="true">${icon(e.track)}</span>
-          <h3>${timeTag(e)}<span class="tt">${esc(e.title)}</span></h3>
-          <p class="lm">${esc(kindLabel(e))}｜日期精確度：${PREC[e.precision]}${e.media.some(m=>m.kind==='photo')?'｜有照片':''}${e.media.some(m=>m.kind==='audio')?'｜有訪談':''}</p>
-          <p class="sum">${esc(e.summary.split('\n')[0])}</p>
-          <button class="btn sm xbtn" data-id="${e.id}" aria-expanded="${on}" aria-controls="d-${e.id}">${on?'收起細節':'看細節與史料'}</button>
-          <div class="xdetail" id="d-${e.id}"${on?'':' hidden'}>${on ? detailHtml(e,{inline:true}) : ''}</div></li>`; }).join('')}</ol></section>`; }).join('')}</div>`;
-  },
-  onPick(id, el){
-    const toggle = el.classList.contains('xbtn');
-    if(toggle){ TX.open.has(id) ? TX.open.delete(id) : TX.open.add(id); S.e = TX.open.has(id) ? id : null; }
-    else { TX.open.add(id); S.e = id; }          // 細節裡的「往前看／往後看」：打開那一件
-    writeUrl(false); render();
-    const b = $('#vpanel .xbtn[data-id="'+id+'"]'); if(b){ b.focus({preventScroll:true}); if(!toggle) reveal(b.closest('li')); }
-    return false;
-  }
-});
-/* ============ 版本 2：表格年表 ============
-   <table> 加 caption 與 scope；欄位是日期、事件、類型、軌道、精確度與出處。按欄位名稱可以排序。 */
-const TB = {key:'t', dir:1};
-const TB_COLS = [['t','日期'],['title','事件'],['type','類型'],['track','軌道'],['precision','精確度'],['source','出處']];
-VERS.push({id:'table', no:'版本 2', name:'表格年表',
-  basis:'第三部分 4.1：多軌道資料建議提供表格，欄位為年代、事件、類別、出處，並加 caption 與 scope。',
-  fit:'想要比較、排序或列印的讀者；研究者核對出處。',
-  tradeoff:'資訊最完整，但沒有時間的空間感。窄的螢幕上表格可以左右捲動（1.4.10 允許資料表這樣做）。',
-  keys:'Tab 到欄位名稱，Enter 排序；Tab 到事件名稱，Enter 看說明。',
-  draw(root){
-    const PK = Object.keys(PREC);
-    const cmp = {t:(a,b)=>a.t-b.t, title:(a,b)=>a.title.localeCompare(b.title,'zh-Hant'), type:(a,b)=>a.type.localeCompare(b.type)||a.t-b.t,
-      track:(a,b)=>TK.indexOf(a.track)-TK.indexOf(b.track)||a.t-b.t, precision:(a,b)=>PK.indexOf(a.precision)-PK.indexOf(b.precision)||a.t-b.t,
-      source:(a,b)=>a.source.localeCompare(b.source,'zh-Hant')||a.t-b.t}[TB.key];
-    const rows = shown().slice().sort((a,b)=>cmp(a,b)*TB.dir);
-    const th = ([k,n]) => { const on = TB.key===k;
-      return `<th scope="col"${on?` aria-sort="${TB.dir>0?'ascending':'descending'}"`:''}><button class="sortb" data-sort="${k}">${n}<span aria-hidden="true">${on?(TB.dir>0?' ▲':' ▼'):''}</span></button></th>`; };
-    root.innerHTML = `<div class="plate vtable"><div class="tscroll" role="region" aria-labelledby="tbCap" tabindex="0"><table class="tbl evt">
-      <caption id="tbCap">智能障礙相關事件表（${rows.length} 件，依${TB_COLS.find(c=>c[0]===TB.key)[1]}${TB.dir>0?'由小到大':'由大到小'}排列）</caption>
-      <thead><tr>${TB_COLS.map(th).join('')}</tr></thead>
-      <tbody>${rows.map(e=>`<tr${S.e===e.id?' class="on"':''}><td>${timeTag(e)}</td><th scope="row"><button class="rowb" data-id="${e.id}" aria-pressed="${S.e===e.id}" style="--c:${colorOf(e.track)}">${icon(e.track)}<span>${esc(e.title)}</span></button></th>
-        <td>${TYPES[e.type]}</td><td>${esc(trackName(e))}</td><td>${PREC[e.precision]}${e.certainty==='approx'?'（約）':''}</td><td>${esc(e.source)}</td></tr>`).join('')}</tbody></table></div></div>`;
-  }
-});
-document.addEventListener('click', e=>{
-  const b = e.target.closest('[data-sort]'); if(!b) return;
-  const k = b.dataset.sort; if(TB.key===k) TB.dir = -TB.dir; else { TB.key = k; TB.dir = 1; }
-  render(); say('依'+TB_COLS.find(c=>c[0]===k)[1]+(TB.dir>0?'由小到大':'由大到小')+'排列');
-});
-/* ============ 版本 6：多軌道比例時間軸 ============
-   寬的畫面：橫向 1962–2025，一條軌道一列（三個分支、剪報、研究、學生人數），上方是報紙用詞的比例。
-   窄的畫面：改成直向；可以一次看全部軌道（只有記號），或只看一條（寫出事件名稱）。 */
-const SW = {lane:'all'};
-// 同一條軌道裡的事件，依時間先後
-const laneEvents = k => shown().filter(e=>e.track===k);
-const lanes = () => TK.filter(k=>S.tracks.has(k));
-function swimWide(W){
-  const L = lanes(), LW = 124, R = 18, X = t => LW+(W-LW-R)*(t-AX0)/(AX1-AX0), LH = 70, TOP = 78, H = TOP+L.length*LH+8;
-  let g = '';
-  // 上方：報紙用詞的比例（疊起來的色帶），到有新聞資料的最後一年
-  const sy0 = 30, sh = 30, xs = []; for(let i=0;i<=120;i++){ const t = AX0+(DATA_END-AX0)*i/120; xs.push({x:X(t), sh:shares(t)}); }
-  STACK.forEach((k,i)=>{ const top = xs.map(p=>f1(p.x)+','+f1(sy0+p.sh[i][0]*sh)), bot = xs.map(p=>f1(p.x)+','+f1(sy0+p.sh[i][1]*sh)).reverse();
-    g += `<polygon points="${top.concat(bot).join(' ')}" fill="${TERMS[k].color}" stroke="var(--line2)" stroke-width=".6"/>`; });
-  g += `<text class="lnm" x="${LW-10}" y="${sy0+sh/2+4}" text-anchor="end" font-size="12">報紙用詞比例</text>`;
-  // 年代：刻度與格線
-  DECADES.forEach(d=>{ const t = Math.max(d,AX0), x = X(t);
-    g += `<line x1="${f1(x)}" x2="${f1(x)}" y1="18" y2="${H-6}" stroke="var(--ink)" stroke-opacity=".14"/>`;
-    g += `<text class="yr" x="${f1(x+4)}" y="14" font-size="12">${t===d ? d : t}</text>`; });
-  L.forEach((k,li)=>{
-    const y0 = TOP+li*LH, my = y0+20, ev = laneEvents(k);
-    g += `<rect x="0" y="${y0}" width="${W}" height="${LH}" fill="${li%2?'transparent':'var(--trk)'}"/>`;
-    g += `<g class="lnm">${mark(TRACKS[k].shape, 14, my, 5.2, `fill="${colorOf(k)}"`)}<text x="26" y="${my+4.5}" font-size="13">${esc(TRACKS[k].name)}</text><text class="cnt" x="26" y="${my+22}" font-size="11">${ev.length} 件</text></g>`;
-    g += `<line x1="${LW}" x2="${W-R}" y1="${my}" y2="${my}" stroke="${colorOf(k)}" stroke-opacity=".45" stroke-width="2"/>`;
-    // 名稱：重要的先排；兩列都排不下的，名稱留在提示框與說明裡
-    const rows = [[],[]], lab = {};
-    ev.slice().sort((a,b)=>b.importance-a.importance || a.t-b.t).forEach(e=>{ const w = Math.min(textW(e.title,11.5), 150), x = Math.min(Math.max(X(e.t)-w/2, LW+2), W-R-w);
-      for(let r=0;r<2;r++){ if(rows[r].every(([a,b])=>x+w+8<a || x>b+8)){ rows[r].push([x,x+w]); lab[e.id] = {x, r, w}; break; } } });
-    ev.forEach((e,i)=>{ const x = X(e.t), on = S.e===e.id, b = lab[e.id], txt = b ? (textW(e.title,11.5)>150 ? e.title.slice(0, Math.floor(150/11.5)-1)+'…' : e.title) : '';
-      g += `<g class="ev${on?' on':''}" data-id="${e.id}" role="button" tabindex="-1" aria-pressed="${on}" aria-label="${esc(evLabel(e, '第 '+(i+1)+' / 共 '+ev.length+' 件'))}" data-tip="${esc(e.title+'\n'+whenLong(e))}" style="--c:${colorOf(k)}">
-        <rect class="hit" x="${f1(x-13)}" y="${my-13}" width="26" height="26" rx="6"/>
-        ${e.certainty==='approx' ? `<line x1="${f1(X(e.dec))}" x2="${f1(X(e.dec+10))}" y1="${my}" y2="${my}" stroke="${colorOf(k)}" stroke-width="7" stroke-opacity=".3" stroke-linecap="round" stroke-dasharray="2 4"/>` : ''}
-        ${mark(TRACKS[k].shape, x, my, on?7.4:6, 'class="mk"')}
-        ${b ? `<text class="lt" x="${f1(b.x+b.w/2)}" y="${my+(b.r?44:28)}" text-anchor="middle" font-size="11.5">${esc(txt)}</text>${b.r ? `<line x1="${f1(x)}" x2="${f1(x)}" y1="${my+8}" y2="${my+33}" stroke="${colorOf(k)}" stroke-opacity=".5"/>` : ''}` : ''}</g>`; });
-  });
-  return `<svg class="tsvg swim" width="${W}" height="${H}" viewBox="0 0 ${W} ${H}" role="group" data-rove aria-roledescription="多軌道時間軸" aria-describedby="swHelp" aria-label="多軌道時間軸，1962 到 2025 年，${L.length} 條軌道">${g}</svg>`;
-}
-function swimNarrow(W){
-  const one = SW.lane!=='all' && S.tracks.has(SW.lane) ? SW.lane : null, L = one ? [one] : lanes();
-  const YW = 46, PY = one ? 26 : 15, TOP = 16, Y = t => TOP+(t-AX0)*PY, H = Y(AX1)+12;
-  const CW = one ? 34 : Math.max(30, Math.min(56, (W-YW-8)/L.length)), CX = i => YW+CW*i+CW/2;
-  let g = '', maxY = 0;
-  DECADES.forEach(d=>{ const t = Math.max(d,AX0), y = Y(t);
-    g += `<line x1="0" x2="${W}" y1="${f1(y)}" y2="${f1(y)}" stroke="var(--ink)" stroke-opacity=".16"/><text class="yr" x="4" y="${f1(y+15)}" font-size="12">${t===d?d:t}</text>`; });
-  L.forEach((k,li)=>{ const x = CX(li), ev = laneEvents(k), used = [];
-    g += `<line x1="${f1(x)}" x2="${f1(x)}" y1="${TOP}" y2="${H-8}" stroke="${colorOf(k)}" stroke-opacity=".45" stroke-width="2"/>`;
-    let lastLab = -1e9;
-    ev.forEach((e,i)=>{ let y = Y(e.t); while(used.some(u=>Math.abs(u-y)<13)) y += 13; used.push(y);
-      const on = S.e===e.id, ly = Math.max(y+4.5, lastLab+20); if(one) lastLab = ly; maxY = Math.max(maxY, one ? ly : y);
-      g += `<g class="ev${on?' on':''}" data-id="${e.id}" role="button" tabindex="-1" aria-pressed="${on}" aria-label="${esc(evLabel(e, '第 '+(i+1)+' / 共 '+ev.length+' 件'))}" style="--c:${colorOf(k)}">
-        <rect class="hit" x="${f1(one ? x-14 : x-CW/2+2)}" y="${f1(y-12)}" width="${one ? W-x+8 : CW-4}" height="24" rx="6"/>${mark(TRACKS[k].shape, x, y, on?7:5.6, 'class="mk"')}
-        ${one ? `${ly-y>6 ? `<path d="M${f1(x+8)} ${f1(y)} L${f1(x+22)} ${f1(ly-4.5)}" stroke="${colorOf(k)}" stroke-opacity=".6" fill="none"/>` : ''}<text class="lt" x="${f1(x+24)}" y="${f1(ly)}" font-size="13.5"><tspan class="yr2">${esc(whenShort(e))}</tspan> ${esc(e.title)}</text>` : ''}</g>`; });
-  });
-  const H2 = Math.max(H, maxY+16);
-  return `<svg class="tsvg swim narrow" width="${W}" height="${H2}" viewBox="0 0 ${W} ${H2}" role="group" data-rove aria-roledescription="多軌道時間軸" aria-describedby="swHelp" aria-label="直向的多軌道時間軸，由上往下越來越晚，${one ? '只看「'+TRACKS[one].name+'」' : L.length+' 條軌道'}">${g}</svg>`;
-}
-VERS.push({id:'swim', no:'版本 6', name:'多軌道比例時間軸',
-  basis:'Brehmer 等人（2017）最常見的設計「線性＋編年刻度＋依類別分面」；第一部分 3.1 多軌道、3.4 分期色帶、3.10 手機一次一條軌道。',
-  fit:'20–200 件、多條主線；要看出「同一時間各條線發生了什麼」。',
-  tradeoff:'時間比例正確，看得出空白與密集，但密集的地方名稱放不下（名稱一律在提示框與說明裡）。手機上改成直向。',
-  keys:'Tab 進入圖（只占一個停點）；左右鍵在同一條軌道裡前後移動，上下鍵換軌道；Home／End 到頭尾；Enter 看說明，Esc 關閉。手機的直向版是上下鍵前後、左右鍵換軌道。',
-  draw(root){
-    const narrow = vw()<720;
-    root.innerHTML = `<p class="vh" id="swHelp">${narrow ? '上下鍵在同一條軌道裡前後移動，左右鍵換軌道' : '左右鍵在同一條軌道裡前後移動，上下鍵換軌道'}，Enter 看說明。</p>
-      ${narrow ? `<div class="tl-filter seg-lanes" role="group" aria-label="手機上要看哪一條軌道"><span class="lbl" aria-hidden="true">一次看一條：</span><button class="bchip" data-lane="all" aria-pressed="${SW.lane==='all'||!S.tracks.has(SW.lane)}">全部（只有記號）</button>${lanes().map(k=>`<button class="bchip" data-lane="${k}" aria-pressed="${SW.lane===k}" style="--c:${colorOf(k)}">${icon(k)}${esc(TRACKS[k].name)}</button>`).join('')}</div>` : ''}
-      <div class="plate tl-fig" id="swFig"></div>
-      ${narrow ? '' : `<p class="tl-terms swlg"><span class="lbl">上方色帶：報紙用詞的比例（2023 年起沒有新聞資料）</span>${STACK.map(k=>`<span class="tchip sm" style="--c:${TERMS[k].color}"><i></i>${esc(TERMS[k].name)}</span>`).join('')}</p>`}
-      <p class="lm swnote">記號旁邊沒寫名稱的事件，名稱在提示框與說明裡；虛線色帶表示只知道年代的事件。</p>`;
-    const fig = $('#swFig'), W = Math.floor(fig.clientWidth);
-    fig.innerHTML = narrow ? swimNarrow(W) : swimWide(W);
-    const all = $$('#swFig [data-id]'), cur = all.find(x=>x.dataset.id===S.e) || all[0]; if(cur) cur.setAttribute('tabindex','0');
-  },
-  onKey(e){
-    const el = e.target.closest && e.target.closest('#swFig [data-id]'); if(!el) return;
-    const narrow = !!$('#swFig .narrow'), id = el.dataset.id, ev = byId[id];
-    const along = narrow ? ['ArrowUp','ArrowDown'] : ['ArrowLeft','ArrowRight'], across = narrow ? ['ArrowLeft','ArrowRight'] : ['ArrowUp','ArrowDown'];
-    const drawn = $$('#swFig [data-id]').map(x=>byId[x.dataset.id]), inLane = drawn.filter(x=>x.track===ev.track);
-    let to = null;
-    if(along.includes(e.key)){ const i = inLane.indexOf(ev); to = inLane[i+(e.key===along[1]?1:-1)]; }
-    else if(across.includes(e.key)){ const L = TK.filter(k=>drawn.some(x=>x.track===k)), li = L.indexOf(ev.track), k = L[li+(e.key===across[1]?1:-1)];
-      if(k){ const cand = drawn.filter(x=>x.track===k); to = cand.reduce((a,b)=>Math.abs(b.t-ev.t)<Math.abs(a.t-ev.t)?b:a, cand[0]); } }
-    else if(e.key==='Home') to = drawn[0]; else if(e.key==='End') to = drawn[drawn.length-1];
-    else return;
-    if(to) roveTo($('#swFig [data-id="'+to.id+'"]'));
-    return true;
-  }
-});
-document.addEventListener('click', e=>{
-  const b = e.target.closest('[data-lane]'); if(!b) return;
-  SW.lane = b.dataset.lane; render(); say(SW.lane==='all' ? '顯示全部軌道' : '只看「'+TRACKS[SW.lane].name+'」，'+laneEvents(SW.lane).length+' 件');
-});
-/* ============ 版本 7：概覽＋細節＋語意縮放 ============
+/* ============ 可縮放時間軸：概覽＋細節＋語意縮放 ============
    上方是全時段的概覽列（每年的剪報篇數＋事件刻痕），框起來的是主視窗目前的範圍。
    縮放是連續的（全覽 64 年到最窄 3 年），換範圍時有短短的過渡，看得出是在放大或縮小。
    縮放不只是放大：跨度大時只寫出重要的事件，越放大寫出越多；放不下的合併成「＋N」。
@@ -3264,7 +2986,7 @@ function zOverview(W){
 // o.prev：過渡開始前寫出名稱的事件；o.p：過渡的進度（0–1），新出現的卡片跟著淡入
 function zMain(W, o){
   o = o||{};
-  const a = Z.a, b = Z.b, s = b-a, X = t => 14+(W-28)*(t-a)/s, AXY = 30, CH = 46, RG = 52, MAXR = 5;
+  const a = Z.a, b = Z.b, s = b-a, X = t => 14+(W-28)*(t-a)/s, AXY = 30, FS = big ? 16 : 13, FD = big ? 13.5 : 11.5, CH = big ? 56 : 46, RG = CH+6, MAXR = 5;
   const ev = shown().filter(e=>e.t>=a && e.t<b), need = zNeed(s);
   let g = '';
   // 背景：可以拖曳平移、雙擊放大的地方
@@ -3279,19 +3001,19 @@ function zMain(W, o){
   const rows = Array.from({length:MAXR}, ()=>[]), card = {}, loose = [];
   ev.slice().sort((p,q)=>(q.id===S.e)-(p.id===S.e) || q.importance-p.importance || p.t-q.t).forEach(e=>{
     if(e.importance<need && e.id!==S.e){ loose.push(e); return; }
-    const w = Math.min(Math.max(textW(e.title,13), textW(whenShort(e),11.5))+24, 210), x = Math.min(Math.max(X(e.t)-w/2, 2), W-w-2);
+    const w = Math.min(Math.max(textW(e.title,FS), textW(whenShort(e),FD))+24, big ? 260 : 210), x = Math.min(Math.max(X(e.t)-w/2, 2), W-w-2);
     const r = rows.findIndex(R=>R.every(([p,q])=>x+w+6<p || x>q+6));
     if(r<0){ loose.push(e); return; } rows[r].push([x,x+w]); card[e.id] = {x, w, r};
   });
   const used = Math.max(0, ...Object.values(card).map(c=>c.r+1)), LY = AXY+18+Math.max(used,1)*RG+18;
   const items = [];
-  ev.filter(e=>card[e.id]).forEach(e=>{ const c = card[e.id], x = X(e.t), y = AXY+14+c.r*RG, on = S.e===e.id, lim = Math.floor((c.w-22)/13);
-    const title = textW(e.title,13)>c.w-22 ? [...e.title].slice(0, lim-1).join('')+'…' : e.title;
+  ev.filter(e=>card[e.id]).forEach(e=>{ const c = card[e.id], x = X(e.t), y = AXY+14+c.r*RG, on = S.e===e.id, lim = Math.floor((c.w-22)/FS);
+    const title = textW(e.title,FS)>c.w-22 ? [...e.title].slice(0, lim-1).join('')+'…' : e.title;
     const fade = o.prev && !o.prev.has(e.id) ? ` opacity="${(o.p||0).toFixed(2)}"` : '';
     items.push({x, html:`<g class="ev card${on?' on':''}" data-id="${e.id}" data-x="${f1(x)}" role="button" tabindex="-1" aria-pressed="${on}" aria-label="${esc(evLabel(e))}" style="--c:${colorOf(e.track)}"${fade}>
       <line x1="${f1(x)}" x2="${f1(x)}" y1="${AXY}" y2="${y}" stroke="${colorOf(e.track)}" stroke-opacity=".7"/>${mark(TRACKS[e.track].shape, x, AXY, 5, 'class="mk"')}
       <rect class="lb" x="${f1(c.x)}" y="${y}" width="${f1(c.w)}" height="${CH}" rx="7"/><rect x="${f1(c.x)}" y="${y}" width="4" height="${CH}" rx="2" fill="${colorOf(e.track)}"/>
-      <text class="yr" x="${f1(c.x+12)}" y="${y+17}" font-size="11.5">${esc(whenShort(e))}</text><text class="lt" x="${f1(c.x+12)}" y="${y+36}" font-size="13">${esc(title)}</text></g>`}); });
+      <text class="yr" x="${f1(c.x+12)}" y="${y+(big?20:17)}" font-size="${FD}">${esc(whenShort(e))}</text><text class="lt" x="${f1(c.x+12)}" y="${y+(big?45:36)}" font-size="${FS}">${esc(title)}</text></g>`}); });
   // 沒寫名稱的：靠得很近的合併成「＋N」，按了放大到那一段
   const L = loose.sort((p,q)=>p.t-q.t), groups = [];
   L.forEach(e=>{ const g0 = groups[groups.length-1]; if(g0 && X(e.t)-X(g0[g0.length-1].t)<30) g0.push(e); else groups.push([e]); });
@@ -3354,38 +3076,34 @@ function zZoomAt(t, factor, o){ const s = Math.min(Math.max(zSpan()*factor, ZMIN
 const zCenter = () => (Z.a+Z.b)/2;
 const zFocusFig = () => { const t = $('#zFig [tabindex="0"]'); if(t) t.focus({preventScroll:true}); };
 
-VERS.push({id:'zoom', no:'版本 7', name:'概覽＋細節＋語意縮放', solo:'zoom.html',
-  basis:'Shneiderman「先概覽、縮放與篩選、再按需求看細節」；第一部分 3.2 概覽＋細節、3.3 語意縮放、3.5 群集與重要度分級；第三部分 4.5 的 2.5.7 拖曳替代。',
-  fit:'200 件以上、以探索為主；這裡加上 738 篇剪報的密度，示範資料量大時的做法。',
-  tradeoff:'一次只看一段時間，要靠概覽列維持方位感；操作比其他版本多一層。',
-  keys:'滑鼠：按住 Ctrl（Mac 為 ⌘）再滾動滾輪，或用觸控板兩指縮放；拖曳空白處左右移動；雙擊放大；拖曳概覽列上的框。鍵盤：Tab 進入圖，左右鍵在事件與「＋N」之間移動，Enter 看說明或放大；圖有焦點時，＋／－ 縮放，PageUp／PageDown 往前或往後。',
-  urlIn(q){ const a = parseFloat(q.get('from')), b = parseFloat(q.get('to'));
-    if(a>=AX0 && b>a){ [Z.a, Z.b] = zClamp(a, b+1); } },
-  urlOut(){ return zSpan()>=ZMAX-.001 ? {} : {from:Math.floor(Z.a+.001), to:Math.max(Math.floor(Z.a+.001), Math.ceil(Z.b-.001)-1)}; },
-  draw(root){
-    if(S.e){ const e = byId[S.e]; if(e.t<Z.a || e.t>=Z.b){ const s = zSpan(); [Z.a, Z.b] = zClamp(e.t-s/2, e.t+s/2); } }
-    if(zNeedWas==null) zNeedWas = zNeed();
-    const s = zSpan();
-    root.innerHTML = `<div class="plate zbox">
-      <div class="zctl" role="group" aria-label="平移與縮放">
-        <button class="btn" data-zoom="prev">‹ 往前</button>
-        <button class="btn" data-zoom="out" aria-label="縮小">－</button>
-        <label class="zslide"><span class="lbl">全覽</span><input type="range" id="zSlider" min="0" max="100" step="1" value="${zToSlider(s)}" aria-label="縮放" aria-valuetext="跨 ${Math.round(s)} 年，${zLabel()}"><span class="lbl">三年</span></label>
-        <button class="btn" data-zoom="in" aria-label="放大">＋</button>
-        <button class="btn" data-zoom="next">往後 ›</button>
-        <label class="zsel"><span class="lbl">年代</span><select id="zEra"><option value="">選一個年代</option>${DECADES.map(d=>`<option value="${d}">${d}年代</option>`).join('')}</select></label>
-        <button class="btn" data-zoom="all">看全部</button>
-      </div>
-      <p class="zrange"></p>
-      <div class="zovw"><span class="lbl">概覽：每年的剪報篇數與事件刻痕（按一下移到那一年，也可以拖曳框）</span><div id="zOvFig"></div></div>
-      <p class="vh" id="zHelp">左右鍵移動，Enter 看說明或放大，加號與減號縮放，PageUp 與 PageDown 往前或往後一段。</p>
-      <div class="zfigw"><div class="tl-fig zfig" id="zFig"></div><p class="zhint" id="zHint" aria-hidden="true" hidden>按住 Ctrl（Mac 為 ⌘）再滾動滾輪即可縮放；拖曳可以左右移動</p></div></div>`;
-    const m = zPaint();
-    zLastLab = m ? m.labelled : new Set();
-    const all = $$('#zFig [data-x]'), cur = all.find(x=>x.dataset.id===S.e) || all[0]; if(cur) cur.setAttribute('tabindex','0');
-  },
-  onJump(y){ zStop(); [Z.a, Z.b] = zClamp(y-2, y+8); },
-  onKey(e){
+// 網址記住目前的範圍：?from=1985&to=1995
+function zUrlIn(q){ const a = parseFloat(q.get('from')), b = parseFloat(q.get('to')); if(a>=AX0 && b>=a){ [Z.a, Z.b] = zClamp(a, b+1); } }
+const zUrlOut = () => zSpan()>=ZMAX-.001 ? {} : {from:Math.floor(Z.a+.001), to:Math.max(Math.floor(Z.a+.001), Math.ceil(Z.b-.001)-1)};
+function zDraw(root){
+  if(S.e){ const e = byId[S.e]; if(e.t<Z.a || e.t>=Z.b){ const s = zSpan(); [Z.a, Z.b] = zClamp(e.t-s/2, e.t+s/2); } }
+  if(zNeedWas==null) zNeedWas = zNeed();
+  const s = zSpan();
+  root.innerHTML = `<div class="plate zbox">
+    <div class="zctl" role="group" aria-label="平移與縮放">
+      <button class="btn" data-zoom="prev">‹ 往前</button>
+      <button class="btn" data-zoom="out" aria-label="縮小">－</button>
+      <label class="zslide"><span class="lbl">全覽</span><input type="range" id="zSlider" min="0" max="100" step="1" value="${zToSlider(s)}" aria-label="縮放" aria-valuetext="跨 ${Math.round(s)} 年，${zLabel()}"><span class="lbl">三年</span></label>
+      <button class="btn" data-zoom="in" aria-label="放大">＋</button>
+      <button class="btn" data-zoom="next">往後 ›</button>
+      <label class="zsel"><span class="lbl">年代</span><select id="zEra"><option value="">選一個年代</option>${DECADES.map(d=>`<option value="${d}">${d}年代</option>`).join('')}</select></label>
+      <button class="btn" data-zoom="all">看全部</button>
+    </div>
+    <p class="zrange"></p>
+    <div class="zovw"><span class="lbl">概覽：每年的剪報篇數與事件刻痕（按一下移到那一年，也可以拖曳框）</span><div id="zOvFig"></div></div>
+    <p class="vh" id="zHelp">左右鍵移動，Enter 看介紹或放大，加號與減號縮放，PageUp 與 PageDown 往前或往後一段。</p>
+    <div class="zfigw"><div class="tl-fig zfig" id="zFig"></div><p class="zhint" id="zHint" aria-hidden="true" hidden>按住 Ctrl（Mac 為 ⌘）再滾動滾輪即可縮放；拖曳可以左右移動</p></div></div>`;
+  const m = zPaint();
+  zLastLab = m ? m.labelled : new Set();
+  const all = $$('#zFig [data-x]'), cur = all.find(x=>x.dataset.id===S.e) || all[0]; if(cur) cur.setAttribute('tabindex','0');
+}
+function zJump(y){ zStop(); [Z.a, Z.b] = zClamp(y-2, y+8); }
+// 圖裡的方向鍵、＋／－、PageUp／PageDown。處理了就回傳 true
+function zKey(e){
     const el = e.target.closest && e.target.closest('#zFig [data-x]'); if(!el) return;
     const all = $$('#zFig [data-x]'), i = all.indexOf(el);
     const go = j => { const to = all[Math.min(Math.max(j,0),all.length-1)]; all.forEach(x=>x.setAttribute('tabindex', x===to?'0':'-1')); to.focus(); };
@@ -3396,12 +3114,11 @@ VERS.push({id:'zoom', no:'版本 7', name:'概覽＋細節＋語意縮放', solo
     if(e.key==='+' || e.key==='='){ zZoomAt(at, .5, {msg:'放大'}); return true; }
     if(e.key==='-' || e.key==='_'){ zZoomAt(at, 2, {msg:'縮小'}); return true; }
     if(e.key==='PageUp' || e.key==='PageDown'){ const d = (e.key==='PageDown'?1:-1)*zSpan()/2; zTo(Z.a+d, Z.b+d); return true; }
-  }
-});
+}
 
 /* ---------- 按鈕、滑桿、選單 ---------- */
 document.addEventListener('click', e=>{
-  if(S.v!=='zoom') return; let el;
+  let el;
   if((el = e.target.closest('[data-zoom]'))){ const k = el.dataset.zoom, s = zSpan();
     if(k==='in') zZoomAt(zCenter(), .5, {msg:'放大'}); else if(k==='out') zZoomAt(zCenter(), 2, {msg:'縮小'});
     else if(k==='all') zTo(AX0, AX1, {msg:'看全部'});
@@ -3424,7 +3141,6 @@ document.addEventListener('change', e=>{
 const zYearAt = (clientX, svg, pad) => { const r = svg.getBoundingClientRect(); return Z.a+(Z.b-Z.a)*(clientX-r.left-pad)/(r.width-pad*2); };
 let zWheelT = null, zHintT = null;
 document.addEventListener('wheel', e=>{
-  if(S.v!=='zoom') return;
   const fig = e.target.closest && e.target.closest('#zFig, #zOvFig'); if(!fig) return;
   if(!(e.ctrlKey || e.metaKey)){
     // 沒按 Ctrl：照常捲動頁面，只提示怎麼縮放
@@ -3440,7 +3156,7 @@ document.addEventListener('wheel', e=>{
 }, {passive:false});
 let zDrag = null;
 document.addEventListener('pointerdown', e=>{
-  if(S.v!=='zoom' || e.button!==0) return;
+  if(e.button!==0) return;
   const ov = e.target.closest && e.target.closest('#zOv'), bg = e.target.closest && e.target.closest('#zFig .zbg');
   if(!ov && !bg) return;
   zStop();
@@ -3464,29 +3180,35 @@ document.addEventListener('pointerup', zEndDrag);
 document.addEventListener('pointercancel', zEndDrag);
 document.addEventListener('dblclick', e=>{
   // 拖曳時用了 pointer capture，雙擊的目標會是整張圖，所以只排除事件與「＋N」
-  if(S.v!=='zoom' || !(e.target.closest && e.target.closest('#zFig')) || e.target.closest('[data-x]')) return;
+  if(!(e.target.closest && e.target.closest('#zFig')) || e.target.closest('[data-x]')) return;
   e.preventDefault(); zZoomAt(zYearAt(e.clientX, $('#zFig svg'), 14), .5, {msg:'放大'});
 });
-/* ============ 對照：原本的事件樹 ============
-   直接把正式網站的時間軸放進來，方便和新的版本比較。 */
-VERS.push({id:'tree', no:'對照', name:'原本的事件樹', panel:false, noTools:true,
-  basis:'正式網站目前的時間軸：18 件重大事件畫成一棵由下往上長的樹，背景是報紙用詞的比例。',
-  fit:'強調事件之間「往前看／往後看」的因果關係。',
-  tradeoff:'只有 18 件重大事件，沒有剪報、研究與人數；樹的方向（由下往上）和一般時間軸相反。',
-  draw(root){
-    root.innerHTML = `<div class="plate vtree"><iframe src="index.html#tree" title="正式網站的事件樹時間軸" loading="lazy"></iframe><p class="lm"><a href="index.html#tree">在新的頁面打開正式網站的事件樹</a></p></div>`;
-  }
-});
+/* ============ 介紹卡：時間軸下方，只放選到的那件事本身的介紹 ============
+   最上面是易讀版（可以用工具列的「易讀版」關掉），完整說明收在「看完整說明」裡；最下面一行是精確度、出處與挑選理由。 */
+function cardHtml(){
+  if(!S.e) return `<p class="card-empty">點時間軸上的事件，這裡會出現它的介紹。</p>`;
+  const e = byId[S.e], ez = EASY[e.id]||'';
+  const full = `<div class="pn-desc">${e.summary.split('\n').map(s=>`<p>${esc(s)}</p>`).join('')}</div>
+    ${e.memo ? `<div class="memo"><h3>備註</h3>${e.memo.split('\n').map(s=>`<p>${esc(s)}</p>`).join('')}</div>` : ''}`;
+  const body = easyOn && ez
+    ? `<div class="cr-easy"><p class="cr-easy-h">易讀版${EASY_DRAFT ? '<span>草稿，待審閱</span>' : ''}</p>${ez.split('\n').map(t=>`<p>${esc(t)}</p>`).join('')}</div>
+       <details class="cr-more"><summary>看完整說明</summary>${full}</details>`
+    : full;
+  const meta = [['日期精確度', PREC[e.precision]+(e.certainty==='approx'?'（約略）':'')], ['出處', e.source]].concat(e.why ? [['挑選理由', e.why]] : []);
+  return `<article class="ecard" style="--c:${colorOf(e.track)}" aria-labelledby="cardTitle">
+    <div class="ecard-top"><p class="pn-kind">${icon(e.track)}${esc(kindLabel(e))}</p><button class="btn sm" data-act="close" aria-label="關閉這件事的介紹">關閉</button></div>
+    <h2 id="cardTitle" tabindex="-1">${esc(e.title)}</h2>
+    <p class="pn-date">${timeTag(e)}</p>
+    ${body}
+    <p class="emeta">${meta.map(([k,v])=>`<span><b>${k}</b>${esc(v)}</span>`).join('')}</p>
+  </article>`;
+}
 /* ============ 啟動 ============ */
-if(SOLO){
-  $('#pageTitle').textContent = '智能障礙事件：可縮放時間軸'; $('.mast-sub').textContent = '可縮放時間軸'; $('#vtabs').hidden = true;
-  $('#pageLead').textContent = EV.length+' 件事件（重大事件、剪報、研究、學生人數）畫在同一條時間軸上。放大會寫出更多事件；按住 Ctrl（Mac 為 ⌘）滾動滾輪、拖曳，或用下方的按鈕與滑桿都可以。';
-} else $('#pageLead').textContent = '同一份 '+EV.length+' 件事件（重大事件、剪報、研究、學生人數，附照片與訪談節選），用不同的時間軸畫法呈現。上方的分頁可以切換版本，每個版本都寫了它來自研究報告的哪一節、適合什麼情境。';
-document.documentElement.classList.toggle('calm', calm());
-$('#skipMain').addEventListener('click', e=>{ e.preventDefault(); view.focus(); });
+$('#pageLead').textContent = EV.length+' 件事件（重大事件、剪報、研究、學生人數）畫在同一條時間軸上，放大會寫出更多事件。按住 Ctrl（Mac 為 ⌘）滾動滾輪、拖曳，或用下方的按鈕與滑桿都可以縮放。點一件事，下方會出現它的介紹。';
+$('#skipMain').addEventListener('click', e=>{ e.preventDefault(); const t = $('#zFig [tabindex="0"]')||$('#zArea'); t.focus(); reveal($('#zArea'), 'top'); });
 readUrl();
 render({focus:false});
-if(S.e){ const el = $('#vpanel [data-id="'+S.e+'"]'); if(el) reveal(el); }
+if(S.e){ const c = $('#card .ecard'); if(c) reveal($('#zArea'), 'top'); }
 </script>
 </body>
 </html>
