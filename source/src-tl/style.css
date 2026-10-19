@@ -124,3 +124,12 @@ html{scroll-padding-top:calc(var(--mast) + 16px)}          /* 用 Tab 移動時�
 .vinfo summary::-webkit-details-marker{display:none}
 .vinfo summary::before{content:"";align-self:center;width:0;height:0;border-left:7px solid var(--ink2);border-top:5px solid transparent;border-bottom:5px solid transparent;transition:transform .15s}
 .vinfo details[open] summary::before{transform:rotate(90deg)}
+
+/* 版本 7：縮放的滑桿、拖曳與滾輪提示 */
+.zslide{display:inline-flex;align-items:center;gap:8px}
+.zslide input{width:clamp(120px,22vw,240px);min-height:44px;accent-color:var(--ink)}
+.zfigw{position:relative}
+.tsvg.zoom .zbg{fill:transparent;cursor:grab}
+body.zdragging,body.zdragging .zbg{cursor:grabbing!important;user-select:none}
+.zov{touch-action:pan-y}
+.zhint{position:absolute;left:50%;top:44px;transform:translateX(-50%);max-width:calc(100% - 24px);padding:8px 14px;border-radius:999px;background:var(--ink);color:var(--paper);font-size:.88rem;text-align:center;pointer-events:none;box-shadow:0 4px 14px rgba(0,0,0,.18)}

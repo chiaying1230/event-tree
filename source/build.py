@@ -99,20 +99,26 @@ media = rd('src/60-media.js')
 media = media[:media.index('// 聲音波形的示意')]          # 只要最上面的照片與訪談清單
 tl_src = ''.join(rd(os.path.relpath(f, HERE)) for f in sorted(glob.glob(os.path.join(HERE, 'src-tl', '[0-9]*.js'))))
 assert tl_src.count('/*__EVENTS__*/') == 1
-tl_js = rd('src/00-data.js').replace('/*__DATA__*/', data) + media + tl_src.replace('/*__EVENTS__*/', dump(EVENTS).replace('</', '<\\/'))
-assert '</script' not in tl_js.lower()
-TL_TITLE = '時間軸版本比較｜' + TITLE
-tl_doc = ('<!DOCTYPE html>\n<html lang="zh-Hant-TW">\n<head>\n<meta charset="utf-8">\n'
-          '<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">\n'
-          '<title>' + TL_TITLE + '</title>\n'
-          '<meta name="description" content="同一份 %d 件智能障礙相關事件，用不同的時間軸畫法呈現，方便比較。">\n' % (len(EVENTS) + 18) +
-          '<meta name="color-scheme" content="light dark">\n<meta name="robots" content="noindex">\n'
-          '<link rel="icon" type="image/png" href="icon.png">\n'
-          + FONTS + '<style>' + css + rd('src-tl/style.css') + '</style>\n</head>\n<body>\n'
-          '<noscript><p style="margin:0;padding:24px;font:16px/1.8 sans-serif">這個頁面需要開啟瀏覽器的 JavaScript 才能顯示內容。</p></noscript>\n'
-          + rd('src-tl/body.html') + '\n<script>\n' + tl_js + '</script>\n</body>\n</html>\n')
-wr(os.path.join(out, 'timelines.html'), tl_doc)
-print('版本比較頁：%s（%d KB）' % (os.path.join(out, 'timelines.html'), len(tl_doc.encode('utf-8')) // 1024))
+tl_base = rd('src/00-data.js').replace('/*__DATA__*/', data) + media
+def tl_page(fname, solo, title, desc):
+    # solo：只放一個版本（例如 'zoom'），不畫版本分頁
+    js = tl_base + 'const SOLO = %s;\n' % (dump(solo) if solo else 'null') + tl_src.replace('/*__EVENTS__*/', dump(EVENTS).replace('</', '<\\/'))
+    assert '</script' not in js.lower()
+    doc = ('<!DOCTYPE html>\n<html lang="zh-Hant-TW">\n<head>\n<meta charset="utf-8">\n'
+           '<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">\n'
+           '<title>' + title + '</title>\n'
+           '<meta name="description" content="' + att(desc) + '">\n'
+           '<meta name="color-scheme" content="light dark">\n<meta name="robots" content="noindex">\n'
+           '<link rel="icon" type="image/png" href="icon.png">\n'
+           + FONTS + '<style>' + css + rd('src-tl/style.css') + '</style>\n</head>\n<body>\n'
+           '<noscript><p style="margin:0;padding:24px;font:16px/1.8 sans-serif">這個頁面需要開啟瀏覽器的 JavaScript 才能顯示內容。</p></noscript>\n'
+           + rd('src-tl/body.html') + '\n<script>\n' + js + '</script>\n</body>\n</html>\n')
+    wr(os.path.join(out, fname), doc)
+    print('%s：%s（%d KB）' % (title.split('｜')[0], os.path.join(out, fname), len(doc.encode('utf-8')) // 1024))
+NEV = len(EVENTS) + 18
+tl_page('timelines.html', None, '時間軸版本比較｜' + TITLE, '同一份 %d 件智能障礙相關事件，用不同的時間軸畫法呈現，方便比較。' % NEV)
+# 版本 7 單獨一頁：可縮放的時間軸
+tl_page('zoom.html', 'zoom', '可縮放時間軸｜' + TITLE, '%d 件智能障礙相關事件畫在同一條可縮放的時間軸上，放大會寫出更多事件。' % NEV)
 
 # ---------- Google Apps Script（選用） ----------
 if args.gas:
